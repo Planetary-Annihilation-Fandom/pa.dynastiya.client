@@ -1,0 +1,83 @@
+{
+    "name": "lava",
+    "ambient_sound": "/SE/Ambience/Amb_Planet_Lava",
+    "metal_spot_spec": "/pa/effects/features/metal_splat_02.json",
+    "biomes": [
+        {
+            "spec": "/pa/terrain/lava/lava.json",
+            "temperature": [
+                0.2,
+                1,
+                1
+            ],
+            "elevation": [
+                0,
+                0.2,
+                1
+            ],
+            "water_distance": [
+                0,
+                500,
+                1
+            ]
+        }
+    ],
+    "base_biome": "/pa/terrain/base/base.json",
+    "enable_features": true,
+    "enable_lava": true,
+    "atmosphere": {
+        "hdr_intensity": 5.0,
+        "ldr_intensity": 5.0,
+        "color": [
+            0.001,
+            0.001,
+            0.001,
+            0.8
+        ],
+        "density": 30.0
+    },
+    "lighting": {
+        "sun": {
+            "diffuse": [
+                0.4,
+                0.4,
+                0.4
+            ],
+            "specular": [
+                0.2,
+                0.2,
+                0.2
+            ],
+            "hdr_intensity": 12.0,
+            "ldr_intensity": 9.5
+        },
+        "ambient": {
+            "hdr_intensity": 1.0,
+            "ldr_intensity": 1.0,
+            "day_intensity_hdr": 1.0,
+            "day_intensity_ldr": 1.3,
+            "day_sky": [
+                0.7,
+                0.7,
+                0.7
+            ],
+            "day_ground": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "night_intensity_hdr": 2.0,
+            "night_intensity_ldr": 2.5,
+            "night_sky": [
+                0.4,
+                0.4,
+                0.4
+            ],
+            "night_ground": [
+                0.3,
+                0.3,
+                0.3
+            ]
+        }
+    }
+}

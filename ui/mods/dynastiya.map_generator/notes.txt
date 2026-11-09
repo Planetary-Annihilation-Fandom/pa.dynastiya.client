@@ -1,0 +1,4 @@
+Always use click: methodname for model bindings, e.g.:
+<button data-bind="click: test_view_model">Click me</button>
+
+To tooltips work - you need to bind model / apply binding mechanism to html
