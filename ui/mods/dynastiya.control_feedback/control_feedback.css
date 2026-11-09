@@ -1,67 +1,38 @@
-/* Immediate control feedback in every PA view. Keep panel motion separate.
- * Apply in the resting state too: hover-only rules leave a delayed mouseout.
- * Do not change focus, disabled, pointer-events, layout, or event bindings. */
-button,
-input,
-select,
-textarea,
-.btn,
-.btn_std,
-.btn_hero,
-.btn_neg,
-.btn_std_gray,
-.btn_back,
-.btn_std_ix,
-.btn_toggle,
-.btn_toggle_shared_army,
-.btn_slot,
-.econ-button,
-.dropdown-menu > li > a,
-.nav-pills > li > a,
-.one-commander,
-.one-system,
-.one-planet,
-.one_war,
-#start-cards > .card,
-.loadout-card > .card,
-.gw_coop_prompt_button,
-.gw-panel-collapse-button.top,
-.div_game_menu_item,
-.div_command_item a,
-.div_build_item,
-.span_build_bar_tab,
-.div_rate_ctr_overall,
-.div_planet_list_item_group,
-.btn_player_known,
-.alert_list_item,
-.btn_special_weapon,
-.div_unit_alert_commander,
-.div_unit_alert_ready,
-.div_unit_alert_death,
-.div_unit_alert_misc,
-.btn_upgrade,
-.div_kickstarter_watermark,
-#paymentMethods li {
+/* Immediate controls and panels, including pseudo-elements. */
+*, *::before, *::after {
     -webkit-transition: none !important;
     transition: none !important;
 }
 
-/* HUD panel motion keeps PA's timing, but cannot tween control colours. */
-.div_command_bar_top_cont, .div_command_bar_top_cont.show,
-.div_orders_bar_top_cont, .div_orders_bar_top_cont.show {
-    -webkit-transition-property: right, opacity !important;
-    transition-property: right, opacity !important;
+/* Keep the message's original lifetime, without a fade. */
+.bounty_reward_notification {
+    -webkit-animation-name: dynastiya_reward_hold !important;
+    animation-name: dynastiya_reward_hold !important;
 }
-.div_command_item, .div_command_item.show,
-.show.persisting .div_command_item, .show.persisting .div_command_item.show {
-    -webkit-transition-property: height, opacity !important;
-    transition-property: height, opacity !important;
+@-webkit-keyframes dynastiya_reward_hold {
+    0%, 99.99% { opacity: 1; }
+    100% { opacity: 0; }
 }
-.div_order_item_menu, .div_order_item_menu.show {
-    -webkit-transition-property: opacity !important;
-    transition-property: opacity !important;
+@keyframes dynastiya_reward_hold {
+    0%, 99.99% { opacity: 1; }
+    100% { opacity: 0; }
 }
-.div_order_menu_cont, .div_order_item_menu.show .div_order_menu_cont {
-    -webkit-transition-property: left !important;
-    transition-property: left !important;
+
+/* Decoration behind the match-start button. */
+#text_slide_top {
+    -webkit-animation: none !important;
+    animation: none !important;
+    display: none !important;
+}
+
+/* main.js performs scene/video completion directly; no fade event is needed. */
+#img_splash {
+    -webkit-animation: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+}
+#black_splash {
+    -webkit-animation: none !important;
+    animation: none !important;
+    display: none !important;
 }
