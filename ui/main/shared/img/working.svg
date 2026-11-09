@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="190" height="190" viewBox="0 0 40 40">
+  <!-- Static waiting symbol: visibility and adjacent status text carry progress. -->
+  <path fill="none" stroke="#00b3ff" stroke-width="2" d="M10 5h20M10 35h20M12 5v6c0 4 5 6 8 9-3 3-8 5-8 9v6M28 5v6c0 4-5 6-8 9 3 3 8 5 8 9v6"/>
+  <path fill="#fcee21" d="M15 10h10c0 3-3 5-5 7-2-2-5-4-5-7zm5 14 6 7H14z"/>
+</svg>
