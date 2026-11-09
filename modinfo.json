@@ -1,5 +1,5 @@
 {
-  "author": "EGSP",
+  "author": "blubloobu",
   "build": "124685",
   "category": [
     "titans",
@@ -9,7 +9,7 @@
   "context": "client",
   "date": "2026-11-09",
   "description": "A large-scale overhaul focused on a cohesive, complete gameplay experience.",
-  "display_name": "Dynastiya",
+  "display_name": "Dynastiya Client",
   "forum": "https://steamcommunity.com/app/386070/discussions/0/",
   "github": "https://github.com/Planetary-Annihilation-Fandom/pa.dynastiya.client",
   "hidden": true,
