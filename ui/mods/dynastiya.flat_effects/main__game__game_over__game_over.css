@@ -1,0 +1,10 @@
+/* Generated from main/game/game_over/game_over.css; run tools/build-flat-effects.cjs. */
+.panel_game_over {
+    -webkit-filter: none !important;
+}
+
+.badge_animation {
+    -webkit-animation: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+}

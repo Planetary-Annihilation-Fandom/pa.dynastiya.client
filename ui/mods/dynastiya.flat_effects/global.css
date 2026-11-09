@@ -1,0 +1,42 @@
+/* Cover descendants, pseudo-elements and later inline/hover/focus styles. */
+*, *::before, *::after {
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+/* Static keyboard focus remains visible even when the original used a shadow. */
+button:focus, input:focus, select:focus, textarea:focus,
+a:focus, [tabindex]:focus, .btn:focus {
+    outline: 2px solid #9ceaff !important;
+    outline-offset: -2px;
+}
+.btn.selected, .btn.active, .btn_toggle.live, [aria-selected="true"] {
+    border-color: #9ceaff !important;
+}
+button:disabled, input:disabled, select:disabled, .btn.disabled,
+.btn_std_disabled, .btn_hero_disabled, .btn_toggle_disabled {
+    opacity: .45 !important;
+}
+
+/* Empty decorative layers; do not hide their parent messages or pause controls. */
+.background_glow, .title_watermark, #logo_slide_top, #logo_slide_bottom {
+    display: none !important;
+}
+.user_pause_bar {
+    background: #493e0b !important;
+    border-bottom: 2px solid #ffe36c !important;
+}
+.badge_animation { opacity: 1 !important; }
+
+/* Static warning colors replace the corresponding flashing classes. */
+.div_animated_flash_red { background-color: #8b2020 !important; }
+.div_animated_flash_green { background-color: #175b2d !important; }
+.div_animated_flash_black { background-color: #111 !important; }
+.div_animated_flash_white { background-color: #555 !important; }
+.div_animated_flash_cyan { background-color: #135967 !important; }
+label.generate-planet-label {
+    -webkit-animation: none !important;
+    animation: none !important;
+    color: #9ceaff !important;
+}

@@ -1,0 +1,9 @@
+/* Generated from main/game/community_mods/css/start.css; run tools/build-flat-effects.cjs. */
+div.community-nav:hover, #nav_mods:hover, #nav_promo:hover, #nav_guides:hover, .legion div.community-nav:hover {
+    box-shadow: none !important;
+}
+
+#nav-community-mods {
+    -webkit-animation: none !important;
+    animation: none !important;
+}

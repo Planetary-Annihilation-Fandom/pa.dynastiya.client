@@ -1,0 +1,92 @@
+[
+  {
+    "source": "main/game/community_mods/css/start.css",
+    "override": "main__game__community_mods__css__start.css",
+    "bundled": false,
+    "rules": 2
+  },
+  {
+    "source": "main/game/galactic_war/gw_play/gw_play.css",
+    "override": "main__game__galactic_war__gw_play__gw_play.css",
+    "bundled": false,
+    "rules": 1
+  },
+  {
+    "source": "main/game/game_over/game_over.css",
+    "override": "main__game__game_over__game_over.css",
+    "bundled": false,
+    "rules": 2
+  },
+  {
+    "source": "main/game/live_game/live_game.css",
+    "override": "main__game__live_game__live_game.css",
+    "bundled": false,
+    "rules": 5
+  },
+  {
+    "source": "main/game/live_game/live_game_celestial_control.css",
+    "override": "main__game__live_game__live_game_celestial_control.css",
+    "bundled": false,
+    "rules": 1
+  },
+  {
+    "source": "main/game/live_game/live_game_options_bar.css",
+    "override": "main__game__live_game__live_game_options_bar.css",
+    "bundled": false,
+    "rules": 1
+  },
+  {
+    "source": "main/game/live_game/live_game_paused_popup.css",
+    "override": "main__game__live_game__live_game_paused_popup.css",
+    "bundled": false,
+    "rules": 1
+  },
+  {
+    "source": "main/game/live_game/live_game_unit_alert.css",
+    "override": "main__game__live_game__live_game_unit_alert.css",
+    "bundled": false,
+    "rules": 8
+  },
+  {
+    "source": "main/game/matchmaking/matchmaking.css",
+    "override": "main__game__matchmaking__matchmaking.css",
+    "bundled": false,
+    "rules": 1
+  },
+  {
+    "source": "main/game/start/start.css",
+    "override": "main__game__start__start.css",
+    "bundled": false,
+    "rules": 2
+  },
+  {
+    "source": "main/shared/css/global.css",
+    "override": "main__shared__css__global.css",
+    "bundled": true,
+    "rules": 2
+  },
+  {
+    "source": "main/shared/css/landing_page.css",
+    "override": "main__shared__css__landing_page.css",
+    "bundled": false,
+    "rules": 1
+  },
+  {
+    "source": "main/shared/js/thirdparty/bootstrap-3.0.3/css/bootstrap.css",
+    "override": "main__shared__js__thirdparty__bootstrap-3.0.3__css__bootstrap.css",
+    "bundled": true,
+    "rules": 1
+  },
+  {
+    "source": "main/uberbar/uberbar.css",
+    "override": "main__uberbar__uberbar.css",
+    "bundled": false,
+    "rules": 1
+  },
+  {
+    "source": "mods/dynastiya.map_generator/map_generator.css",
+    "override": "mods__dynastiya.map_generator__map_generator.css",
+    "bundled": false,
+    "rules": 1
+  }
+]

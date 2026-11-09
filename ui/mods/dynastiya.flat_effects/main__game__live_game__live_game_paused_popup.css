@@ -1,0 +1,6 @@
+/* Generated from main/game/live_game/live_game_paused_popup.css; run tools/build-flat-effects.cjs. */
+.user_pause_bar > .background_glow {
+    background: rgba(255, 245, 0, 0.8) !important;
+    -webkit-animation: none !important;
+    animation: none !important;
+}

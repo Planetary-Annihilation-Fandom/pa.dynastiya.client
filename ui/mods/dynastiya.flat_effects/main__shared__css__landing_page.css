@@ -1,0 +1,6 @@
+/* Generated from main/shared/css/landing_page.css; run tools/build-flat-effects.cjs. */
+.title_watermark {
+    -webkit-animation: none !important;
+    animation: none !important;
+    opacity: 1 !important;
+}

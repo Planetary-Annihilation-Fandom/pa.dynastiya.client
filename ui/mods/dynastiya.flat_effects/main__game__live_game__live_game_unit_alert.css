@@ -1,0 +1,37 @@
+/* Generated from main/game/live_game/live_game_unit_alert.css; run tools/build-flat-effects.cjs. */
+.div_special_weapon_alert {
+    background: rgba(255, 0, 0, 0.8) !important;
+}
+
+.combat > .wrapper {
+    background: rgba(255, 184, 0, 1) !important;
+}
+
+.div_commander_death_alert {
+    background: rgb(255, 0, 0) !important;
+}
+
+.div_animated_flash_red {
+    -webkit-animation: none !important;
+    animation: none !important;
+}
+
+.div_animated_flash_green {
+    -webkit-animation: none !important;
+    animation: none !important;
+}
+
+.div_animated_flash_black {
+    -webkit-animation: none !important;
+    animation: none !important;
+}
+
+.div_animated_flash_white {
+    -webkit-animation: none !important;
+    animation: none !important;
+}
+
+.div_animated_flash_cyan {
+    -webkit-animation: none !important;
+    animation: none !important;
+}

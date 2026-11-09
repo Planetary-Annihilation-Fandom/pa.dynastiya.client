@@ -1,0 +1,5 @@
+/* Generated from main/shared/js/thirdparty/bootstrap-3.0.3/css/bootstrap.css; run tools/build-flat-effects.cjs. */
+.progress.active .progress-bar {
+    -webkit-animation: none !important;
+    animation: none !important;
+}

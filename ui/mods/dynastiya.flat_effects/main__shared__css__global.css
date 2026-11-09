@@ -1,0 +1,9 @@
+/* Generated from main/shared/css/global.css; run tools/build-flat-effects.cjs. */
+.btn_back_small {
+    box-shadow: none !important;
+}
+
+img.working {
+    -webkit-animation: none !important;
+    animation: none !important;
+}

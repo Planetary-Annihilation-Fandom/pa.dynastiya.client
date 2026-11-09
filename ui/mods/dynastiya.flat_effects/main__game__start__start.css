@@ -1,0 +1,10 @@
+/* Generated from main/game/start/start.css; run tools/build-flat-effects.cjs. */
+#logo_slide_top {
+    -webkit-animation: none !important;
+    animation: none !important;
+}
+
+#logo_slide_bottom {
+    -webkit-animation: none !important;
+    animation: none !important;
+}

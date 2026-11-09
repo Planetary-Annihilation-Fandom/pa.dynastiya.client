@@ -1,0 +1,5 @@
+/* Generated from mods/dynastiya.map_generator/map_generator.css; run tools/build-flat-effects.cjs. */
+label.generate-planet-label {
+    -webkit-animation: none !important;
+    animation: none !important;
+}
