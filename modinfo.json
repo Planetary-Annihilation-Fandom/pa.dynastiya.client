@@ -1,0 +1,20 @@
+{
+  "author": "EGSP",
+  "build": "124685",
+  "category": [
+    "titans",
+    "gameplay",
+    "overhaul"
+  ],
+  "context": "client",
+  "date": "2026-11-09",
+  "description": "A large-scale overhaul focused on a cohesive, complete gameplay experience.",
+  "display_name": "Dynastiya",
+  "forum": "https://steamcommunity.com/app/386070/discussions/0/",
+  "github": "https://github.com/Planetary-Annihilation-Fandom/pa.dynastiya.client",
+  "hidden": true,
+  "identifier": "com.pa.dynastiya.client",
+  "signature": "not yet implemented",
+  "titansOnly": true,
+  "version": "0.1.0"
+}
