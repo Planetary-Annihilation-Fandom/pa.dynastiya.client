@@ -16,7 +16,7 @@
   "identifier": "com.pa.dynastiya.client",
   "signature": "not yet implemented",
   "titansOnly": true,
-  "version": "0.1.2",
+  "version": "0.1.3",
   "scenes": {
     "new_game": [
       "coui://ui/mods/dynastiya.map_generator/map_generator.js",
