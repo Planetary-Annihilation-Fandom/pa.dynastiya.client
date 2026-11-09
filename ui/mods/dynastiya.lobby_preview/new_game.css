@@ -1,0 +1,77 @@
+body.lobby-system-preview
+{
+    background: none!important;
+}
+
+body.lobby-system-preview div.background_glow
+{
+    display: none!important;
+}
+
+body.lobby-system-preview div.section_content
+{
+    background: none!important;
+}
+
+body.lobby-system-preview div.section_content_table
+{
+    border-image: url('coui://ui/mods/dynastiya.lobby_preview/panel_std.png') 29 53 53 29 fill;
+/*
+    border: none;
+    margin: 0;
+    height: 100%!important;
+    margin-left: 20px;
+    margin-right: 20px;
+*/
+}
+
+body.lobby-system-preview div.section_wrapper
+{
+/*
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+*/
+}
+
+body.lobby-system-preview div.game_roster
+{
+    border-image: url('coui:///ui/mods/dynastiya.lobby_preview/panel_secondary.png') 33 46 46 33 fill;
+/*
+    border: none;
+    margin-left: 20px;
+*/
+}
+
+body.lobby-system-preview table.roster_table
+{
+/*
+    height: calc( 100% - 50px )!important;
+    margin-top: 24px;
+*/
+}
+
+
+body.lobby-system-preview table.roster_table.lobby-system-preview-opacity
+{
+    opacity: 0.7;
+}
+
+body.lobby-system-preview table.roster_table.lobby-system-preview
+{
+    display: none;
+}
+
+#lobby-system-preview-opacity
+{
+    float: right;
+}
+
+#lobby-system-preview-close
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 9999;
+}

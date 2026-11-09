@@ -11,3 +11,7 @@ The biome definitions and editor images are from Biomes Lite 1.2.2-up0 by TATAPS
 ## Ferret’s Better Biome Visuals
 
 Biome textures and visual settings are from version 1.0.0 by ferretmaster: https://github.com/Ferret-Master/Ferrets-Better-Biome-Visuals. The author states that the assets are modified from Planetary Annihilation and that the game's licenses apply.
+
+## Lobby System Preview
+
+The lobby preview is adapted from Lobby System Preview 1.1.4 by mikeyh. Its interface and code live in `ui/mods/dynastiya.lobby_preview`; the original mod is available at https://forums.planetaryannihilation.com/threads/wip-server-lobby-lobby-system-preview.69144/.
