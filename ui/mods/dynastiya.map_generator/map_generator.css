@@ -1,0 +1,316 @@
+.frame {
+    /* background: #252525; */
+
+    /* background: linear-gradient(135deg, rgba(60, 60, 60, 1) 0%, rgba(255, 255, 255, 0) 89%) !important; */
+}
+
+.map-generator-header {
+    font-family: "Sansation";
+    font-size: 13px;
+    text-transform: uppercase;
+    border-top: 1px solid #333;
+    color: #fff;
+    text-shadow: 0px 0px 20px #07959B;
+    margin-top: 5px;
+    padding-top: 2px;
+}
+
+.vertical {
+    display: flex;
+    flex-direction: column;
+}
+
+.horizontal {
+    display: flex;
+    flex-direction: row;
+}
+
+.centered {
+    align-items: center;
+}
+
+.options-container {
+    align-items: flex-end;
+    margin-bottom: 0.3rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.options-block {
+    padding-left: 3px;
+    flex-shrink: 0;
+}
+
+.options-block-biome {
+    width: 100px;
+}
+
+.options-grid {
+    flex-wrap: wrap;
+    max-width: 90px;
+}
+
+.gap-small {
+    margin-right: 0.3rem;
+}
+
+.gap-down-small {
+    margin-bottom: 0.3rem;
+}
+
+.gap-down-medium {
+    margin-bottom: 0.5rem;
+}
+
+
+button.generate {
+    border-width: 5px 40px 5px 40px;
+    border-image: url(coui://ui/main/shared/img/buttons/btn_lrg_std.png) 5 40 10 40 fill;
+    background-color: transparent;
+
+    padding: 0px;
+    margin-left: -0.5rem;
+
+    width: 93%;
+    height: 35px;
+}
+
+button.generate:hover {
+    border-image: url(coui://ui/main/shared/img/buttons/btn_lrg_std_hover.png) 5 40 10 40 fill;
+    /* -webkit-transition: .1s; */
+}
+
+button.option {
+    width: 30px !important;
+    height: 30px !important;
+
+    background: rgba(21, 21, 21, 1);
+    box-shadow: inset 0px 0px 8px rgba(255, 255, 255, 0.34);
+    border: 1px solid rgba(131, 131, 131, 0.89);
+    padding: 0% !important;
+
+    overflow: hidden;
+}
+
+button.option.selected {
+    box-shadow: inset 0px 0px 8px #285AB5;
+    border: 1px solid #06FAE8;
+}
+
+button.option.xl {
+    width: 60px !important;
+}
+
+button.option.xxl {
+    width: 90px !important;
+}
+
+/* button.quad {
+    height: 30px;
+}
+
+button.quad.xl {
+    height: 30px;
+}
+
+button.quad.xxl {
+    height: 30px;
+} */
+
+img.quad {
+    height: 20px;
+    width: 20px;
+    -webkit-filter: grayscale(100%);
+}
+
+img.quad.xl {
+    height: 40px;
+    width: 40px;
+    transform: translateY(-15%);
+}
+
+img.quad.xxl {
+    height: 60px;
+    width: 60px;
+    transform: translateY(-30%);
+}
+
+img.selected {
+    -webkit-filter: grayscale(0%);
+}
+
+
+hr.vertical-split {
+    margin: 0px 10px 0px 0px;
+    height: 90px;
+    width: 3px;
+    border: 0px;
+    background-color: rgba(144, 144, 144, 0.21);
+}
+
+hr.horizontal-split {
+    margin: 0px 0px 0.6rem 0px;
+    height: 0.1rem;
+    width: 100%;
+    border: 0px;
+    background-color: rgba(144, 144, 144, 0.21);
+}
+
+
+label.option {
+    color: #A1E5FF;
+}
+
+label.option.description {
+    color: rgb(6, 255, 234);
+}
+
+label.generate-planet-label {
+    color: #FAFAFA;
+    font-family: "Sansation";
+    font-weight: bold;
+    font-size: 13px;
+    text-transform: uppercase;
+
+    -webkit-animation:
+        pulsate 3s ease-in-out 0s alternate infinite none running;
+}
+
+@-webkit-keyframes pulsate {
+    0% {
+        -webkit-filter: drop-shadow(0 0px 3px rgba(6, 255, 234, 0.89));
+    }
+
+    100% {
+        -webkit-filter: drop-shadow(0 0px 10px rgba(41, 141, 255, 0.89));
+    }
+}
+
+.selected-value-description {
+    color: rgb(189, 189, 189) !important;
+    font-size: 16px;
+    font-weight: normal;
+
+    margin-left: 8px;
+    align-self: center;
+}
+
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    width: 15rem;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    background: #444444;
+    box-shadow: inset 0px 1px 3px 2px rgba(0, 0, 0, 0.55);
+    height: 6px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    /* Override default look */
+    appearance: none;
+    margin-top: -10px;
+    height: 25px;
+    width: 10px;
+    /* Centers thumb on the track */
+    background-color: #242424;
+    border: 1px solid rgba(131, 131, 131, 0.89);
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.75);
+}
+
+input[type="range"]:focus::-webkit-slider-thumb {
+    outline: 1px solid #FAFAFA;
+}
+
+/* .tick {
+    display: block;
+    width: 3px;
+    background: #7C7C7C;
+} */
+
+/* input[type="range"].planet::-webkit-slider-thumb {
+    background-image: url("coui://ui/mods/dynastiya.map_generator/icons/planet.png");
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+} */
+
+/* OLD  */
+
+
+
+.td {
+    padding: 0px, 0px, 0px, 0px;
+}
+
+.box_highlight {
+    box-shadow: 0px 0px 5px rgb(134, 134, 134) inset;
+}
+
+.section_title_main {
+    position: relative;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    text-transform: uppercase;
+    text-shadow: 0px 0px 0px rgb(22, 74, 95);
+    pointer-events: none;
+}
+
+.section_title_inner_duel {
+    position: relative;
+    /* padding-top: 10px; */
+    padding-bottom: 5px;
+    padding-left: 8px;
+    z-index: 1;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    font-weight: bold;
+    font-size: 16px;
+    color: rgb(255, 136, 56);
+    text-shadow: 0px 0px 0px rgb(107, 50, 23);
+    pointer-events: none;
+}
+
+.section_title_inner_arena {
+    position: relative;
+    /* padding-top: 10px; */
+    padding-bottom: 5px;
+    padding-left: 8px;
+    z-index: 1;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    font-weight: bold;
+    font-size: 16px;
+    color: rgb(255, 65, 65);
+    text-shadow: 0px 0px 0px rgb(255, 99, 151);
+    pointer-events: none;
+}
+
+.section_title_inner_wadiya {
+    position: relative;
+    /* padding-top: 10px; */
+    padding-bottom: 5px;
+    padding-left: 8px;
+    z-index: 1;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    font-weight: bold;
+    font-size: 16px;
+    color: rgb(122, 108, 245);
+    text-shadow: 0px 0px 0px rgb(77, 161, 240);
+    pointer-events: none;
+}

@@ -1,0 +1,207 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <noloc>
+        <title>map generator ui</title>
+    </noloc>
+    <link href="coui://ui/mods/dynastiya.map_generator/map_generator.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <div id="frame-body" class="frame vertical">
+        <div class="map-generator-header">Lobby planet generation</div>
+        <div class=" vertical centered">
+            <div class="options-container horizontal">
+                <div class="options-block vertical gap-small">
+                    <div id="planet-size" class="gap-down-medium">
+                        <div id="header" class="horizontal">
+                            <label id="name" class="option gap-small">Planet size:</label>
+                            <label id="description" class="option description"></label>
+                        </div>
+                        <div id="controls" class="horizontal">
+                            <div id="control" class="vertical gap-small">
+                                <button id="small" class="option btn-default" data-bind="
+                                    tooltip: '!LOC:Small planet',
+                                    click_sound: 'default',
+                                    rollover_sound: 'default',
+                                    click: select_option.bind($data,'planet-size','small')" data-placement="right">
+                                    <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/planet.png">
+                                </button>
+                            </div>
+                            <div id="control" class="vertical gap-small">
+                                <button id="medium" class="option xl btn-default" data-bind="
+                                    tooltip: '!LOC:Medium planet',
+                                    click_sound: 'default',
+                                    rollover_sound: 'default',
+                                    click: select_option.bind($data,'planet-size','medium')" data-placement="right">
+                                    <img class="quad xl" src="coui://ui/mods/dynastiya.map_generator/icons/planet.png">
+                                </button>
+                            </div>
+                            <div id="control" class="vertical gap-small">
+                                <button id="large" class="option xxl btn-default" data-bind="
+                                    tooltip: '!LOC:Large planet',
+                                    click_sound: 'default',
+                                    rollover_sound: 'default',
+                                    click: select_option.bind($data,'planet-size','large')" data-placement="right">
+                                    <img class="quad xxl" src="coui://ui/mods/dynastiya.map_generator/icons/planet.png">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="metal">
+                        <div id="header" class="horizontal">
+                            <label id="name" class="option gap-small">Metall amount:</label>
+                            <label id="description" class="option description"></label>
+                        </div>
+                        <div id="controls" class="horizontal">
+                            <div id="control" class="vertical gap-small">
+                                <button id="poor" class="option btn-default" data-bind="
+                                click: select_option.bind($data, 'metal', 'poor'),
+                                tooltip: '!LOC:Poor planet',
+                                click_sound: 'default',
+                                rollover_sound: 'default'" data-placement="right">
+                                    <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/metal_small.png">
+                                </button>
+                            </div>
+                            <div id="control" class="vertical gap-small">
+                                <button id="normal" class="option xl btn-default" data-bind="
+                                click: select_option.bind($data, 'metal', 'normal'),
+                                tooltip: '!LOC:Normal planet',
+                                click_sound: 'default',
+                                rollover_sound: 'default'" data-placement="right">
+                                    <img class="quad xl" src="coui://ui/mods/dynastiya.map_generator/icons/metal_medium.png">
+                                </button>
+                            </div>
+                            <div id="control" class="vertical gap-small">
+                                <button id="rich" class="option xxl btn-default" data-bind="
+                                click: select_option.bind($data, 'metal', 'rich'),
+                                tooltip: '!LOC:Rich planet',
+                                click_sound: 'default',
+                                rollover_sound: 'default'" data-placement="right">
+                                    <img class="quad xxl" src="coui://ui/mods/dynastiya.map_generator/icons/metal_big.png">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="vertical-split" />
+                <div id="biome" class="options-block-biome">
+                    <div id="header" class="horizontal">
+                        <label id="name" class="option gap-small">Biome:</label>
+                        <label id="description" class="option description"></label>
+                    </div>
+                    <div id="controls" class="horizontal options-grid">
+                        <div id="control" class="vertical">
+                            <button id="moon" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'moon'),
+                            tooltip: '!LOC:Moon biome',
+                            click_sound: 'default', rollover_sound: 'default'" data-placement="left">
+                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_moon.png">
+                            </button>
+                        </div>
+                        <div id="control" class="vertical">
+                            <button id="asteroid" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'asteroid'),
+                            tooltip: '!LOC:Asteroid biome',
+                            click_sound: 'default', rollover_sound: 'default'" data-placement="left">
+                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_asteroid.png">
+                            </button>
+                        </div>
+                        <div id="control" class="vertical">
+                            <button id="desert" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'desert'),
+                            tooltip: '!LOC:Desert/sand biome',
+                            click_sound: 'default', rollover_sound: 'default'" data-placement="left">
+                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_desert.png">
+                            </button>
+                        </div>
+                        <div id="control" class="vertical">
+                            <button id="forest" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'forest'),
+                            tooltip: '!LOC:Forest/tropical biome',
+                            click_sound: 'default', rollover_sound: 'default'" data-placement="left">
+                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_forest.png">
+                            </button>
+                        </div>
+                        <div id="control" class="vertical">
+                            <button id="lava" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'lava'),
+                            tooltip: '!LOC:Lava/hot biome',
+                            click_sound: 'default', rollover_sound: 'default'" data-placement="left">
+                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_lava.png">
+                            </button>
+                        </div>
+                        <div id="control" class="vertical">
+                            <button id="metallic" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'metallic'),
+                            tooltip: '!LOC:Metallic star biome',
+                            click_sound: 'default', rollover_sound: 'default'" data-placement="left">
+                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_metall.png">
+                            </button>
+                        </div>
+                        <div id="control" class="vertical">
+                            <button id="snow" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'snow'),
+                            tooltip: '!LOC:Snow/ice biome',
+                            click_sound: 'default', rollover_sound: 'default'" data-placement="left">
+                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_snow.png">
+                            </button>
+                        </div>
+                        <div id="control" class="vertical">
+                            <button id="random" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'random'),
+                            tooltip: '!LOC:Random biome',
+                            click_sound: 'default', rollover_sound: 'default'" data-placement="left">
+                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_random.png">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="options-container vertical">
+                <button class="option btn-default" data-bind="tooltip: '!LOC:Use moons',
+                    click_sound: 'default', rollover_sound: 'default',
+                    click: toogle_moons" data-placement="right">
+                    <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/option_moons.png">
+                </button>
+                <hr class="horizontal-split" />
+            </div> -->
+
+            <button class="generate btn-default" data-bind="
+                tooltip: '!LOC:Click to generate planet',
+                click_sound: 'default',
+                rollover_sound: 'default',
+                click: generate" data-placement="bottom">
+                <label class="generate-planet-label">Generate Planet</label>
+            </button>
+        </div>
+    </div>
+</body>
+<script>
+    $().ready(function () {
+
+        // I dont use binginds cause  map_generator.js is loaded in context of new_game as this html.
+        // so this html can clearly see all functions defined in map_generator.js
+        // and other mods too, i think :)
+        // ko.applyBindings(MapGeneratorModel, document.getElementById("frame-body"));
+
+        // MapGeneratorModel is a variable (class) defined in map_generator.js
+        // MapGeneratorModel{
+        //     var self = this;
+        // }
+        // MapGeneratorModel = new MapGeneratorModel();
+
+        // that should be used to incapsulate functions in it,
+        // but i dont want to do it that way,
+        // so all functions exposed
+
+        // just call it straightly cause it is in a window scope/context
+        start();
+
+        // use bindings mechanism to enable tooltips
+        ko.applyBindings(
+            _view.view_model, // view_model is a class defined in view.js. And we call its constructor here to instantiate it
+            document.getElementById("frame-body")
+        );
+
+        _view.view_model.test_view_model();
+    })
+</script>
+
+</html>

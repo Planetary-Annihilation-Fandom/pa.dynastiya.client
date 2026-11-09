@@ -1,0 +1,1850 @@
+{
+    "name": "lava",
+    "color": [
+        0.27,
+        0.267,
+        0.28,
+        1
+    ],
+    "base_texture": "/pa/terrain/lava/textures/base/lava_tile_diffuse.papa",
+    "normal_texture": "/pa/terrain/generic/decal_null_normal.papa",
+    "material_texture": "/pa/terrain/generic/decal_null_material.papa",
+    "layers": [
+        {
+            "note": "0",
+            "disable": true
+        },
+        {
+            "note": "1",
+            "noise": {
+                "scale": 2,
+                "zoom": 1,
+                "type": "simplex"
+            }
+        },
+        {
+            "note": "2",
+            "noise": {
+                "scale": 2,
+                "zoom": 5,
+                "type": "simplex"
+            }
+        },
+        {
+            "note": "3",
+            "inherit_noise": true
+        },
+        {
+            "note": "4",
+            "noise": {
+                "scale": 2,
+                "zoom": 5,
+                "type": "simplex"
+            }
+        },
+        {
+            "note": "5",
+            "inherit_noise": true
+        },
+        {
+            "note": "6",
+            "inherit_noise": true
+        },
+        {
+            "note": "7",
+            "inherit_noise": true
+        },
+        {
+            "note": "8",
+            "noise": {
+                "scale": 1.0,
+                "zoom": 50,
+                "type": "grid"
+            }
+        },
+        {
+            "note": "9",
+            "inherit_noise": true
+        },
+        {
+            "note": "10",
+            "inherit_noise": true
+        },
+        {
+            "note": "11",
+            "inherit_noise": true
+        },
+        {
+            "note": "12",
+            "noise": {
+                "scale": 1.0,
+                "zoom": 50,
+                "type": "grid"
+            }
+        },
+        {
+            "note": "13",
+            "noise": {
+                "scale": 1.0,
+                "zoom": 50,
+                "type": "simplex"
+            }
+        },
+        {
+            "inherit_noise": true
+        },
+        {
+            "inherit_noise": true
+        },
+        {
+            "inherit_noise": true
+        },
+        {
+            "note": "17",
+            "noise": {
+                "scale": 1.0,
+                "zoom": 1,
+                "type": "simplex"
+            }
+        },
+        {
+            "inherit_noise": true
+        },
+        {
+            "inherit_noise": true
+        },
+        {
+            "inherit_noise": true
+        },
+        {
+            "inherit_noise": true
+        },
+        {
+            "inherit_noise": true
+        },
+        {
+            "noise": {
+                "scale": 1.0,
+                "zoom": 50,
+                "type": "grid"
+            }
+        },
+        {
+            "inherit_noise": true
+        },
+        {
+            "inherit_noise": true
+        },
+        {
+            "note": "26",
+            "noise": {
+                "scale": 1.0,
+                "zoom": 1,
+                "type": "simplex"
+            }
+        },
+        {
+            "note":"27 Biomes Lite Ramps",
+            "noise": {
+                "scale": 3,
+                "zoom": 2,
+                "type": "simplex"
+            }
+        }
+    ],
+    "brushes": [
+        {
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 2,
+            "weight": 0.75,
+            "weight_hard": 1,
+            "weight_scale": 0.75,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.3,
+                0.5
+            ],
+            "elevation_range": [
+                0.3,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_plateau_01.json",
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "scale_variation": 0.1,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 2,
+            "weight": 0.75,
+            "weight_hard": 0,
+            "weight_scale": 0.5,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.25,
+                0.5
+            ],
+            "elevation_range": [
+                0.25,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_plateau_02.json",
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "scale_variation": 0.25,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 2,
+            "weight": 0.75,
+            "weight_hard": 1,
+            "weight_scale": 0.75,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.3,
+                0.5
+            ],
+            "elevation_range": [
+                0.2,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_plateau_03.json",
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "scale_variation": 0.1,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 2,
+            "weight": 0.75,
+            "weight_hard": 1,
+            "weight_scale": 0.75,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.3,
+                0.5
+            ],
+            "elevation_range": [
+                0.275,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_plateau_04.json",
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "scale_variation": 0.1,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 3,
+            "group": "basic",
+            "layer": 2,
+            "weight": 0.75,
+            "weight_hard": 1,
+            "weight_scale": 0.75,
+            "threshold": 0,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.5,
+                1.0
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_plateau_05.json",
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "scale_variation": 0.3,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 2,
+            "weight": 0.75,
+            "weight_hard": 1,
+            "weight_scale": 0.75,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.0,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_plateau_06.json",
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "scale_variation": 0.1,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 2,
+            "weight": 0.75,
+            "weight_hard": 1,
+            "weight_scale": 0.75,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.0,
+                0.5
+            ],
+            "elevation_range": [
+                0.25,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_plateau_07.json",
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "scale_variation": 0.1,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 2,
+            "weight": 0.75,
+            "weight_hard": 0,
+            "weight_scale": 0.5,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.25,
+                0.5
+            ],
+            "elevation_range": [
+                0.25,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_plateau_08.json",
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "scale_variation": 0.25,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 2,
+            "weight": 0.75,
+            "weight_hard": 0,
+            "weight_scale": 0.5,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.25,
+                0.5
+            ],
+            "elevation_range": [
+                0.25,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_plateau_09.json",
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "scale_variation": 0.25,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 4,
+            "weight": 1,
+            "weight_hard": 1,
+            "weight_scale": 4,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.4,
+                0.6
+            ],
+            "elevation_range": [
+                0.4,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_volcano_04.json",
+            "scale": [
+                0.85,
+                0.85,
+                0.85
+            ],
+            "scale_variation": 0.2,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 4,
+            "weight": 1,
+            "weight_hard": 1,
+            "weight_scale": 4,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.4,
+                0.6
+            ],
+            "elevation_range": [
+                0.4,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_volcano_05.json",
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "scale_variation": 0.2,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 4,
+            "weight": 1,
+            "weight_hard": 1,
+            "weight_scale": 2,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.2,
+                0.5
+            ],
+            "elevation_range": [
+                0.3,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_volcano_06.json",
+            "scale": [
+                1,
+                1,
+                1
+            ],
+            "scale_variation": 0.2,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 16,
+            "layer": 0,
+            "weight": 2,
+            "weight_hard": 1,
+            "weight_scale": 4,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.5,
+                0.55
+            ],
+            "elevation_range": [
+                0.2,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_rock_33.json",
+            "scale": [
+                0.4,
+                0.4,
+                0.4
+            ],
+            "scale_variation": 0.3,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances":16,
+            "layer": 0,
+            "weight": 2,
+            "weight_hard": 1,
+            "weight_scale": 4,
+            "threshold": 1,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.52,
+                0.55
+            ],
+            "elevation_range": [
+                0.2,
+                0.5
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_rock_34.json",
+            "scale": [
+                0.4,
+                0.4,
+                0.4
+            ],
+            "scale_variation": 0.3,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 16,
+            "layer": 0,
+            "weight": 3,
+            "weight_hard": 1,
+            "weight_scale": 4,
+            "threshold": 0,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.525,
+                0.54
+            ],
+            "elevation_range": [
+                -1,
+                -0.15
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_rock_35.json",
+            "scale": [
+                0.75,
+                0.75,
+                0.75
+            ],
+            "scale_variation": 0,
+            "proj": "BP_Bend"
+        },
+        {
+            "max_instances": 16,
+            "layer": 0,
+            "weight": 3,
+            "weight_hard": 1,
+            "weight_scale": 4,
+            "threshold": 0,
+            "sample_scale": 1.0,
+            "bias": 20,
+            "noise_range": [
+                0.525,
+                0.54
+            ],
+            "elevation_range": [
+                -1,
+                -0.15
+            ],
+            "op": "BO_Add",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_rock_36.json",
+            "scale": [
+                0.75,
+                0.75,
+                0.75
+            ],
+            "scale_variation": 0,
+            "proj": "BP_Bend"
+        },
+        {
+            "group": "basic",
+            "layer": 4,
+            "weight": 4,
+            "weight_hard": 1,
+            "weight_scale": 4,
+            "threshold": 0,
+            "sample_scale": 1.2,
+            "bias": 12,
+            "noise_range": [
+                0.95,
+                1.0
+            ],
+            "elevation_range": [
+                0.75,
+                1.0
+            ],
+            "op": "BO_Subtract",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_crack_01.json",
+            "scale": [
+                0.75,
+                0.75,
+                0.75
+            ],
+            "scale_variation": 0,
+            "proj": "BP_Bend"
+        },
+        {
+            "group": "basic",
+            "layer": 4,
+            "weight": 8,
+            "weight_hard": 1,
+            "weight_scale": 5,
+            "threshold": 0,
+            "sample_scale": 1.2,
+            "bias": 12,
+            "noise_range": [
+                0.95,
+                1.0
+            ],
+            "elevation_range": [
+                0.75,
+                1.0
+            ],
+            "op": "BO_Subtract",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_crack_03.json",
+            "scale": [
+                0.6,
+                0.6,
+                0.6
+            ],
+            "scale_variation": 0,
+            "proj": "BP_Bend"
+        },
+        {
+            "group": "basic",
+            "layer": 3,
+            "weight": 8,
+            "weight_hard": 1,
+            "weight_scale": 5,
+            "threshold": 0,
+            "sample_scale": 1.2,
+            "bias": 12,
+            "noise_range": [
+                0.95,
+                1.0
+            ],
+            "elevation_range": [
+                0.75,
+                1.0
+            ],
+            "op": "BO_Subtract",
+            "brush_spec": "/pa/terrain/lava/brushes/lava_crack_04.json",
+            "scale": [
+                0.6,
+                0.6,
+                0.6
+            ],
+            "scale_variation": 0,
+            "proj": "BP_Bend"
+        },
+        {
+
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t1_large_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "water_distance_range": [
+                200,
+                null
+            ],
+            "scale_variation": 0.3,
+            "required_content": "PAExpansion1"
+        },
+        {
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t1_large_3_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "water_distance_range": [
+                200,
+                null
+            ],
+            "scale_variation": 0.3,
+            "required_content": "PAExpansion1"
+        },
+        {
+
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t1_large_4_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+
+            "max_instances": 1,
+            "group": "basic",
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "noise_range": [
+                0.6,
+                0.9
+            ],
+            "scale_variation": 0.3,
+            "required_content": "PAExpansion1"
+        },
+        {
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t1_large_8_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+
+            "max_instances": 1,
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                300,
+                10000
+            ],
+            "water_distance_range": [
+                200,
+                null
+            ],
+            "scale_variation": 0.3,
+            "required_content": "PAExpansion1"
+        },
+        {
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t1_medium_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+
+            "max_instances": 2,
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                300,
+                10000
+            ],
+            "water_distance_range": [
+                400,
+                null
+            ],
+            "scale_variation": 0.3,
+
+            "required_content": "PAExpansion1"
+        },
+        {
+
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t1_medium_4_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+
+            "max_instances": 2,
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                300,
+                10000
+            ],
+            "water_distance_range": [
+                400,
+                null
+            ],
+            "scale_variation": 0.3,
+
+            "required_content": "PAExpansion1"
+        },
+        {
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t1_pit_2_ramp.json",
+            "op": "BO_Subtract",
+            "proj": "BP_Bend",
+
+            "max_instances": 2,
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "water_distance_range": [
+                400,
+                null
+            ],
+            "scale_variation": 0.3,
+
+            "required_content": "PAExpansion1"
+        },
+        {
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t2_large_4_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+
+            "max_instances": 1,
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "water_distance_range": [
+                400,
+                null
+            ],
+
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "organic",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t2_large_bend.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "organic",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t2_large_long.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t2_medium_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "max_instances": 2,
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                300,
+                10000
+            ],
+            "water_distance_range": [
+                200,
+                null
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t2_medium_4_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "max_instances": 2,
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                300,
+                10000
+            ],
+            "water_distance_range": [
+                200,
+                null
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t2_medium_bend.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+
+            "max_instances": 2,
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                300,
+                10000
+            ],
+            "water_distance_range": [
+                400,
+                null
+            ],
+            "scale_variation": 0.3,
+
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "organic",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t2_medium_long.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t2_medium_wide_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "max_instances": 2,
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                300,
+                10000
+            ],
+            "water_distance_range": [
+                200,
+                null
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "organic",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t2_small_1_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "organic",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t2_small_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "organic",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t3_medium_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t3_medium_4_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "max_instances": 2,
+            "layer": 27,
+            "threshold": 0,
+            "weight": 1,
+            "weight_hard": 20,
+            "weight_scale": 4,
+            "bias": 20,
+            "planet_size_range": [
+                300,
+                10000
+            ],
+            "water_distance_range": [
+                200,
+                null
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "organic",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t3_small.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "organic",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t3_small_1_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "organic",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t3_small_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "organic",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t3_small_2x_1_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "organic",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_t3_small_3_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t1_large_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t1_large_3_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t1_large_4_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t1_large_8_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t1_medium_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t1_medium_4_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t1_pit_2_ramp.json",
+            "op": "BO_Subtract",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t2_large_4_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t2_large_bend.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t2_large_long.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t2_medium_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t2_medium_3_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t2_medium_4_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t2_medium_bend.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t2_medium_long.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t2_medium_wide_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t2_small_1_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t2_small_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t3_medium_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t3_medium_4_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t3_small.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 0,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t3_small_1_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t3_small_2_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t3_small_3_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        },
+        {
+            "group": "structural",
+            "layer": 7,
+            "brush_spec": "/pa/terrain/lava/brushes/lava_metal_t3_small_2x_1_ramp.json",
+            "op": "BO_Add",
+            "proj": "BP_Bend",
+            "planet_size_range": [
+                10,
+                20
+            ],
+            "required_content": "PAExpansion1"
+        }
+    ],
+    "features": [],
+    "decals": [
+        {
+            "note": "Midtone ground transition value.",
+            "layer": 3,
+            "bias": 200,
+            "noise_range": [
+                0.0,
+                1.0
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "elevation_range": [
+                0.65,
+                1.0
+            ],
+            "scale": [
+                60,
+                60,
+                1
+            ],
+            "scale_variation": 0.2,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_01.json"
+        },
+        {
+            "note": "Midtone ground transition value.",
+            "layer": 3,
+            "bias": 200,
+            "noise_range": [
+                0.0,
+                1.0
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "elevation_range": [
+                0.0,
+                0.25
+            ],
+            "scale": [
+                60,
+                60,
+                1
+            ],
+            "scale_variation": 0.2,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_01.json"
+        },
+        {
+            "note": "Opaque lightest ground value.",
+            "layer": 4,
+            "bias": 200,
+            "noise_range": [
+                0.0,
+                1.0
+            ],
+            "elevation_range": [
+                0.225,
+                0.7
+            ],
+            "pos_range": [
+                0.0,
+                0.5
+            ],
+            "scale": [
+                55,
+                55,
+                1
+            ],
+            "scale_variation": 0.0,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_05.json"
+        },
+        {
+            "note": "Transition Decals. Inner Layer, close to lava.",
+            "layer": 5,
+            "bias": 200,
+            "noise_range": [
+                0.0,
+                1.0
+            ],
+            "elevation_range": [
+                0.16,
+                0.23
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "scale": [
+                60,
+                60,
+                1
+            ],
+            "scale_variation": 0.0,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_07.json"
+        },
+        {
+            "note": "Transition Decals. Outer Layer, More Inland.",
+            "layer": 5,
+            "bias": 200,
+            "noise_range": [
+                0.0,
+                1.0
+            ],
+            "elevation_range": [
+                0.7,
+                0.75
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "scale": [
+                60,
+                60,
+                1
+            ],
+            "scale_variation": 0.0,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_07.json"
+        },
+        {
+            "note": "Mud cracks.",
+            "layer": 5,
+            "bias": 1,
+            "noise_range": [
+                0.475,
+                0.5
+            ],
+            "pos_range": [
+                25,
+                25
+            ],
+            "elevation_range": [
+                0.2,
+                0.5
+            ],
+            "scale": [
+                80,
+                80,
+                1
+            ],
+            "scale_variation": 0.15,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_cracks_04.json"
+        },
+        {
+            "layer": 6,
+            "bias": 200,
+            "noise_range": [
+                0.4,
+                0.6
+            ],
+            "pos_range": [
+                0.3,
+                0.3
+            ],
+            "elevation_range": [
+                0.13,
+                0.155
+            ],
+            "scale": [
+                40,
+                40,
+                1
+            ],
+            "scale_variation": 0.7,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_06.json"
+        },
+        {
+            "layer": 7,
+            "bias": 200,
+            "noise_range": [
+                0.3,
+                0.7
+            ],
+            "pos_range": [
+                0.3,
+                0.3
+            ],
+            "elevation_range": [
+                0.12,
+                0.155
+            ],
+            "scale": [
+                60,
+                60,
+                1
+            ],
+            "scale_variation": 0.2,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_rocks.json"
+        },
+        {
+            "note": "Blast craters.",
+            "layer": 9,
+            "bias": 1,
+            "noise_range": [
+                0.5,
+                0.625
+            ],
+            "pos_range": [
+                1,
+                1
+            ],
+            "elevation_range": [
+                0.3,
+                0.5
+            ],
+            "scale": [
+                160,
+                160,
+                1
+            ],
+            "scale_variation": 0.15,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_crater.json"
+        },
+        {
+            "layer": 13,
+            "bias": 500,
+            "noise_range": [
+                0.0,
+                1.0
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "elevation_range": [
+                -1,
+                -0.005
+            ],
+            "scale": [
+                60,
+                60,
+                1
+            ],
+            "scale_variation": 0.0,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_03.json"
+        },
+        {
+            "layer": 19,
+            "bias": 500,
+            "noise_range": [
+                0.0,
+                1.0
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "elevation_range": [
+                -1,
+                -0.05
+            ],
+            "scale": [
+                40,
+                40,
+                1
+            ],
+            "scale_variation": 1.0,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_04.json"
+        },
+        {
+            "layer": 20,
+            "bias": 500,
+            "noise_range": [
+                0.0,
+                1.0
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "elevation_range": [
+                -1,
+                -0.25
+            ],
+            "scale": [
+                40,
+                40,
+                1
+            ],
+            "scale_variation": 1.0,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_yellow.json"
+        },
+        {
+            "layer": 21,
+            "bias": 600,
+            "noise_range": [
+                0.0,
+                1.0
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "water_distance_range": [
+                -25,
+                50
+            ],
+            "scale": [
+                50,
+                50,
+                1
+            ],
+            "scale_variation": 0.0,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_red.json"
+        },
+        {
+            "note": "Darkest ground transition value.",
+            "layer": 22,
+            "bias": 200,
+            "noise_range": [
+                0.0,
+                1.0
+            ],
+            "pos_range": [
+                0.15,
+                1.35
+            ],
+            "water_distance_range": [
+                20,
+                70
+            ],
+            "scale": [
+                50,
+                50,
+                1
+            ],
+            "scale_variation": 1.0,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_02.json"
+        },
+        {
+            "layer": 23,
+            "bias": 200,
+            "noise_range": [
+                0.0,
+                1.0
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "water_distance_range": [
+                60,
+                120
+            ],
+            "scale": [
+                50,
+                50,
+                1
+            ],
+            "scale_variation": 0.75,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_01.json"
+        },
+        {
+            "layer": 24,
+            "bias": 200,
+            "noise_range": [
+                0.0,
+                0.4
+            ],
+            "elevation_range": [
+                -0.2,
+                -0.15
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "scale": [
+                30,
+                30,
+                1
+            ],
+            "scale_variation": 1.0,
+            "count": 1,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_yellowSpots.json"
+        },
+        {
+            "layer": 0,
+            "bias": 800,
+            "noise_range": [
+                0.6,
+                0.65
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "elevation_range": [
+                -0.1,
+                0.025
+            ],
+            "scale": [
+                250,
+                250,
+                1
+            ],
+            "scale_variation": 0.0,
+            "count": 1.0,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_cracks_02.json"
+        },
+        {
+            "layer": 25,
+            "bias": 800,
+            "noise_range": [
+                0.6,
+                0.9
+            ],
+            "pos_range": [
+                0.15,
+                0.15
+            ],
+            "elevation_range": [
+                -0.2,
+                -0.09
+            ],
+            "scale": [
+                250,
+                250,
+                1
+            ],
+            "scale_variation": 0.0,
+            "count": 1.0,
+            "material_spec": "/pa/terrain/lava/decals/lava_decal_cracks_02.json"
+        }
+    ]
+}
