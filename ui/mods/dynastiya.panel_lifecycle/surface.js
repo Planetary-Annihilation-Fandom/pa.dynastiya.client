@@ -1,4 +1,4 @@
-/* Local counterpart of dockPresentation: never conceal the whole menu/lobby. */
+/* Подготовка локального блока внутри общей страницы: лобби, меню, настройки. */
 (function () {
     'use strict';
     if (api.Panel.createPresentation) return;
@@ -7,20 +7,30 @@
         '{visibility:hidden!important;pointer-events:none!important;}';
     document.head.appendChild(sheet);
 
-    // Область применения: локальный DOM-блок внутри общей страницы.
-    // present: открытие окна выбора командира/цвета, диалога или нового раздела,
-    // когда промежуточное содержимое ещё не должно быть видно пользователю.
-    // update (или обычные KO-привязки): постоянные списки и уже видимые данные.
-    // В частности, список слотов, выбранная система и параметры лобби должны
-    // обновляться без скрытия, даже при смене игроков, планет или числа строк.
-    // Нельзя использовать present на каждый ответ сервера или изменение списка:
-    // он намеренно скрывает блок и создаёт заметный провал между обновлениями.
-    // Ограничивайте подготовку открываемым блоком, а не всей страницей/колонкой.
-    // var p = api.Panel.createPresentation(document.querySelector('#details'));
-    // p.update(packet, renderCounts);          // retain visible content
-    // p.present(packet, renderPage, pageId);   // rebuild only for a new key
-    // p.present(packet, renderPage);           // force a rebuild, even same data
-    // p.dispose();                            // before permanently removing node
+    // У такого блока нет своего нативного окна: он делит страницу с соседними
+    // разделами, и изменение его размера не задерживает показ. Поэтому почти
+    // всё обновляется на месте, а скрытие нужно только для вновь открытого окна.
+    //
+    // var p = api.Panel.createPresentation(element);
+    //
+    // p.update(data, apply) или обычные привязки Knockout
+    //     Постоянные списки и уже видимые данные: слоты лобби, выбранная
+    //     система, параметры игры, вкладки настроек. Блок не скрывается даже
+    //     при смене игроков, планет или числа строк. Скрытие на каждое
+    //     изменение данных — это и есть мигание.
+    //
+    // p.present(data, apply, key)
+    //     Открывается окно выбора командира или цвета, диалог, новый раздел,
+    //     а его картинки ещё не загружены. Блок скрыт до загрузки. Ограничивайте
+    //     подготовку самим открывающимся блоком, а не страницей или колонкой.
+    //     При том же ключе present работает как update; без ключа — всегда
+    //     заново.
+    //
+    // p.cancel()   — владелец закрыл блок во время подготовки; разметка остаётся.
+    // p.dispose()  — перед окончательным удалением элемента.
+    //
+    // Режима replace здесь нет: удерживать прежний кадр нужно только у
+    // нативного окна HUD (см. presentation.js).
     api.Panel.createPresentation = function (element) {
         var state = {pending: false, revision: 0};
         var keyed = false, key, frame, closed = false, resources = [], cache = {};
@@ -63,8 +73,8 @@
             });
         }
         state.update = function (data, apply) { if (!closed) { apply(data); api.Panel.onBodyResize(); } };
-        // Closing the owner cancels preparation, not its retained DOM. A late
-        // image event must not resume scans or reveal an obsolete opening.
+        // Закрытие владельцем отменяет подготовку, но не разметку. Поздняя
+        // загрузка картинки не должна снова показать уже закрытый блок.
         state.cancel = function () {
             keyed = false;
             state.revision++;
@@ -99,16 +109,25 @@
         return state;
     };
 
-    // Observe a structural key already maintained by a stock view model. The
-    // computed compares its serialized key, not the changing model object.
-    // watch(p, function () { return [model.visible(), model.pageId()]; });
-    // Use mode 'update' for retained DOM: a key change only requests measurement,
-    // without starting a new visibility/preparation cycle.
+    // Подключает режим к ключу, который вычисляется из модели стандартной сцены.
+    // Сравнивается сериализованный ключ, а не меняющийся объект модели.
+    // var stop = api.Panel.watchPresentation(p, function () { return [model.visible(), model.pageId()]; }, 'replace');
+    //
+    // mode 'update'  — смена ключа только запрашивает замер размера.
+    // mode 'replace' — только для dockPresentation: смена ключа удерживает
+    //                  прежний кадр, пока окно не получит новый размер.
+    // без mode       — present: блок скрывается до готовности.
+    //
+    // Создавайте наблюдение до ko.applyBindings. Тогда оно узнаёт о смене ключа
+    // раньше привязок, и replace успевает сохранить прежний кадр до того, как
+    // Knockout изменит разметку.
     api.Panel.watchPresentation = function (presentation, readKey, mode) {
         var key = ko.computed(function () { return JSON.stringify(readKey()); });
+        var noop = function () {};
         var subscription = key.subscribe(function (value) {
-            if (mode === 'update') presentation.update(null, function () {});
-            else presentation.present(null, function () {}, value);
+            if (mode === 'update') presentation.update(null, noop);
+            else if (mode === 'replace') presentation.replace(null, noop, value);
+            else presentation.present(null, noop, value);
         });
         return function () { subscription.dispose(); key.dispose(); };
     };

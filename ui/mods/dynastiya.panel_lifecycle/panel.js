@@ -108,8 +108,8 @@ function init_panel() {
             result._$dock = $('<panel-dock style="display:inline-block"></panel-dock>');
             $div.append(result._$dock);
         }
-        // A docked HUD view has no content dimensions until its first resize
-        // message. Creating it visible exposes a zero/stale-sized backing view.
+        // Окно HUD с fit=dock* не знает своего размера до первого сообщения
+        // panel.resize. Видимое с самого начала, оно показало бы пустой кадр.
         result._awaitingDock = !!(hudScene && /\/game\/live_game\//.test(result.src) && /^dock/.test(result.fit));
         if (result._awaitingDock) {
             result.visible = false;
@@ -121,7 +121,7 @@ function init_panel() {
         $.extend(config, result.region, {name: config.name, parent: config.parent, border: normalizeBorder(result.border)});
 
         engine.call('panel.create', JSON.stringify(config)).then(function (id) {
-            // Creation can finish after navigation or explicit destruction.
+            // Создание может завершиться уже после перехода или удаления панели.
             if (result._destroyed) {
                 if (id >= 0) engine.call('panel.destroy', id);
                 return;
@@ -191,8 +191,8 @@ function init_panel() {
 
         var region;
 
-        // Move while still hidden. Showing first can expose the previous dock
-        // position for one native frame when a bottom-anchored panel grows.
+        // Сначала перемещаем, потом показываем: иначе растущая панель с нижней
+        // привязкой на один кадр появилась бы на прежнем месте.
         var willBeVisible = !self._awaitingDock && self._$div.is(':visible');
         var curRegion = willBeVisible ? calcRegion(self._$div, self._div) : self.region;
         if (willBeVisible && regionsAreDifferent(curRegion, self.region)) {
@@ -236,10 +236,15 @@ function init_panel() {
 
     panel.prototype.acknowledgeDock = function() {
         if (this._dockRevision === undefined) return;
+        // Положение и привязка окна нужны режиму replace: копия прежнего кадра
+        // должна остаться на своём месте, когда окно меняет размер.
         this.message('panel.dock_applied', {
             revision: this._dockRevision,
             width: Math.round(this.region.width * window.innerWidth),
-            height: Math.round(this.region.height * window.innerHeight)
+            height: Math.round(this.region.height * window.innerHeight),
+            left: Math.round(this.region.left * window.innerWidth),
+            top: Math.round(this.region.top * window.innerHeight),
+            fit: this.fit
         });
     };
 
@@ -249,7 +254,7 @@ function init_panel() {
         if (!self.hasOwnProperty('id'))
             return;
 
-        // update() applies the region before changing native visibility.
+        // update() применяет положение до изменения видимости окна.
         self.update();
 
         var newSrc = self._$div.attr('src') || '';
@@ -444,8 +449,8 @@ function init_panel() {
             panel.onBodyResize();
         }
         if (hudScene && !panel._layoutObserver) {
-            // KO inserts/removes whole sections between polling ticks. Measure
-            // the resulting layout before paint; image loads also request a pass.
+            // Knockout добавляет и убирает разделы между опросами по таймеру.
+            // Измеряем результат до отрисовки; загрузка картинок тоже вызывает замер.
             function scheduleLayout() {
                 if (panel._layoutFrame !== undefined) return;
                 panel._layoutFrame = window.requestAnimationFrame(function () {
@@ -455,8 +460,8 @@ function init_panel() {
                 });
             }
             panel._layoutObserver = new MutationObserver(function () {
-                // Conceal a changed child layout in the mutation microtask,
-                // before an intermediate shape can reach the next paint.
+                // Замер в микрозадаче MutationObserver выполняется до отрисовки кадра,
+                // поэтому подготовка начинается раньше, чем промежуточный вид попадёт на экран.
                 if (panel.prepareDock) panel.onBodyResize();
                 scheduleLayout();
             });
