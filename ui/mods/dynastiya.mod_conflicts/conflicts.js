@@ -56,11 +56,35 @@
         return { own: own, host: host };
     }
 
+    // Иконка берётся из поля icon в modinfo.json мода: обычно это ссылка в интернете.
+    // Если её нет или она не загрузилась, остаётся рамка с первой буквой названия.
+    function item(mod) {
+        var name = nameOf(mod);
+        var li = api.dynastiyaUi.text('text', '', { tag: 'li', expressive: true, strong: true });
+        li.className += ' dyn-mod-item';
+        var icon = document.createElement('span');
+        icon.className = 'dyn-mod-item__icon';
+        icon.textContent = name.charAt(0).toUpperCase();
+        if (mod.icon) {
+            var img = document.createElement('img');
+            img.alt = '';
+            img.onerror = function () { img.parentNode && img.parentNode.removeChild(img); };
+            img.src = mod.icon;
+            icon.appendChild(img);
+        }
+        var label = document.createElement('span');
+        label.className = 'dyn-mod-item__name';
+        label.textContent = name;
+        li.appendChild(icon);
+        li.appendChild(label);
+        return li;
+    }
+
     function list(body, mods) {
         var ul = document.createElement('ul');
         ul.className = 'dyn-modal__list dyn-scroll';
         _.forEach(mods, function (mod) {
-            ul.appendChild(api.dynastiyaUi.text('text', nameOf(mod), { tag: 'li', expressive: true, strong: true }));
+            ul.appendChild(item(mod));
         });
         body.appendChild(ul);
     }
@@ -102,6 +126,7 @@
             });
         return {
             title: loc('!LOC:Conflicting mods'),
+            size: 'lg',
             content: function (body) {
                 paragraph(body, loc('!LOC:Dynastiya already includes these mods. Enabling them alongside Dynastiya breaks its features.'));
                 if (state.own.length) list(body, state.own);

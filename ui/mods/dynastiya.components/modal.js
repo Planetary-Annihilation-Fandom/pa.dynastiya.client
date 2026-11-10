@@ -6,6 +6,7 @@
     //
     //   var modal = api.dynastiyaUi.modal({
     //       title: 'Заголовок',
+    //       size: 'lg', // необязательно: по умолчанию окно 720px, lg — по шкале Carbon
     //       content: function (body) { body.appendChild(...); },
     //       actions: [
     //           { label: 'Отмена', cancel: true },
@@ -84,6 +85,7 @@
 
         function render(next) {
             current = next;
+            dialog.className = 'dyn-modal' + (next.size ? ' dyn-modal--' + next.size : '');
             dialog.innerHTML = '';
 
             var header = element('div', 'dyn-modal__header');

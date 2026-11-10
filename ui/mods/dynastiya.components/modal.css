@@ -28,6 +28,21 @@
     box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.12), 0 0 24px rgba(0, 0, 0, 0.75);
 }
 
+.dyn-modal--lg {
+    width: 96%;
+    max-width: none;
+    max-height: 96%;
+}
+
+/* Размер lg по шкале модальных окон Carbon: ширина в процентах экрана по точкам перелома. */
+@media (min-width: 1056px) {
+    .dyn-modal--lg { width: 84%; }
+}
+
+@media (min-width: 1312px) {
+    .dyn-modal--lg { width: 72%; }
+}
+
 .dyn-modal__header {
     display: flex;
     align-items: center;
@@ -77,9 +92,9 @@
     list-style: none;
 }
 
-.dyn-modal__list {
-    max-height: 172px;
-    padding: 8px 12px 4px;
+.dyn-modal__body .dyn-modal__list {
+    max-height: 280px;
+    padding: 12px 12px 4px;
     border: 1px solid rgba(131, 131, 131, 0.35);
 }
 
@@ -98,6 +113,48 @@
     height: 6px;
     background: #06fae8;
     box-shadow: 0 0 4px rgba(6, 250, 232, 0.89);
+}
+
+/* Строка мода: иконка из modinfo.json (поле icon) и название. Без иконки или без сети
+   вместо картинки остаётся рамка с первой буквой названия. */
+.dyn-modal__body li.dyn-mod-item {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin-bottom: 8px;
+}
+
+.dyn-modal__body li.dyn-mod-item:before {
+    display: none;
+}
+
+.dyn-mod-item__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    margin-right: 16px;
+    border: 1px solid rgba(131, 131, 131, 0.35);
+    background: #151515;
+    color: #9aa8b2;
+    font-size: 20px;
+    line-height: 46px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.dyn-mod-item__icon img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.dyn-mod-item__name {
+    min-width: 0;
+    word-wrap: break-word;
 }
 
 .dyn-modal__footer {
