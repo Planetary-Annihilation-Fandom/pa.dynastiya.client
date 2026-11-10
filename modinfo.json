@@ -73,6 +73,9 @@
     ],
     "live_game_econ": [
       "coui://ui/mods/dynastiya.layout/live_game_econ.css"
+    ],
+    "live_game_hover": [
+      "coui://ui/mods/dynastiya.layout/live_game_hover.css"
     ]
   }
 }

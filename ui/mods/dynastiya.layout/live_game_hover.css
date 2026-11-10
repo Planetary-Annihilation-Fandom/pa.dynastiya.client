@@ -1,0 +1,10 @@
+/* Sansation has proportional digits: even 88% -> 89% can change the
+   intrinsic width of this dock and restart its presentation gate. Reserve
+   room for 100% while allowing longer values to grow without clipping. */
+#worldpopup01 .div_health_percentages .stat {
+    min-width: 4em;
+    text-align: right;
+}
+#worldpopup01 .div_health_bar_grp {
+    flex-shrink: 0;
+}
