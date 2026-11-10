@@ -1,0 +1,71 @@
+/* Reserve the active underline; changing tabs must not move the panel body. */
+#left-panel-tabs .left-tab {
+    border-bottom: 2px solid transparent;
+}
+#left-panel-tabs .left-tab-active {
+    border-bottom-color: #00b3ff;
+}
+/* The stock absolute 286px slots overlap version/social controls at smaller
+   UI widths. Keep the same order, but divide the space between those controls. */
+#top-bar #top-bar-nav {
+    position: static;
+    transform: none;
+    -webkit-transform: none;
+    flex: 1;
+    min-width: 0;
+    margin: 0 12px;
+    height: auto;
+    align-self: stretch;
+    align-items: stretch;
+}
+#top-bar #top-bar-nav > .top-nav-group {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+    height: auto;
+    align-items: stretch;
+}
+#top-bar-nav .top-nav-btn {
+    white-space: normal;
+    word-wrap: break-word;
+    padding: 4px 24px 4px 8px;
+    text-align: center;
+    height: auto;
+    min-height: 70px;
+}
+#top-bar-nav .top-nav-sub-btn {
+    white-space: normal;
+    word-wrap: break-word;
+}
+#top-bar-nav .top-nav-sub-btn > loc {
+    min-width: 0;
+}
+#top-bar-nav .top-nav-sub-btn .external-link,
+#top-bar-nav .top-nav-sub-btn .discord_logo {
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+/* Header labels can wrap while the adjacent action keeps its click area. */
+#right-panel .right-panel-card-header {
+    flex-wrap: wrap;
+}
+#right-panel .right-panel-card-title {
+    min-width: 0;
+    word-wrap: break-word;
+}
+
+/* The top bar may grow for multi-line localization instead of clipping it.
+   Its normal 70px minimum and the player's UI scale remain unchanged. */
+body #top-bar {
+    height: auto;
+    min-height: 70px;
+}
+
+#top-bar #top-bar-right {
+    height: auto;
+    align-self: stretch;
+}
+#top-bar-right .top-nav-quit {
+    height: auto;
+    align-self: stretch;
+}

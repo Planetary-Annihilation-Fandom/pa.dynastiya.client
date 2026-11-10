@@ -1,0 +1,18 @@
+/* Both net rates (+999.9K) and percentages share a slot. A change in text
+   must not resize the neighbouring storage bars; larger values may still grow. */
+body .div-metal .div_rate_ctr_cont,
+body .div-energy .div_rate_ctr_cont,
+body .div-metal .div_rate_ctr_overall,
+body .div-energy .div_rate_ctr_overall {
+    min-width: 4.5em;
+    flex-shrink: 0;
+}
+/* Native PNG dimensions reserve space even before the first image load. */
+.category_icon_metal img {
+    width: 20px;
+    height: 16px;
+}
+.category_icon_energy img {
+    width: 14px;
+    height: 18px;
+}

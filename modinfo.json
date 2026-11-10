@@ -20,7 +20,8 @@
   "scenes": {
     "server_browser": [
       "coui://ui/mods/dynastiya.server_browser/server_browser.js",
-      "coui://ui/mods/dynastiya.layout/server_browser.css"
+      "coui://ui/mods/dynastiya.layout/server_browser.css",
+      "coui://ui/mods/dynastiya.layout/landing.css"
     ],
     "live_game_build_bar": [
       "coui://ui/mods/dynastiya.live_game/build_bar.js"
@@ -32,17 +33,21 @@
       "coui://ui/mods/dynastiya.live_game/chat.js"
     ],
     "live_game_planets": [
-      "coui://ui/mods/dynastiya.live_game/planets.js"
+      "coui://ui/mods/dynastiya.live_game/planets.js",
+      "coui://ui/mods/dynastiya.layout/live_game_planets.css"
     ],
     "live_game_options_bar": [
-      "coui://ui/mods/dynastiya.live_game/options_bar.js"
+      "coui://ui/mods/dynastiya.live_game/options_bar.js",
+      "coui://ui/mods/dynastiya.layout/live_game_options_bar.css"
     ],
     "settings": [
       "coui://ui/mods/dynastiya.settings/settings.js",
-      "coui://ui/mods/dynastiya.layout/settings.css"
+      "coui://ui/mods/dynastiya.layout/settings.css",
+      "coui://ui/mods/dynastiya.layout/landing.css"
     ],
     "start": [
-      "coui://ui/mods/dynastiya.start/start.js"
+      "coui://ui/mods/dynastiya.start/start.js",
+      "coui://ui/mods/dynastiya.layout/start.css"
     ],
     "main": [
       "coui://ui/mods/dynastiya.control_feedback/main.js"
@@ -51,7 +56,8 @@
       "coui://ui/mods/dynastiya.map_generator/map_generator.js",
       "coui://ui/mods/dynastiya.lobby_preview/recent_systems.js",
       "coui://ui/mods/dynastiya.lobby_preview/new_game.css",
-      "coui://ui/mods/dynastiya.lobby_preview/new_game.js"
+      "coui://ui/mods/dynastiya.lobby_preview/new_game.js",
+      "coui://ui/mods/dynastiya.layout/new_game.css"
     ],
     "system_editor": [
       "coui://ui/mods/dynastiya.biomes/system_editor.js"
@@ -64,6 +70,9 @@
       "coui://ui/mods/dynastiya.control_feedback/control_feedback.css",
       "coui://ui/mods/dynastiya.control_feedback/instant_motion.js",
       "coui://ui/mods/dynastiya.tooltip/tooltip.js"
+    ],
+    "live_game_econ": [
+      "coui://ui/mods/dynastiya.layout/live_game_econ.css"
     ]
   }
 }

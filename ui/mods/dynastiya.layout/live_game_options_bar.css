@@ -1,0 +1,15 @@
+/* Toggle states share the same PNG dimensions. Reserve the click targets
+   before loading, so toggling one icon cannot shift its neighbours. */
+.div_ingame_options_bar_cont .btn_ingame_options img {
+    width: 28px;
+    height: 16px;
+}
+.div_pip_toggle_cont .img_pip {
+    width: 31px;
+    height: 26px;
+}
+/* Reserve a normal hours:minutes:seconds clock while allowing longer games. */
+.div_ingame_stats .div_ingame_timer {
+    min-width: 6em;
+    text-align: right;
+}

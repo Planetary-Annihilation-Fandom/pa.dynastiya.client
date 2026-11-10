@@ -1,0 +1,20 @@
+/* Names may wrap within the panel without pushing the radius/metal column
+   out of the hit area. Keep the thumbnail and numeric column intact. */
+.div_planet_list_item_wrap > .div_planet_list_item_center {
+    min-width: 0;
+    flex-shrink: 1;
+}
+.div_planet_list_item_wrap .planet_radius,
+.div_planet_list_item_wrap .planet_metal {
+    min-width: 4em;
+}
+/* All engine states use 10x10 PNGs. Reserve their boxes before loading and
+   wrap complete indicators when a mod adds more engines than fit in one row. */
+.div_planet_list_item_center .engine_detail_cont {
+    flex-wrap: wrap;
+}
+.engine_detail_cont .icon_engine_status {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+}

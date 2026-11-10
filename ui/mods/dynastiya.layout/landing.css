@@ -1,0 +1,19 @@
+/* The title is a flex item, but its text needs no second flex container.
+   A long localized title may wrap; the back button keeps its full hit area. */
+body .section_title .content .title {
+    display: block;
+    min-width: 0;
+    text-align: center;
+    word-wrap: break-word;
+}
+body .section_title .content .btn_back,
+body .section_title .content .btn_back_small {
+    flex-shrink: 0;
+}
+
+/* Settings uses a centered text-only heading, with no items to distribute. */
+body .section_title_centered {
+    display: block;
+    text-align: center;
+    word-wrap: break-word;
+}

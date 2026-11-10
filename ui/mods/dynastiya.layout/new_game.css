@@ -1,0 +1,15 @@
+/* Many-planet systems must wrap complete 20/30px tiles rather than squeeze
+   their boxes while the images keep their original size. */
+#system .all-planets {
+    flex-wrap: wrap;
+}
+#system .all-planets .div_planet {
+    flex-shrink: 0;
+}
+#system .system-name {
+    word-wrap: break-word;
+}
+/* Settings sections are content-sized; chat retains its own scroll area. */
+.game_settings > .section {
+    flex-shrink: 0;
+}

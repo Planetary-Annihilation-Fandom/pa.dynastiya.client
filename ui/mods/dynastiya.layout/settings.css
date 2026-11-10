@@ -11,3 +11,20 @@
 .option-list .form-group .sub-group {
     flex-wrap: wrap;
 }
+
+/* Keyboard tabs stay above the scrolling bindings, including short windows. */
+.option-list.keyboard > .tab_cont {
+    flex-shrink: 0;
+}
+.option-list.keyboard > .section_cont {
+    min-height: 0;
+}
+/* Server warnings share a row with controls; nowrap + nonshrinking children
+   otherwise sends long localized warnings outside the visible settings area. */
+.option-list .warn-group {
+    flex-wrap: wrap;
+}
+.option-list .warn-group .warning {
+    max-width: 100%;
+    word-wrap: break-word;
+}
