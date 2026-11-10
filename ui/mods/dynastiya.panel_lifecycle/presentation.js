@@ -18,6 +18,7 @@
     var resources = [];
     var cache = Object.create(null);
     var closed = false;
+    var presented = false;
 
     function dock() { return document.getElementsByTagName('body-dock')[0] || document.body; }
     function requestSettle() {
@@ -78,9 +79,14 @@
         }
         if (++stableFrames < 2) { requestSettle(); return; }
         state.pending = false;
+        presented = true;
         root.removeAttribute('data-dynastiya-dock-pending');
     }
     panel.prepareDock = function (payload, report) {
+        // A live HUD changes size during progress updates and Knockout rebinding.
+        // Never blank an already presented view or rescan all its CSS resources:
+        // continuous updates can otherwise keep it hidden indefinitely.
+        if (presented) { report(); return; }
         lastReport = report;
         payload.revision = ++state.revision;
         state.pending = true;

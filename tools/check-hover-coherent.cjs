@@ -29,14 +29,21 @@ async function main() {
             const result = await read(hover, `handlers.hover(${payload(health)});return {
                 revision:api.Panel.dockPresentation.revision,width:document.body.offsetWidth,height:document.body.offsetHeight,
                 percent:model.worldHoverTarget().healthPercentString(),hidden:document.documentElement.hasAttribute('data-dynastiya-dock-pending')};`);
-            assert.equal(result.width, baseline.width, 'Progress must not resize the dock');
-            assert.equal(result.height, baseline.height);
             assert.equal(result.percent, health+'%');
             assert.equal(result.revision, baseline.revision, 'Progress must not restart the presentation gate');
             assert.equal(result.hidden, false);
         }
-        console.log('Factory hover: 1–100% updates preserve dock dimensions and do not conceal/reprepare the panel');
+        // Also exercise geometry changes (long names, extra production rows),
+        // rather than relying on one percentage column retaining its width.
+        const result = await read(hover, `var el=document.createElement('div');
+            el.id='dynastiya-hover-resize-check';el.style.height='30px';
+            document.body.appendChild(el);api.Panel.onBodyResize();
+            return {revision:api.Panel.dockPresentation.revision,hidden:document.documentElement.hasAttribute('data-dynastiya-dock-pending')};`);
+        assert.equal(result.revision,baseline.revision);
+        assert.equal(result.hidden,false,'Actual geometry changes must not blank the hover panel');
+        console.log('Factory hover: progress and geometry updates do not conceal/reprepare the panel');
     } finally {
+        await read(hover, "var el=document.getElementById('dynastiya-hover-resize-check');if(el)el.parentNode.removeChild(el);return true;");
         await read(hover, 'handlers.hover({});return true;');
         await read(game, 'model.hasWorldHoverTarget(false);return true;');
     }
