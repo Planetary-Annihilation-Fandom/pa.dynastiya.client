@@ -20,6 +20,15 @@
 
     var waiting = false;
     var latestSelection;
+    function contentKey(selection, group) {
+        return JSON.stringify([Object.keys(selection.spec_ids || {}).sort(), group]);
+    }
+    // Switching tabs changes the grid even when the builder selection is fixed.
+    // Share the same composite key with selection updates (one owner per dock).
+    if (ko.isObservable(model.activeBuildGroup)) model.activeBuildGroup.subscribe(function (group) {
+        if (latestSelection && api.Panel.dockPresentation)
+            api.Panel.dockPresentation.present(null, function () {}, contentKey(latestSelection, group));
+    });
     handlers.selection = function (payload) {
         latestSelection = payload;
         if (waiting) return;
@@ -33,7 +42,7 @@
             if (presentation) {
                 // Counts and queues update in place; a different set of builder
                 // specs requires a new build grid, regardless of unit names.
-                var key = JSON.stringify(Object.keys(selection.spec_ids || {}).sort());
+                var key = contentKey(selection, ko.unwrap(model.activeBuildGroup));
                 presentation.present(selection, function (value) {
                     model.parseSelection(value);
                 }, key);

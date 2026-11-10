@@ -145,9 +145,9 @@ for (const [type, create, destroy, registry, data] of [
     item.destroy();
 }
 // Scope is selected at boot, including child HUD panels, before any scene binds panels.
-for (const [scene, expected] of [['/main/main.html', 2], ['/main/game/new_game/new_game.html', 2],
-    ['/main/game/live_game/live_game_chat.html', 3], ['/main/game/settings/settings.html', 2],
-    ['/main/game/start/start.html', 2], ['/main/game/server_browser/server_browser.html', 2],
+for (const [scene, expected] of [['/main/main.html', 4], ['/main/game/new_game/new_game.html', 4],
+    ['/main/game/live_game/live_game_chat.html', 5], ['/main/game/settings/settings.html', 4],
+    ['/main/game/start/start.html', 4], ['/main/game/server_browser/server_browser.html', 4],
     ['/main/game/galactic_war/gw_start/gw_start.html', 0], ['/main/game/armory/armory.html', 0],
     ['/main/game/system_editor/system_editor.html', 0], ['/main/game/guide/guide.html', 0]]) {
     const scripts = [];

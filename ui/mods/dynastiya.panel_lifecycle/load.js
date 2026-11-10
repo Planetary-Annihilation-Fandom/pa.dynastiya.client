@@ -8,6 +8,8 @@
     api.dynastiyaPanelLifecycle = true;
     loadScript('coui://ui/mods/dynastiya.panel_lifecycle/panel.js');
     loadScript('coui://ui/mods/dynastiya.panel_lifecycle/holodeck.js');
+    loadScript('coui://ui/mods/dynastiya.panel_lifecycle/surface.js');
     if (/\/game\/live_game\//.test(scene))
         loadScript('coui://ui/mods/dynastiya.panel_lifecycle/presentation.js');
+    loadScript('coui://ui/mods/dynastiya.panel_lifecycle/policies.js');
 }());

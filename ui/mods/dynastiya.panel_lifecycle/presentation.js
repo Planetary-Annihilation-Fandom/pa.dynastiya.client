@@ -22,6 +22,19 @@
     var hasKey = false;
     var contentKey;
 
+    // Usage (apply must commit synchronously; await resources before calling):
+    // var p = api.Panel.dockPresentation;
+    // p.update(packet, applyHealth);                 // live values, no conceal
+    // p.present(packet, applyUnit, packet.entity);   // same key => update
+    // p.present(packet, applyUnit);                 // always rebuild
+    // Keys describe identity/structure, never progress, time or input text.
+    // 0, '' and null are valid keys; omitting the argument forces a rebuild.
+    // For an ordinary DOM section use api.Panel.createPresentation(element).
+    // Async adapter pattern (discard obsolete results before touching the UI):
+    // var request = ++latestRequest;
+    // loadDetails(id).then(function (data) {
+    //     if (request === latestRequest) p.present(data, applyUnit, id);
+    // });
     // Keep this namespace separate from Panel.update, which moves native views.
     // apply(data) must synchronously commit the model; async callers invoke this
     // only after their resources resolve, using their latest requested data.

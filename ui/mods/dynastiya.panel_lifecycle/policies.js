@@ -1,0 +1,143 @@
+/* Presentation policy for every stock HUD scene and the priority full pages. */
+(function () {
+    'use strict';
+    if (api.Panel.presentationPolicies) return;
+    api.Panel.presentationPolicies = true;
+    var register = app.registerWithCoherent;
+    app.registerWithCoherent = function (model, handlers) {
+        var scene = window.location.pathname.split('/').pop().replace(/\.html$/, '').replace(/^live_game_pip_.+$/, 'live_game_pip');
+        var dispose = [];
+        function value(name) { return ko.isObservable(model[name]) ? model[name]() : undefined; }
+        function fields(names) { return names.split(' ').map(value); }
+        function ids(name) {
+            return (value(name) || []).map(function (row) {
+                return [ko.unwrap(row.id), ko.unwrap(row.index), ko.unwrap(row.name), ko.unwrap(row.spec_id),
+                    ko.unwrap(row.entity), ko.unwrap(row.army_id), ko.unwrap(row.type)];
+            });
+        }
+        function listIdentity(name) {
+            return (value(name) || []).map(function (row) {
+                return ['id','name','title','url','link','display_name','channel_url','status'].map(function (field) { return ko.unwrap(row[field]); });
+            });
+        }
+        function stateFields(names) {
+            var state = value('state') || {};
+            return names.split(' ').map(function (name) { return state[name]; });
+        }
+        function groupShape(group) { return [!!(group && group.total), Object.keys(group && group.breakdown || {})]; }
+        // Each key contains identity/sections only. Resource totals, clocks,
+        // progress bars, camera coordinates, order values and text input stay live.
+        var keys = {
+            live_game_action_bar: function () { return fields('showCommands showOrders allowMove allowAttack allowAssist allowRepair allowReclaim allowPatrol allowUse allowSpecialMove allowUnload allowLoad allowFireSecondaryWeapon allowMassTeleport allowStop allowFireOrders allowMoveOrders allowEnergyOrders allowBuildStanceOrders'); },
+            live_game_build_hover: function () { return [value('name'), value('siconUrl'), value('desc')]; },
+            live_game_celestial_control: function () { return stateFields('active findingTargetPlanet findingTargetSurfacePosition actionIndex'); },
+            live_game_chat: function () { return fields('chatSelected teamChat spectatorChat'); },
+            live_game_control_group_bar: function () { return [fields('hasSelection restart hoverIndex'),
+                groupShape(value('currentFocusPlanetIdleFabberGroup')), groupShape(value('currentFocusPlanetIdleFactoryGroup')),
+                (value('controlGroupList') || []).map(groupShape)]; },
+            live_game_devmode: function () { return [fields('cheatAllowChangeVision cheatAllowChangeControl'), ids('players')]; },
+            live_game_econ: function () { return fields('showResources showSharedResources'); },
+            live_game_menu: function () { return [value('gwCampaignRole'), (value('state') || []).map(function (item) { return [item.action, item.label]; })]; },
+            live_game_message: function () { return fields('message buttonLabel helper'); },
+            live_game_options_bar: function () { return [stateFields('pip uber_bar custom_formations'), value('showServerRate')]; },
+            live_game_paused_popup: function () { return fields('paused restart saving ranked'); },
+            live_game_pip: function () { return fields('alertMode mirrorMode'); },
+            live_game_planets: function () { return [ids('planets'), fields('landing targeting celestialControl showCelestialViewModels')]; },
+            live_game_players: function () { return [ids('players'), fields('showPlayerListPanel showSpectatorPanel spectatorPanelMode showEconomyData showArmyData showAllianceData')]; },
+            live_game_popup: function () { return [value('visible'), value('params')]; },
+            live_game_sandbox: function () { return [value('sandbox_expanded'), (value('sandbox_units') || []).length]; },
+            live_game_time_bar: function () { return fields('visible isSpectator showPlayFromHere'); },
+            live_game_time_bar_alerts: function () { return [value('visible'), (value('items') || []).map(function (item) { return [ko.unwrap(item.name), ko.unwrap(item.ready)]; })]; },
+            live_game_unit_alert: function () { return [value('showingPreview'), ids('alerts'), ids('combatList'), ids('defeatedArmyAlerts'), ids('specialWeaponAlerts')]; }
+        };
+        // Header/footer/tutorial have no changing content; PiP video, alert
+        // countdowns, control-group counts and chat messages remain live.
+        // Hover/selection/buildbar own their keyed data adapters; do not install
+        // a second key owner on the same dockPresentation controller.
+        if (keys[scene] && api.Panel.dockPresentation)
+            dispose.push(api.Panel.watchPresentation(api.Panel.dockPresentation, keys[scene]));
+        model.dynastiyaPresentationPolicy = keys[scene] ? 'structural-key' :
+            (/live_game_(world_popup|selection|build_bar)/.test(scene) ? 'data-adapter' :
+                (/^(start|new_game|live_game)$/.test(scene) ? 'local-sections' : 'live'));
+
+        // Install after KO has associated each section with its binding context.
+        // Local sections must never hide the full lobby, game world or main menu.
+        var selectors = {
+            start: '.top-nav-dropdown,.div_tutorial_popup,#events,#events-panel,#mod-highlights-panel,#news,#mini-board,#streams,#videos,#links-panel,#player-profile,#login,#connecting,#error,#reconnectDlg,.div_build_number_dialog',
+            new_game: '.div-system-picker-cont,.div-commander-picker-cont,.div-color-picker-cont,.armies-wrapper,#error,#start-error,#mod_names,#cheat_info,#game_options,#system',
+            live_game: '.div_tutorial_bar,.div_game_over_popup_overlay,.div_gamestats_panel'
+        };
+        var applyBindings = ko.applyBindings;
+        if (selectors[scene]) ko.applyBindings = function (boundModel, root) {
+            var result = applyBindings.apply(this, arguments);
+            if (boundModel !== model) return result;
+            ko.applyBindings = applyBindings;
+            function attach(element) {
+                if (element.dynastiyaPresentationSurface) return;
+                var releases = [];
+                function release() {
+                    releases.splice(0).forEach(function (fn) { fn(); });
+                    delete element.dynastiyaPresentationSurface;
+                    var index = dispose.indexOf(release);
+                    if (index >= 0) dispose.splice(index, 1);
+                }
+
+                var context = ko.contextFor(element);
+                if (!context) return;
+                var bindings = ko.bindingProvider.instance.getBindingAccessors(element, context) || {};
+                var read = bindings.visible || bindings['if'];
+                var local = element.dynastiyaPresentationSurface = api.Panel.createPresentation(element);
+                ko.utils.domNodeDisposal.addDisposeCallback(element, release);
+                dispose.push(release);
+                // Static sections need only their initial complete frame. For
+                // lists, explicit identity watches below prepare replacements.
+                if (read) releases.push(api.Panel.watchPresentation(local, function () { return !!ko.unwrap(read()); }));
+                local.present(null, function () {});
+                releases.push(local.dispose);
+                if (scene === 'new_game' && element.id === 'system')
+                    releases.push(api.Panel.watchPresentation(local, function () {
+                        var system = value('processedSelectedSystem') || {};
+                        return [ko.unwrap(system.name), (ko.unwrap(system.planets) || []).map(function (p) { return [ko.unwrap(p.name), ko.unwrap(p.index)]; })];
+                    }));
+                if (scene === 'new_game' && element.classList.contains('armies-wrapper'))
+                    releases.push(api.Panel.watchPresentation(local, function () {
+                        return (value('armies') || []).map(function (army) {
+                            return [ko.unwrap(army.aiArmy), (ko.unwrap(army.slots) || []).map(function (slot) {
+                                return [ko.unwrap(slot.playerName), ko.unwrap(slot.commander)];
+                            })];
+                        });
+                    }));
+                if (scene === 'new_game' && element.id === 'game_options')
+                    releases.push(api.Panel.watchPresentation(local, function () { return fields('gameType canChangeSettings dynamicAlliances bountyMode eradicationMode'); }));
+                if (scene === 'new_game' && /^(mod_names|cheat_info)$/.test(element.id))
+                    releases.push(api.Panel.watchPresentation(local, function () { return fields('activeModTextArray activeCheatTextArray'); }));
+                var lists = {news:'newsItems','mini-board':'miniboardPlayers',streams:'liveStreams',videos:'communityVideos',
+                    events:'activeEvents','events-panel':'announcements','mod-highlights-panel':'featuredMods'};
+                if (scene === 'start' && lists[element.id])
+                    releases.push(api.Panel.watchPresentation(local, function () {
+                        return [listIdentity(lists[element.id]), element.id === 'news' ? value('expandedNewsIndex') : null];
+                    }));
+            }
+            Array.prototype.forEach.call((root || document).querySelectorAll(selectors[scene]), attach);
+            // KO creates colour pickers and other conditional sections later.
+            // Ignore text replacements; only inspect newly inserted elements.
+            var observer = new MutationObserver(function (records) {
+                records.forEach(function (record) {
+                    Array.prototype.forEach.call(record.addedNodes, function (node) {
+                        if (node.nodeType !== 1) return;
+                        if (node.matches(selectors[scene])) attach(node);
+                        Array.prototype.forEach.call(node.querySelectorAll(selectors[scene]), attach);
+                    });
+                });
+            });
+            observer.observe(root || document.body, {childList:true,subtree:true});
+            dispose.push(function () { observer.disconnect(); });
+            return result;
+        };
+        $(window).on('beforeunload', function () {
+            dispose.slice().forEach(function (release) { release(); });
+            if (ko.applyBindings !== applyBindings && selectors[scene]) ko.applyBindings = applyBindings;
+        });
+        return register.apply(this, arguments);
+    };
+}());
