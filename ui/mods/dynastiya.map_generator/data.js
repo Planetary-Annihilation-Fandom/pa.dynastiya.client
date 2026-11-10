@@ -64,7 +64,12 @@ define(function () {
          * @returns {Object} The modification data or undefined if it does not exist in local storage.
          */
         load: function () {
-            var data = JSON.parse(localStorage.getItem('map_generator_data'));
+            var data;
+            try {
+                data = JSON.parse(localStorage.getItem('map_generator_data'));
+            } catch (error) {
+                data = undefined;
+            }
             data = this.check_data_consistency(data);
             return data;
         },
@@ -77,17 +82,18 @@ define(function () {
          * The function checks this array for missing options and updates it if necessary.
          */
         check_data_consistency: function (data) {
-            if (data == undefined) {
+            if (!data || typeof data !== 'object' || Array.isArray(data)) {
                 var new_data = this.create_default();
                 this.save(new_data);
                 return new_data;
             }
 
-            if (data.options == undefined || data.options.length == 0) {
+            if (!Array.isArray(data.options) || data.options.length == 0) {
                 data.options = this.create_default().options;
                 this.save(data);
                 return data;
             }
+            var original = JSON.stringify(data);
             // if some options are missing, add them with default values
             for (var i = 0; i < default_options.length; i++) {
                 var option = _.find(data.options, { id: default_options[i].id });
@@ -112,7 +118,8 @@ define(function () {
                 }
             }
 
-            this.save(data);
+            // Reading an option must not rewrite localStorage on every button.
+            if (JSON.stringify(data) !== original) this.save(data);
             return data;
         },
 
@@ -128,6 +135,7 @@ define(function () {
                 option = { id: option_id, value: value };
                 data.options.push(option);
             } else {
+                if (option.value === value) return;
                 option.value = value;
             }
             this.save(data);

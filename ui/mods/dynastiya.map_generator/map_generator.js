@@ -71,7 +71,11 @@ var biomes_id_list = [
     "metal"
 ];
 
+var generationRequest = 0;
+
 function generate() {
+    var request = ++generationRequest;
+    var previousSystem = model.system();
 
     // TODO: use biome generation option
     var biome = _data.get_option('biome');
@@ -128,10 +132,16 @@ function generate() {
 
     get_random_system('Generated', get_generation_size(), biome_id, get_metal_density(),
         get_additional_surface_parameters(temperature, undefined, undefined)).then(function (system) {
+            // A slow name response must not replace a newer generation or selection.
+            if (request !== generationRequest || model.system() !== previousSystem || !model.isGameCreator()) return;
             model.system(system);
             model.updateSystem(model.system());
             model.changeSettings();
             model.requestUpdateCheatConfig();
+        }, function (error) {
+            if (request !== generationRequest || model.system() !== previousSystem || !model.isGameCreator()) return;
+            console.error('Map generation failed', error);
+            model.localChatMessage('Map Generator', 'Could not generate a system. Please try again.');
         })
 
     /**
@@ -364,13 +374,10 @@ function get_random_system(planet_title, planet_size, biomeName, base_metal_dens
     // planets = generate_asteroids(planets, orbit_from_planet)
 
     var pgen = _.map(planets, function (plnt, index) {
-        var biomeGet = $.getJSON('coui://pa/terrain/' + plnt.planet.biome + '.json')
-            .then(function (data) {
-                return data;
-            });
         var nameGet = $.Deferred();
-        api.game.getRandomPlanetName().then(function (name) { nameGet.resolve(name); });
-        return $.when(biomeGet, nameGet).then(function (biomeInfo, name) {
+        // No terrain data is consumed here; only the random name is needed.
+        api.game.getRandomPlanetName().then(function (name) { nameGet.resolve(name); }, function (error) { nameGet.reject(error); });
+        return nameGet.then(function (name) {
             plnt.name = name;
             return plnt;
         });

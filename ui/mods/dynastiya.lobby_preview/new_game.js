@@ -31,6 +31,7 @@ function lobbySystemPreview()
 
     model.lobbySystemPreview_available = ko.observable( false );
     var previewGeneration = 0;
+    var focusTimer;
 
     model.lobbySystemPreview_focus = function()
     {
@@ -64,7 +65,9 @@ function lobbySystemPreview()
         {
             if (generation !== previewGeneration) return;
             model.lobbySystemPreview_available( true );
-            _.delay( model.lobbySystemPreview_focus, 200 );
+            focusTimer = _.delay(function () {
+                if (generation === previewGeneration) model.lobbySystemPreview_focus();
+            }, 200);
         });
 
     }
@@ -75,6 +78,7 @@ function lobbySystemPreview()
         model.lobbySystemPreview_show( false );
         model.lobbySystemPreview_available( false );
         ++previewGeneration;
+        clearTimeout(focusTimer);
 
         if (model.holodeck) model.holodeck.destroy();
 

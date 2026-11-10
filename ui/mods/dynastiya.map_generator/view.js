@@ -67,11 +67,11 @@ define(['require', './data', 'text!./map_generator.html'], function (require) {
                     var id = options_id_map[i];
                     var options_element = $('#' + id);
                     var controls_element = $(options_element).find("#controls");
+                    var value_for_id = _data.get_option(id);
 
                     controls_element.children("#control").each(function (index, jquery_element) {
                         // console.log("MAP_GENERATOR/VIEW: option control is")
                         // console.log(jquery_element)
-                        var value_for_id = _data.get_option(id);
                         if (value_for_id == undefined) {
                             // console.log("MAP_GENERATOR/VIEW: No option found for id: " + id);
                             return;

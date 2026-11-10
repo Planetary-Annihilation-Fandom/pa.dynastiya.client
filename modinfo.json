@@ -23,6 +23,7 @@
     ],
     "new_game": [
       "coui://ui/mods/dynastiya.map_generator/map_generator.js",
+      "coui://ui/mods/dynastiya.lobby_preview/recent_systems.js",
       "coui://ui/mods/dynastiya.lobby_preview/new_game.css",
       "coui://ui/mods/dynastiya.lobby_preview/new_game.js"
     ],
