@@ -1,0 +1,15 @@
+.legionui .div_build_bar_unit_hover_detail .wrapper .detail .description .text {
+  color: white !important;
+}
+
+.mixedui .div_build_bar_unit_hover_detail .wrapper .detail .description .text {
+  color: white !important;
+}
+
+.legionui .div_build_bar_unit_hover_detail .wrapper {
+  color: white;
+}
+
+.mixedui .div_build_bar_unit_hover_detail .wrapper {
+  color: white;
+}

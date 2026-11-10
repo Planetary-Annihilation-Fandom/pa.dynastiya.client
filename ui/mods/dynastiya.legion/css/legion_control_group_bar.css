@@ -1,0 +1,90 @@
+.legionui .div_group_select .bground {
+  border: 1px solid #45484d;
+  background: linear-gradient(to top, #45484d 0%, #000 100%);
+}
+
+.mixedui .div_group_select .bground {
+  border: 1px solid #606;
+  background: linear-gradient(to top, #45484d 0%, #000 100%);
+}
+
+.unit_group_item .total {
+  flex-grow: 1;
+  color: #000;
+}
+
+.legionui .unit_group_menu {
+  background: #970000;
+  border: 1px solid #970030;
+}
+
+.mixedui .unit_group_menu {
+  background: #606;
+  border: 1px solid #639;
+}
+
+.legionui .unit_group_menu .item {
+  color: rgba(255, 0, 0, 0.8) !important;
+  border: 1px solid #970000;
+}
+
+.mixedui .unit_group_menu .item {
+  color: #639 !important;
+  border: 1px solid #606;
+}
+
+.legionui .unit_group_item {
+  border: 1px solid rgba(158, 0, 0, 1);
+  color: #fff;
+}
+
+.mixedui .unit_group_item {
+  border: 1px solid #606;
+  color: #fff;
+}
+
+.legionui .unit_group_item.disabled {
+  border: 1px solid #2b2b2b;
+}
+
+.mixedui .unit_group_item.disabled {
+  border: 1px solid #2b2b2b;
+}
+
+.legionui .unit_group_item .numkey {
+  color: #f00;
+  background: black;
+  border: 1px solid #4d0000;
+}
+
+.mixedui .unit_group_item .numkey {
+  color: #d0d;
+  background: black;
+  border: 1px solid #606;
+}
+
+.legionui .active {
+  background: rgba(130, 0, 0, 1) !important;
+  border: 1px solid #910000 !important;
+}
+
+.mixedui .active {
+  background: rgba(99, 14, 138, 0.5) !important;
+  border: 1px solid #606 !important;
+}
+
+.legionui .btn_std_ix:hover {
+  background: rgba(255, 0, 0, 0.8);
+  border: 1px solid rgba(158, 0, 0, 0.5) !important;
+}
+
+.mixedui .btn_std_ix:hover {
+  background: #606;
+  border: 1px solid rgba(99, 14, 138, 0.5) !important;
+}
+
+.legionui .tooltip-inner {
+}
+
+.mixedui .tooltip-inner {
+}
