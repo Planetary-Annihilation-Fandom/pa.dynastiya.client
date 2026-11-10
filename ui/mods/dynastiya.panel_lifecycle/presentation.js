@@ -162,9 +162,10 @@
         for (var i = 0; i < images.length && i < copies.length; i++) {
             if (images[i].dynastiyaLoadedSrc) copies[i].src = images[i].dynastiyaLoadedSrc;
         }
-        // Копия видна несколько кадров; одинаковые id сбили бы поиск элементов.
-        Array.prototype.forEach.call(snapshot.querySelectorAll('[id]'), function (node) { node.removeAttribute('id'); });
-        snapshot.removeAttribute('id');
+        // id в копии сохраняем: от них зависят правила CSS. Без id копия
+        // показала скрытую модом надпись за кнопкой START ANNIHILATION. Копия
+        // стоит в DOM после настоящего блока, поэтому getElementById и $('#…')
+        // по-прежнему находят оригинал.
         snapshot.setAttribute('data-dynastiya-dock-snapshot', '');
         var style = snapshot.style;
         style.position = 'fixed';
