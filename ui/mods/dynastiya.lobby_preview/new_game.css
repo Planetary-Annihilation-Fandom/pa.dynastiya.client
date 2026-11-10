@@ -16,42 +16,14 @@ body.lobby-system-preview div.section_content
 body.lobby-system-preview div.section_content_table
 {
     border-image: url('coui://ui/mods/dynastiya.lobby_preview/panel_std.png') 29 53 53 29 fill;
-/*
-    border: none;
-    margin: 0;
-    height: 100%!important;
-    margin-left: 20px;
-    margin-right: 20px;
-*/
-}
 
-body.lobby-system-preview div.section_wrapper
-{
-/*
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-*/
 }
 
 body.lobby-system-preview div.game_roster
 {
     border-image: url('coui:///ui/mods/dynastiya.lobby_preview/panel_secondary.png') 33 46 46 33 fill;
-/*
-    border: none;
-    margin-left: 20px;
-*/
-}
 
-body.lobby-system-preview table.roster_table
-{
-/*
-    height: calc( 100% - 50px )!important;
-    margin-top: 24px;
-*/
 }
-
 
 body.lobby-system-preview table.roster_table.lobby-system-preview-opacity
 {

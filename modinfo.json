@@ -19,7 +19,8 @@
   "version": "0.1.4",
   "scenes": {
     "server_browser": [
-      "coui://ui/mods/dynastiya.server_browser/server_browser.js"
+      "coui://ui/mods/dynastiya.server_browser/server_browser.js",
+      "coui://ui/mods/dynastiya.layout/server_browser.css"
     ],
     "live_game_build_bar": [
       "coui://ui/mods/dynastiya.live_game/build_bar.js"
@@ -37,7 +38,8 @@
       "coui://ui/mods/dynastiya.live_game/options_bar.js"
     ],
     "settings": [
-      "coui://ui/mods/dynastiya.settings/settings.js"
+      "coui://ui/mods/dynastiya.settings/settings.js",
+      "coui://ui/mods/dynastiya.layout/settings.css"
     ],
     "start": [
       "coui://ui/mods/dynastiya.start/start.js"

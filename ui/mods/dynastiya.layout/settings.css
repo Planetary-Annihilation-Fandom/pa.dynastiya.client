@@ -1,0 +1,13 @@
+/* Column flex items otherwise shrink as settings are added, overlapping
+   labels and controls instead of extending the existing scroll area. */
+.option-list .option,
+.option-list .form-group,
+.option-list .sub-group {
+    flex-shrink: 0;
+}
+
+/* Six graphics controls do not fit side by side at the supported 1280px UI
+   width. Wrap whole controls; let the existing option-list scroll vertically. */
+.option-list .form-group .sub-group {
+    flex-wrap: wrap;
+}

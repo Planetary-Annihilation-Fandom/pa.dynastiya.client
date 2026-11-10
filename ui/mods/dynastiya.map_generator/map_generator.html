@@ -17,139 +17,111 @@
             <div class="options-container horizontal">
                 <div class="options-block vertical gap-small">
                     <div id="planet-size" class="gap-down-medium">
-                        <div id="header" class="horizontal">
-                            <label id="name" class="option gap-small">Planet size:</label>
-                            <label id="description" class="option description"></label>
+                        <div class="option-header horizontal">
+                            <label class="option-name option gap-small">Planet size:</label>
+                            <label class="option description"></label>
                         </div>
-                        <div id="controls" class="horizontal">
-                            <div id="control" class="vertical gap-small">
-                                <button id="small" class="option btn-default" data-bind="
-                                    tooltip: '!LOC:Small planet',
-                                    click_sound: 'default',
-                                    rollover_sound: 'default',
-                                    click: select_option.bind($data,'planet-size','small')" data-placement="right">
-                                    <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/planet.png">
-                                </button>
-                            </div>
-                            <div id="control" class="vertical gap-small">
-                                <button id="medium" class="option xl btn-default" data-bind="
-                                    tooltip: '!LOC:Medium planet',
-                                    click_sound: 'default',
-                                    rollover_sound: 'default',
-                                    click: select_option.bind($data,'planet-size','medium')" data-placement="right">
-                                    <img class="quad xl" src="coui://ui/mods/dynastiya.map_generator/icons/planet.png">
-                                </button>
-                            </div>
-                            <div id="control" class="vertical gap-small">
-                                <button id="large" class="option xxl btn-default" data-bind="
-                                    tooltip: '!LOC:Large planet',
-                                    click_sound: 'default',
-                                    rollover_sound: 'default',
-                                    click: select_option.bind($data,'planet-size','large')" data-placement="right">
-                                    <img class="quad xxl" src="coui://ui/mods/dynastiya.map_generator/icons/planet.png">
-                                </button>
-                            </div>
+                        <div class="option-controls horizontal">
+                            <button id="small" class="option btn-default" data-bind="
+                                tooltip: '!LOC:Small planet',
+                                click_sound: 'default',
+                                rollover_sound: 'default',
+                                click: select_option.bind($data,'planet-size','small')" data-placement="right">
+                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/planet.png">
+                            </button>
+                            <button id="medium" class="option xl btn-default" data-bind="
+                                tooltip: '!LOC:Medium planet',
+                                click_sound: 'default',
+                                rollover_sound: 'default',
+                                click: select_option.bind($data,'planet-size','medium')" data-placement="right">
+                                <img class="quad xl" src="coui://ui/mods/dynastiya.map_generator/icons/planet.png">
+                            </button>
+                            <button id="large" class="option xxl btn-default" data-bind="
+                                tooltip: '!LOC:Large planet',
+                                click_sound: 'default',
+                                rollover_sound: 'default',
+                                click: select_option.bind($data,'planet-size','large')" data-placement="right">
+                                <img class="quad xxl" src="coui://ui/mods/dynastiya.map_generator/icons/planet.png">
+                            </button>
                         </div>
                     </div>
                     <div id="metal">
-                        <div id="header" class="horizontal">
-                            <label id="name" class="option gap-small">Metall amount:</label>
-                            <label id="description" class="option description"></label>
+                        <div class="option-header horizontal">
+                            <label class="option-name option gap-small">Metall amount:</label>
+                            <label class="option description"></label>
                         </div>
-                        <div id="controls" class="horizontal">
-                            <div id="control" class="vertical gap-small">
-                                <button id="poor" class="option btn-default" data-bind="
+                        <div class="option-controls horizontal">
+                            <button id="poor" class="option btn-default" data-bind="
                                 click: select_option.bind($data, 'metal', 'poor'),
                                 tooltip: '!LOC:Poor planet',
                                 click_sound: 'default',
                                 rollover_sound: 'default'" data-placement="right">
-                                    <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/metal_small.png">
-                                </button>
-                            </div>
-                            <div id="control" class="vertical gap-small">
-                                <button id="normal" class="option xl btn-default" data-bind="
+                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/metal_small.png">
+                            </button>
+                            <button id="normal" class="option xl btn-default" data-bind="
                                 click: select_option.bind($data, 'metal', 'normal'),
                                 tooltip: '!LOC:Normal planet',
                                 click_sound: 'default',
                                 rollover_sound: 'default'" data-placement="right">
-                                    <img class="quad xl" src="coui://ui/mods/dynastiya.map_generator/icons/metal_medium.png">
-                                </button>
-                            </div>
-                            <div id="control" class="vertical gap-small">
-                                <button id="rich" class="option xxl btn-default" data-bind="
+                                <img class="quad xl" src="coui://ui/mods/dynastiya.map_generator/icons/metal_medium.png">
+                            </button>
+                            <button id="rich" class="option xxl btn-default" data-bind="
                                 click: select_option.bind($data, 'metal', 'rich'),
                                 tooltip: '!LOC:Rich planet',
                                 click_sound: 'default',
                                 rollover_sound: 'default'" data-placement="right">
-                                    <img class="quad xxl" src="coui://ui/mods/dynastiya.map_generator/icons/metal_big.png">
-                                </button>
-                            </div>
+                                <img class="quad xxl" src="coui://ui/mods/dynastiya.map_generator/icons/metal_big.png">
+                            </button>
                         </div>
                     </div>
                 </div>
                 <hr class="vertical-split" />
                 <div id="biome" class="options-block-biome">
-                    <div id="header" class="horizontal">
-                        <label id="name" class="option gap-small">Biome:</label>
-                        <label id="description" class="option description"></label>
+                    <div class="option-header horizontal">
+                        <label class="option-name option gap-small">Biome:</label>
+                        <label class="option description"></label>
                     </div>
-                    <div id="controls" class="horizontal options-grid">
-                        <div id="control" class="vertical">
-                            <button id="moon" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'moon'),
+                    <div class="option-controls horizontal options-grid">
+                        <button id="moon" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'moon'),
                             tooltip: '!LOC:Moon biome',
                             click_sound: 'default', rollover_sound: 'default'" data-placement="left">
-                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_moon.png">
-                            </button>
-                        </div>
-                        <div id="control" class="vertical">
-                            <button id="asteroid" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'asteroid'),
+                            <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_moon.png">
+                        </button>
+                        <button id="asteroid" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'asteroid'),
                             tooltip: '!LOC:Asteroid biome',
                             click_sound: 'default', rollover_sound: 'default'" data-placement="left">
-                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_asteroid.png">
-                            </button>
-                        </div>
-                        <div id="control" class="vertical">
-                            <button id="desert" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'desert'),
+                            <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_asteroid.png">
+                        </button>
+                        <button id="desert" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'desert'),
                             tooltip: '!LOC:Desert/sand biome',
                             click_sound: 'default', rollover_sound: 'default'" data-placement="left">
-                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_desert.png">
-                            </button>
-                        </div>
-                        <div id="control" class="vertical">
-                            <button id="forest" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'forest'),
+                            <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_desert.png">
+                        </button>
+                        <button id="forest" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'forest'),
                             tooltip: '!LOC:Forest/tropical biome',
                             click_sound: 'default', rollover_sound: 'default'" data-placement="left">
-                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_forest.png">
-                            </button>
-                        </div>
-                        <div id="control" class="vertical">
-                            <button id="lava" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'lava'),
+                            <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_forest.png">
+                        </button>
+                        <button id="lava" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'lava'),
                             tooltip: '!LOC:Lava/hot biome',
                             click_sound: 'default', rollover_sound: 'default'" data-placement="left">
-                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_lava.png">
-                            </button>
-                        </div>
-                        <div id="control" class="vertical">
-                            <button id="metallic" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'metallic'),
+                            <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_lava.png">
+                        </button>
+                        <button id="metallic" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'metallic'),
                             tooltip: '!LOC:Metallic star biome',
                             click_sound: 'default', rollover_sound: 'default'" data-placement="left">
-                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_metall.png">
-                            </button>
-                        </div>
-                        <div id="control" class="vertical">
-                            <button id="snow" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'snow'),
+                            <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_metall.png">
+                        </button>
+                        <button id="snow" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'snow'),
                             tooltip: '!LOC:Snow/ice biome',
                             click_sound: 'default', rollover_sound: 'default'" data-placement="left">
-                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_snow.png">
-                            </button>
-                        </div>
-                        <div id="control" class="vertical">
-                            <button id="random" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'random'),
+                            <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_snow.png">
+                        </button>
+                        <button id="random" class="option btn-default" data-bind="click: select_option.bind($data, 'biome', 'random'),
                             tooltip: '!LOC:Random biome',
                             click_sound: 'default', rollover_sound: 'default'" data-placement="left">
-                                <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_random.png">
-                            </button>
-                        </div>
+                            <img class="quad" src="coui://ui/mods/dynastiya.map_generator/icons/biome_random.png">
+                        </button>
                     </div>
                 </div>
             </div>

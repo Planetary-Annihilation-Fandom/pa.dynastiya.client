@@ -1,0 +1,32 @@
+/* A discovered icon must occupy its slot before its image finishes loading.
+   Keep icons in flow so long lobby names cannot draw underneath them. */
+#game-list .one-game .game {
+    display: flex;
+    align-items: center;
+}
+#game-list .one-game .game > span:first-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+#game-list .one-game .game .game-icons {
+    position: static;
+    flex-shrink: 0;
+    display: flex;
+}
+#game-list .one-game .game .game-icons img {
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+/* Keep the scroll track when discovery adds/removes enough rows to overflow. */
+body #game-list {
+    overflow-y: scroll;
+}
+
+/* 25px icons + the stock row padding/borders, even before icons appear. */
+#game-list .one-game {
+    min-height: 39px;
+}
