@@ -157,28 +157,45 @@ async function checkGenerator() {
 function checkPreview() {
     const timers = new Map();
     const ready = [];
-    let focus = 0, destroyed = 0, nextTimer = 0;
-    const $ = () => ({ length: 1, prepend() {}, append() {}, attr() {} });
+    let focus = 0, destroyed = 0, nextTimer = 0, visible = false, onExit;
+    const $ = () => ({ length: 1, prepend() {}, append() {}, attr() {},
+        toggle(value) { visible = value; }, hide() { visible = false; },
+        on(events, fn) { onExit = fn; } });
     const model = {
         startingGameCountdown: ko.observable(-1), gameSystemReady: ko.observable(false),
-        planetBiomes: () => ['moon'], localChatMessage() {}
+        planetBiomes: () => ['moon', 'asteroid'], localChatMessage() {}
     };
-    const ctx = vm.createContext({ $, model, ko, console: { log() {}, error(e) { throw e; } },
+    const ctx = vm.createContext({ $, window: {}, model, ko, console: { log() {}, error(e) { throw e; } },
         _: { defer() {}, delay(fn) { timers.set(++nextTimer, fn); return nextTimer; } },
         clearTimeout: id => timers.delete(id), api: {
             Holodeck: function (element, options, callback) {
                 this.focus = () => focus++;
+                this.update = () => { this.visible = visible; };
                 this.destroy = () => destroyed++;
                 ready.push(callback);
-            }, camera: { focusPlanet() {}, setZoom() {}, alignToPole() {} }
+            }, game: { captureKeyboard() {}, releaseKeyboard() {} },
+            camera: { focusPlanet() {}, setZoom() {}, alignToPole() {} }
         }
     });
     run('dynastiya.lobby_preview/new_game.js', ctx);
-    model.gameSystemReady(true); ready[0]();
-    assert.equal(timers.size, 1);
-    model.gameSystemReady(false);
-    assert.equal(timers.size, 0);
     model.gameSystemReady(true);
+    assert.equal(ready.length, 0, 'a ready system must not allocate an unopened preview');
+    model.lobbySystemPreview_planet_hover(1);
+    assert.equal(ready.length, 0, 'asteroid hover must not open the preview');
+    model.lobbySystemPreview_planet_hover(0); ready[0]();
+    assert.equal(timers.size, 1);
+    const original = model.holodeck;
+    model.lobbySystemPreview_show(false);
+    assert.equal(timers.size, 0);
+    assert.equal(original.visible, false);
+    model.lobbySystemPreview_show(true);
+    assert.equal(model.holodeck, original, 'reopening retains the camera');
+    assert.equal(ready.length, 1);
+    assert.equal(original.visible, true);
+    model.gameSystemReady(false);
+    assert.equal(destroyed, 1);
+    model.gameSystemReady(true);
+    model.lobbySystemPreview_show(true);
     ready[0](); // completion of the old holodeck must be ignored
     assert.equal(timers.size, 0);
     ready[1]();
@@ -188,7 +205,18 @@ function checkPreview() {
     model.startingGameCountdown(5);
     assert.equal(destroyed, 2);
     model.startingGameCountdown(-1);
-    assert.equal(ready.length, 3);
+    assert.equal(ready.length, 2, 'cancelling countdown must not reopen a closed preview');
+    model.lobbySystemPreview_opacity(true);
+    assert.equal(ready.length, 3, 'opacity mode opts into background rendering');
+    ready[2]();
+    model.lobbySystemPreview_opacity(false);
+    assert.equal(model.holodeck.visible, false);
+    assert.equal(timers.size, 0);
+    onExit();
+    assert.equal(destroyed, 3);
+    model.lobbySystemPreview_show(true);
+    model.lobbySystemPreview_opacity(true);
+    assert.equal(ready.length, 3, 'unloaded scene must not create a view');
 }
 
 (async () => {

@@ -10,7 +10,7 @@ function lobbySystemPreview()
 
     lobbySystemPreviewLoaded = true;
 
-    var helpText = 'Once a system is loaded hover over a planet to focus the camera then use the arrow keys to move around. Metal is not generated until the game starts so cannot be shown.';
+    var helpText = 'Once a system is loaded hover over a planet to focus the camera then use the arrow keys to move around. Metal is not generated until the game starts so cannot be shown. Close the preview to stop rendering; enable Preview Opacity to keep it behind the roster.';
 
     console.log( 'com.pa.mikeyh.lobby-system-preview new_game.js' );
 
@@ -25,24 +25,39 @@ function lobbySystemPreview()
 
     $('td.col_2').prepend('<div id="lobby-system-preview-close" class="btn_std" data-bind="click: function() { model.lobbySystemPreview_show(false); }, visible: model.lobbySystemPreview_show"><div class="btn_label">X</div></div>');
 
-    $('td.col_2').prepend('<holodeck id="lobby-system-preview" data-bind="event: { mouseenter: function() { this.focus() }}" style="position:absolute; top: 0; left: 0; width: 100%; height: 100%; z-index:-1" ></holodeck>');
+    $('td.col_2').prepend('<holodeck id="lobby-system-preview" data-bind="event: { mouseenter: function() { model.lobbySystemPreview_release(); }}" style="display:none; position:absolute; top: 0; left: 0; width: 100%; height: 100%; z-index:-1" ></holodeck>');
 
     $('#system .section_header').append('<label id="lobby-system-preview-opacity" data-placement="auto top" data-container="body" data-bind="click: lobbySystemPreview_toggleOpacity, tooltip: \'Integrated / Low Spec GPU Killer\'"><input type="checkbox" style="pointer-events: none !important;" data-bind="checked: lobbySystemPreview_opacity" />Preview Opacity</label>');
 
     model.lobbySystemPreview_available = ko.observable( false );
     var previewGeneration = 0;
     var focusTimer;
+    var hoveredPlanet;
+    var disposed = false;
+    var resetting = false;
+    var subscriptions = [];
+
+    model.lobbySystemPreview_show = ko.observable(false);
+    model.lobbySystemPreview_active = ko.computed(function () {
+        return model.gameSystemReady() && model.startingGameCountdown() === -1 &&
+            (model.lobbySystemPreview_show() || model.lobbySystemPreview_opacity());
+    });
 
     model.lobbySystemPreview_focus = function()
     {
-        if ( ! model.lobbySystemPreview_available() )
+        if ( ! model.lobbySystemPreview_available() || !model.lobbySystemPreview_active() )
         {
             return;
         }
 
         model.holodeck.focus();
 
-        if ( model.planetBiomes().length == 1 )
+        if (hoveredPlanet !== undefined) {
+            api.camera.focusPlanet(hoveredPlanet);
+            api.camera.setZoom('orbital');
+            api.camera.alignToPole();
+        }
+        else if ( model.planetBiomes().length == 1 )
         {
             api.camera.focusPlanet( 0 );
             api.camera.setZoom('orbital');
@@ -56,15 +71,16 @@ function lobbySystemPreview()
 
     model.lobbySystemPreview_create = function()
     {
-        if (model.holodeck || !$('#lobby-system-preview').length || model.startingGameCountdown() != -1) return;
+        if (disposed || resetting || !model.lobbySystemPreview_active() || model.holodeck || !$('#lobby-system-preview').length) return;
 
         var $holodeck = $('#lobby-system-preview');
         var generation = ++previewGeneration;
 
-        model.holodeck = new api.Holodeck( $holodeck, { visible: true, 'no-focus': true }, function( holodeck )
+        model.holodeck = new api.Holodeck( $holodeck, { visible: true, noFocus: true }, function( holodeck )
         {
             if (generation !== previewGeneration) return;
             model.lobbySystemPreview_available( true );
+            if (!model.lobbySystemPreview_active()) return;
             focusTimer = _.delay(function () {
                 if (generation === previewGeneration) model.lobbySystemPreview_focus();
             }, 200);
@@ -75,6 +91,7 @@ function lobbySystemPreview()
     model.lobbySystemPreview_destroy = function()
     {
 
+        resetting = true;
         model.lobbySystemPreview_show( false );
         model.lobbySystemPreview_available( false );
         ++previewGeneration;
@@ -83,21 +100,33 @@ function lobbySystemPreview()
         if (model.holodeck) model.holodeck.destroy();
 
         model.holodeck = false;
+        hoveredPlanet = undefined;
+        $('#lobby-system-preview').hide();
+        resetting = false;
 
     }
 
-    model.startingGameCountdown.subscribe( function( startingGameCountdown )
-    {
-
-        if ( startingGameCountdown != -1 )
-        {
-            model.lobbySystemPreview_destroy();
+    function updatePreview() {
+        if (disposed || resetting) return;
+        var active = model.lobbySystemPreview_active();
+        $('#lobby-system-preview').toggle(active);
+        if (!active) {
+            clearTimeout(focusTimer);
+            // Keep the camera for reopening, but stop native rendering and polling.
+            if (model.holodeck) {
+                model.holodeck.update();
+                api.game.captureKeyboard(true);
+            }
+            return;
         }
-        else if (model.gameSystemReady()) model.lobbySystemPreview_create();
-
-    });
-
-    model.lobbySystemPreview_show = ko.observable( false );
+        model.lobbySystemPreview_create();
+        if (model.holodeck) model.holodeck.update();
+    }
+    subscriptions.push(model.lobbySystemPreview_active.subscribe(updatePreview));
+    subscriptions.push(model.startingGameCountdown.subscribe(function (countdown) {
+        if (countdown !== -1) model.lobbySystemPreview_destroy();
+        else updatePreview();
+    }));
 
     model.lobbySystemPreview_toggleShow = function()
     {
@@ -106,7 +135,6 @@ function lobbySystemPreview()
 
     model.lobbySystemPreview_planet_hover = function( planetIndex, event )
     {
-        if (!model.lobbySystemPreview_available() || !model.holodeck) return;
         var biome = model.planetBiomes()[ planetIndex ];
 
         if ( biome == 'asteroid' )
@@ -114,16 +142,10 @@ function lobbySystemPreview()
             return;
         }
 
-        if ( ! model.lobbySystemPreview_show() && ! model.lobbySystemPreview_opacity() && model.lobbySystemPreview_available() )
-        {
-            model.lobbySystemPreview_show( true );
-        }
-
-        api.camera.focusPlanet( planetIndex );
-        api.camera.setZoom('orbital');
-        api.camera.alignToPole();
-
-        model.holodeck.focus();
+        hoveredPlanet = planetIndex;
+        if (!model.lobbySystemPreview_opacity()) model.lobbySystemPreview_show(true);
+        updatePreview();
+        model.lobbySystemPreview_focus();
 
     }
 
@@ -138,6 +160,7 @@ function lobbySystemPreview()
 
     model.lobbySystemPreview_release = function( event )
     {
+        if (!model.lobbySystemPreview_active() || !model.lobbySystemPreview_available()) return;
         api.game.releaseKeyboard();
 
         if ( model.holodeck )
@@ -146,20 +169,17 @@ function lobbySystemPreview()
         }
     }
 
-    model.gameSystemReady.subscribe( function( gameSystemReady )
-    {
-
-       if ( gameSystemReady )
-       {
-            model.lobbySystemPreview_create();
-       }
-       else
-       {
-           model.lobbySystemPreview_destroy();
-       }
+    subscriptions.push(model.gameSystemReady.subscribe(function (ready) {
+        if (ready) updatePreview();
+        else model.lobbySystemPreview_destroy();
+    }));
+    updatePreview();
+    $(window).on('beforeunload.dynastiyaPreview', function () {
+        disposed = true;
+        subscriptions.forEach(function (subscription) { subscription.dispose(); });
+        model.lobbySystemPreview_active.dispose();
+        model.lobbySystemPreview_destroy();
     });
-
-    if (model.gameSystemReady()) model.lobbySystemPreview_create();
 
     model.lobbySystemPreview_add_data_bind = function( selector, binding )
     {
@@ -180,7 +200,7 @@ function lobbySystemPreview()
 
     model.lobbySystemPreview_add_data_bind( '#mod_names', 'event: { mouseenter: model.lobbySystemPreview_capture, mouseleave: model.lobbySystemPreview_release }' );
 
-    model.lobbySystemPreview_add_data_bind( 'body', 'css : { "lobby-system-preview": model.lobbySystemPreview_available }' );
+    model.lobbySystemPreview_add_data_bind( 'body', 'css : { "lobby-system-preview": model.lobbySystemPreview_active() && model.lobbySystemPreview_available() }' );
 
     model.lobbySystemPreview_add_data_bind( 'div.dropdown-system-picker', "event: { mousewheel: model.lobbySystemPreview_stop, mouseenter: model.lobbySystemPreview_release, mouseleave: model.lobbySystemPreview_capture }, mouseenterBubble: false" );
 

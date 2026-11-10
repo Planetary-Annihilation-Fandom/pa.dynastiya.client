@@ -55,6 +55,7 @@
       "coui://ui/mods/dynastiya.biomes/system_editor.js"
     ],
     "global_mod_list": [
+      "coui://ui/mods/dynastiya.panel_lifecycle/load.js",
       "coui://ui/mods/dynastiya.flat_effects/global.css",
       "coui://ui/mods/dynastiya.flat_effects/main.js",
       "coui://ui/mods/dynastiya.animation/animation.css",
