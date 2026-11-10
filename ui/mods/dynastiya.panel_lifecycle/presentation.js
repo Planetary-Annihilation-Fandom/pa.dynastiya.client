@@ -1,0 +1,124 @@
+/* Keep a dock's intermediate layouts out of the native compositor. */
+(function () {
+    'use strict';
+    var panel = api.Panel;
+    if (panel.pageId === panel.parentId || panel.prepareDock) return;
+    var root = document.documentElement;
+    var sheet = document.createElement('style');
+    sheet.textContent = 'html[data-dynastiya-dock-pending] { opacity: 0 !important; }' +
+        'html[data-dynastiya-dock-pending], html[data-dynastiya-dock-pending] * { pointer-events: none !important; }';
+    document.head.appendChild(sheet);
+    root.setAttribute('data-dynastiya-dock-pending', '');
+    var state = panel.dockPresentation = { revision: 0, pending: true };
+    var target;
+    var reportFrame, settleFrame;
+    var lastReport;
+    var stableFrames = 0;
+    var scannedRevision = -1;
+    var resources = [];
+    var cache = Object.create(null);
+    var closed = false;
+
+    function dock() { return document.getElementsByTagName('body-dock')[0] || document.body; }
+    function requestSettle() {
+        if (closed || !state.pending || settleFrame !== undefined || !target) return;
+        settleFrame = window.requestAnimationFrame(settle);
+    }
+    function imageFor(source) {
+        if (!cache[source]) {
+            var entry = cache[source] = { ready: false, image: new Image() };
+            entry.image.onload = entry.image.onerror = function () {
+                entry.ready = true;
+                requestSettle();
+            };
+            entry.image.src = source;
+            if (entry.image.complete) entry.ready = true;
+        }
+        return cache[source];
+    }
+    function scanResources() {
+        resources = [];
+        var nodes = [dock()];
+        Array.prototype.push.apply(nodes, dock().querySelectorAll('*'));
+        nodes.forEach(function (node) {
+            if (!node.offsetWidth || !node.offsetHeight) return;
+            var style = getComputedStyle(node);
+            var urls = (style.borderImageSource || style.webkitBorderImageSource || '') + ' ' + style.backgroundImage;
+            var pattern = /url\(["']?([^"')]+)["']?\)/g;
+            var match;
+            while ((match = pattern.exec(urls))) resources.push(imageFor(match[1]));
+        });
+        scannedRevision = state.revision;
+    }
+    function resourcesReady() {
+        if (scannedRevision !== state.revision) scanResources();
+        return resources.every(function (entry) { return entry.ready; }) &&
+            Array.prototype.every.call(dock().querySelectorAll('img'), function (img) {
+                return !img.offsetWidth || !img.offsetHeight || !img.getAttribute('src') || img.complete;
+            });
+    }
+    function matches(actual, expected) {
+        // Coherent clamps very small backing views to a minimum size.
+        return Math.abs(actual - expected) <= 1 || (expected < 16 && actual === 16);
+    }
+    function settle() {
+        settleFrame = undefined;
+        if (closed || !state.pending || !target) return;
+        panel.onBodyResize();
+        if (!target || target.revision !== state.revision) return;
+        if (!matches(window.innerWidth, target.width) || !matches(window.innerHeight, target.height)) {
+            stableFrames = 0;
+            // Native resize events request another pass; do not poll a hidden
+            // view at frame rate while its parent is intentionally collapsed.
+            return;
+        }
+        if (!resourcesReady()) {
+            stableFrames = 0;
+            return; // image load/error listeners resume the check
+        }
+        if (++stableFrames < 2) { requestSettle(); return; }
+        state.pending = false;
+        root.removeAttribute('data-dynastiya-dock-pending');
+    }
+    panel.prepareDock = function (payload, report) {
+        lastReport = report;
+        payload.revision = ++state.revision;
+        state.pending = true;
+        target = undefined;
+        stableFrames = 0;
+        root.setAttribute('data-dynastiya-dock-pending', '');
+        if (reportFrame !== undefined) window.cancelAnimationFrame(reportFrame);
+        if (settleFrame !== undefined) window.cancelAnimationFrame(settleFrame);
+        settleFrame = undefined;
+        // Commit one transparent frame before the parent resizes the backing
+        // view. Otherwise the compositor can stretch its previous opaque image.
+        reportFrame = window.requestAnimationFrame(function () {
+            reportFrame = window.requestAnimationFrame(function () {
+                reportFrame = undefined;
+                if (!closed && payload.revision === state.revision) report();
+            });
+        });
+    };
+    // A scene can measure during initialization, before message filters are
+    // registered. Request the acknowledgement again once panel.ready runs.
+    panel.flushDock = function () {
+        if (!closed && state.pending && reportFrame === undefined && lastReport) lastReport();
+    };
+    panel.onDockApplied = function (payload) {
+        if (payload.revision !== state.revision || !state.pending) return;
+        target = payload;
+        requestSettle();
+    };
+    function changed() { stableFrames = 0; requestSettle(); }
+    window.addEventListener('resize', changed);
+    document.addEventListener('load', changed, true);
+    document.addEventListener('error', changed, true);
+    $(window).on('beforeunload', function () {
+        closed = true;
+        if (reportFrame !== undefined) window.cancelAnimationFrame(reportFrame);
+        if (settleFrame !== undefined) window.cancelAnimationFrame(settleFrame);
+        window.removeEventListener('resize', changed);
+        document.removeEventListener('load', changed, true);
+        document.removeEventListener('error', changed, true);
+    });
+}());

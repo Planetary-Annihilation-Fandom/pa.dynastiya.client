@@ -132,10 +132,13 @@ for (const [type, create, destroy, registry, data] of [
     assert.equal(config.visible, false);
     f.pending.shift()(92);
     assert.equal(item.visible, false);
-    f.api.Panel.ready();
+    f.api.Panel.ready(['selection']);
+    assert.ok(f.calls.find(c => c[0] === 'panel.ready')[2].includes('panel.dock_applied'));
     f.globalHandlers['panel.resize']({ id: 92, width: 0, height: 0 });
     assert.equal(item.visible, false, 'an empty initial dock must not reveal the view');
-    f.globalHandlers['panel.resize']({ id: 92, width: 307, height: 160 });
+    f.globalHandlers['panel.resize']({ id: 92, width: 307, height: 160, revision: 1 });
+    const ack = f.calls.find(c => c[0] === 'panel.messageById' && c[2] === 'panel.dock_applied');
+    assert.deepEqual(JSON.parse(ack[3]), { revision: 1, width: 400, height: 300 });
     assert.equal(item._awaitingDock, false);
     assert.equal(item.visible, true);
     assert.ok(f.api.Panel._layoutObserver, 'HUD observes layout changes between polling ticks');
@@ -143,7 +146,7 @@ for (const [type, create, destroy, registry, data] of [
 }
 // Scope is selected at boot, including child HUD panels, before any scene binds panels.
 for (const [scene, expected] of [['/main/main.html', 2], ['/main/game/new_game/new_game.html', 2],
-    ['/main/game/live_game/live_game_chat.html', 2], ['/main/game/settings/settings.html', 2],
+    ['/main/game/live_game/live_game_chat.html', 3], ['/main/game/settings/settings.html', 2],
     ['/main/game/start/start.html', 2], ['/main/game/server_browser/server_browser.html', 2],
     ['/main/game/galactic_war/gw_start/gw_start.html', 0], ['/main/game/armory/armory.html', 0],
     ['/main/game/system_editor/system_editor.html', 0], ['/main/game/guide/guide.html', 0]]) {

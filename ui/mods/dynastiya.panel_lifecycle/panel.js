@@ -201,6 +201,7 @@ function init_panel() {
             engine.call('panel.move', self.id, region);
         }
         self.updateVisibility();
+        if (region) self.acknowledgeDock();
 
         if (self._updateTimeout !== undefined)
             window.clearTimeout(self._updateTimeout);
@@ -231,6 +232,15 @@ function init_panel() {
             return true;
         }
         return false;
+    };
+
+    panel.prototype.acknowledgeDock = function() {
+        if (this._dockRevision === undefined) return;
+        this.message('panel.dock_applied', {
+            revision: this._dockRevision,
+            width: Math.round(this.region.width * window.innerWidth),
+            height: Math.round(this.region.height * window.innerHeight)
+        });
     };
 
     panel.prototype.updateAttr = function() {
@@ -324,10 +334,12 @@ function init_panel() {
         if (!panel)
             return;
 
+        if (typeof payload.revision === 'number') panel._dockRevision = payload.revision;
         if (payload.width > 0 && payload.height > 0) panel._awaitingDock = false;
         panel._$dock.width(payload.width);
         panel._$dock.height(payload.height);
         panel.update();
+        panel.acknowledgeDock();
         _.delay(function() { panel.update(); });
     }
 
@@ -340,13 +352,10 @@ function init_panel() {
             if ((newWidth !== bodySize.width) || (newHeight !== bodySize.height)) {
                 bodySize.width = newWidth;
                 bodySize.height = newHeight;
-                panel.message(panel.parentId, 'panel.resize',
-                    {
-                        id: panel.pageId,
-                        width: newWidth,
-                        height: newHeight
-                    }
-                );
+                var payload = { id: panel.pageId, width: newWidth, height: newHeight };
+                function report() { panel.message(panel.parentId, 'panel.resize', payload); }
+                if (panel.prepareDock) panel.prepareDock(payload, report);
+                else report();
             }
         };
     }
@@ -418,11 +427,13 @@ function init_panel() {
             globalHandlers['panel.query'] = onQuery;
         if (!globalHandlers.hasOwnProperty('panel.query_response'))
             globalHandlers['panel.query_response'] = onQueryResponse;
+        if (panel.onDockApplied) globalHandlers['panel.dock_applied'] = panel.onDockApplied;
         // Make sure the filter includes our messages.
         filters = (filters || []);
         if (filters.length)
-            filters = filters.concat(['panel.resize', 'panel.query', 'panel.query_response']);
+            filters = filters.concat(['panel.resize', 'panel.query', 'panel.query_response', 'panel.dock_applied']);
         engine.call('panel.ready', panel.pageId, filters);
+        if (panel.flushDock) panel.flushDock();
 
         if (panel.pageId !== panel.parentId && panel._resizeTimer === undefined) {
             // Note: The resize listener appears to be unreliable.
@@ -443,7 +454,12 @@ function init_panel() {
                     panel.update();
                 });
             }
-            panel._layoutObserver = new MutationObserver(scheduleLayout);
+            panel._layoutObserver = new MutationObserver(function () {
+                // Conceal a changed child layout in the mutation microtask,
+                // before an intermediate shape can reach the next paint.
+                if (panel.prepareDock) panel.onBodyResize();
+                scheduleLayout();
+            });
             panel._layoutObserver.observe(document.documentElement, {
                 childList: true, subtree: true, characterData: true,
                 attributes: true, attributeFilter: ['class', 'style', 'src']
