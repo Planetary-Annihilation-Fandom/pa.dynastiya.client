@@ -42,7 +42,8 @@ const policies=fs.readFileSync(path.join(folder,'policies.js'),'utf8');
 for(const name of fs.readdirSync(path.join(media,'ui/main/game/live_game')).filter(n=>n.endsWith('.js'))){
  const scene=name.replace('.js','');let registered=false;
  const model={state:ko.observable(scene==='live_game_menu'?[]:{})};
- const ctx={api:{Panel:{dockPresentation:{},watchPresentation(p,read){read();return ()=>{};}}},ko,
+ const ctx={api:{Panel:{dockPresentation:{},watchPresentation(p,read,mode){
+  assert.equal(mode,'update',scene+' automatic policy cannot conceal the view');read();return ()=>{};}}},ko,
   app:{registerWithCoherent(){registered=true;}},window:{location:{pathname:'/main/game/live_game/'+scene+'.html'}},
   $:()=>({on(){}})};
  vm.runInNewContext(policies,ctx);ctx.app.registerWithCoherent(model,{});
@@ -51,14 +52,13 @@ for(const name of fs.readdirSync(path.join(media,'ui/main/game/live_game')).filt
 }
 console.log('Local presentation: keyed/forced rebuilds, images, live input, stale frames, watcher cleanup and HUD policy initialization passed');
 
-// Visibility/hover changes must not invoke whole-view preparation. Actual row
-// identity changes still do; the buildbar/selection adapters keep their own gate.
+// Retained DOM changes only request measurement; they are not a staged replacement.
 for(const scene of ['control_group_bar','build_hover','players','planets']) {
  let prepared=0;
  const model={hoverIndex:ko.observable(-1),name:ko.observable(''),desc:ko.observable(''),
   showPlayerListPanel:ko.observable(false),showCelestialViewModels:ko.observable(false),
   players:ko.observableArray([]),planets:ko.observableArray([])};
- const ctx={ko,api:{Panel:{dockPresentation:{present(){prepared++;}},watchPresentation:api.Panel.watchPresentation}},
+ const ctx={ko,api:{Panel:{dockPresentation:{present(){prepared++;},update(){}},watchPresentation:api.Panel.watchPresentation}},
   app:{registerWithCoherent(){}},window:{location:{pathname:'/live_game/live_game_'+scene+'.html'}},$:()=>({on(){}})};
  vm.runInNewContext(policies,ctx);ctx.app.registerWithCoherent(model,{});
  model.hoverIndex(1);model.name('Factory');model.desc('Long description');
@@ -66,7 +66,7 @@ for(const scene of ['control_group_bar','build_hover','players','planets']) {
  assert.equal(prepared,0,scene+' retains its view during hover/open');
  if(scene==='players'||scene==='planets') {
   model[scene]([{id:1,name:'New row'}]);
-  assert.equal(prepared,1,scene+' still prepares actual row replacement');
+  assert.equal(prepared,0,scene+' updates retained rows without preparing the whole view');
  }
 }
 
@@ -83,14 +83,14 @@ for(const scene of ['control_group_bar','build_hover','players','planets']) {
   utils:{domNodeDisposal:{addDisposeCallback(){}}}});
  const document={body:{},querySelectorAll:list=>nodes.filter(n=>n.matches(list))};
  const ctx={ko:fakeKo,document,api:{Panel:{
-  createPresentation(node){attached.push(node.selector);return {present(){},dispose(){}};},
+  createPresentation(node){attached.push(node.selector);return {update(){},dispose(){}};},
   watchPresentation:()=>()=>{}
  }},app:{registerWithCoherent(){}},
  window:{location:{pathname:'/main/game/new_game/new_game.html'}},
  MutationObserver:class{observe(){}disconnect(){}},$:()=>({on(){}})};
  vm.runInNewContext(policies,ctx);
  const model={};ctx.app.registerWithCoherent(model,{});fakeKo.applyBindings(model);
- assert.deepEqual(attached,['.div-commander-picker-cont'],'only the overlay receives conceal/reveal behavior');
+ assert.deepEqual(attached,['.div-commander-picker-cont'],'only the overlay receives visibility lifecycle behavior');
  console.log('Lobby policy: roster, selected system, settings and mod status remain live; picker prepares locally');
 }
 
@@ -102,7 +102,7 @@ for(const scene of ['control_group_bar','build_hover','players','planets']) {
   bindingProvider:{instance:{getBindingAccessors:e=>({visible:()=>e===node?pickerOpen:ownerOpen})}},
   utils:{domNodeDisposal:{addDisposeCallback(){}}}});
  const ctx={ko:fakeKo,document:{body:{},querySelectorAll:()=>[node]},api:{Panel:{
-  createPresentation:()=>({present(){calls.push('open');},cancel(){calls.push('close');},dispose(){}})
+  createPresentation:()=>({present(){throw Error('opening retained DOM must not hide it again');},update(){calls.push('open');},cancel(){calls.push('close');},dispose(){}})
  }},app:{registerWithCoherent(){}},window:{location:{pathname:'/main/game/new_game/new_game.html'}},
  MutationObserver:class{observe(){}disconnect(){}},$:()=>({on(){},off(){}})};
  vm.runInNewContext(policies,ctx);const model={};ctx.app.registerWithCoherent(model,{});fakeKo.applyBindings(model);

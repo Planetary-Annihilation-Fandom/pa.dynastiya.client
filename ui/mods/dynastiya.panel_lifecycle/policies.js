@@ -44,17 +44,13 @@
             live_game_time_bar_alerts: function () { return [value('visible'), (value('items') || []).map(function (item) { return [ko.unwrap(item.name), ko.unwrap(item.ready)]; })]; },
             live_game_unit_alert: function () { return [value('showingPreview'), ids('alerts'), ids('combatList'), ids('defeatedArmyAlerts'), ids('specialWeaponAlerts')]; }
         };
-        // Header/footer/tutorial have no changing content; PiP video, alert
-        // countdowns, control-group counts and chat messages remain live.
-        // Hover/selection/buildbar own their keyed data adapters; do not install
-        // a second key owner on the same dockPresentation controller.
-        // Hovering a group, changing build descriptions or opening retained
-        // player/planet sections only updates existing DOM. Stock bindings and
-        // resize handlers already handle them; preparing the entire native view
-        // here blanks unrelated rows and can break pointer hover for a frame.
+        // These readers do not own rendering or a prepared replacement to reveal.
+        // Stock KO updates retained DOM. Only request measurement here;
+        // concealing the whole native view here blanks unrelated controls too.
+        // Explicit preparation in buildbar/world-hover adapters is independent.
         if (keys[scene] && api.Panel.dockPresentation)
-            dispose.push(api.Panel.watchPresentation(api.Panel.dockPresentation, keys[scene]));
-        model.dynastiyaPresentationPolicy = keys[scene] ? 'structural-key' :
+            dispose.push(api.Panel.watchPresentation(api.Panel.dockPresentation, keys[scene], 'update'));
+        model.dynastiyaPresentationPolicy = keys[scene] ? 'live-update' :
             (/live_game_(world_popup|selection|build_bar)/.test(scene) ? 'data-adapter' :
                 (/^(start|new_game|live_game)$/.test(scene) ? 'local-sections' : 'live'));
 
@@ -90,8 +86,8 @@
                 var local = element.dynastiyaPresentationSurface = api.Panel.createPresentation(element);
                 ko.utils.domNodeDisposal.addDisposeCallback(element, release);
                 dispose.push(release);
-                // Prepare opening a section, not every change to its rows.
-                // Persistent menu lists update live just like the lobby roster.
+                // KO owns actual visibility. Opening retained DOM is an update,
+                // not a second preparation after it has already become visible.
                 if (read) {
                     var owners = [read];
                     for (var parent = element.parentElement; parent; parent = parent.parentElement) {
@@ -104,22 +100,22 @@
                         return owners.every(function (owner) { return !!ko.unwrap(owner()); });
                     });
                     var change = function (open) {
-                        if (open) local.present(null, function () {});
+                        if (open) local.update(null, function () {});
                         else local.cancel();
                     };
                     var subscription = visible.subscribe(change);
                     change(visible());
                     releases.push(function () { subscription.dispose(); visible.dispose(); });
                 } else {
-                    // jQuery dialogs own their display outside KO. Do not prepare
-                    // an initially closed dialog or keep waiting after it closes.
+                    // jQuery owns dialog visibility; never hide it again in the
+                    // shown callback. Closing only cancels outstanding work.
                     var dialog = $(element);
                     dialog.on('dialogopen.dynastiyaPresentation shown.bs.modal.dynastiyaPresentation', function () {
-                        local.present(null, function () {});
+                        local.update(null, function () {});
                     });
                     dialog.on('dialogclose.dynastiyaPresentation hidden.bs.modal.dynastiyaPresentation', local.cancel);
                     releases.push(function () { dialog.off('.dynastiyaPresentation'); });
-                    if (element.offsetWidth || element.offsetHeight) local.present(null, function () {});
+                    if (element.offsetWidth || element.offsetHeight) local.update(null, function () {});
                 }
                 releases.push(local.dispose);
             }

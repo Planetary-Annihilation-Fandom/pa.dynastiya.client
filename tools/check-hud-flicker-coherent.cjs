@@ -4,12 +4,22 @@ const path = require('node:path');
 const cdp = require(path.resolve(__dirname, '../../../../docs/En/Modding/Debug/cdp.js'));
 const port = Number(process.argv[2] || 9881);
 const scenes = {
-    control_group_bar: `var saved=model.hoverIndex();model.hoverIndex(i%3);model.hoverIndex(saved);`,
+    control_group_bar: `var saved=model.hoverIndex(),selection=model.hasSelection();
+        model.hoverIndex(i%3);model.hasSelection(!selection);model.hasSelection(selection);model.hoverIndex(saved);`,
     build_hover: `var saved=model.state();model.state({name:'Hover '+i,desc:'Description '+i});model.state(saved);`,
     players: `var saved=model.pinPlayerListPanel();model.togglePinPlayerListPanel();model.togglePinPlayerListPanel();model.pinPlayerListPanel(saved);`,
     planets: `var pin=model.pinCelestialViewModels(),ever=model.everToggledCelestialViewModels();
         model.togglePinCelestialViewModels();model.togglePinCelestialViewModels();
         model.pinCelestialViewModels(pin);model.everToggledCelestialViewModels(ever);`,
+    selection: `var summary=model.selectionModel(),saved={spec_ids:{},spec_groups:summary.groups()};
+        summary.types().forEach(function(type,index){var ids=[];
+            for(var j=0;j<summary.counts()[index];j++)ids.push(j);saved.spec_ids[type]=ids;});
+        var tank='/pa/units/land/tank_light_laser/tank_light_laser.json';
+        var bot='/pa/units/land/assault_bot/assault_bot.json';
+        try {var first={spec_ids:{}},second={spec_ids:{}};
+            first.spec_ids[tank]=[1,2];second.spec_ids[tank]=[1];second.spec_ids[bot]=[3];
+            handlers.selection(first);handlers.selection(second);
+        } finally {handlers.selection(saved);}`,
 };
 async function read(target, body) {
     await cdp.sleep(250);

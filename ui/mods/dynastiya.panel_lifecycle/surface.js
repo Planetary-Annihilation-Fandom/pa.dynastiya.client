@@ -102,9 +102,14 @@
     // Observe a structural key already maintained by a stock view model. The
     // computed compares its serialized key, not the changing model object.
     // watch(p, function () { return [model.visible(), model.pageId()]; });
-    api.Panel.watchPresentation = function (presentation, readKey) {
+    // Use mode 'update' for retained DOM: a key change only requests measurement,
+    // without starting a new visibility/preparation cycle.
+    api.Panel.watchPresentation = function (presentation, readKey, mode) {
         var key = ko.computed(function () { return JSON.stringify(readKey()); });
-        var subscription = key.subscribe(function (value) { presentation.present(null, function () {}, value); });
+        var subscription = key.subscribe(function (value) {
+            if (mode === 'update') presentation.update(null, function () {});
+            else presentation.present(null, function () {}, value);
+        });
         return function () { subscription.dispose(); key.dispose(); };
     };
 }());

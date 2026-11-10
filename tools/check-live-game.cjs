@@ -135,11 +135,11 @@ function selectionChecks() {
     assert.equal(model.selectionList().length, 0);
     send({ bot: [9] });
     assert.notEqual(model.selectionList()[0], bot, 'removed rows are released');
-    const keys=[];
-    ctx.api.Panel.dockPresentation={present(data,apply,key){keys.push(key);apply(data);}};
+    let updates=0;
+    ctx.api.Panel.dockPresentation={present(){throw Error('retained selection must not be concealed');},
+        update(data,apply){updates++;apply(data);}};
     send({bot:[9]});send({bot:[9,10]});send({bot:[9],tank:[11]});
-    assert.equal(keys[0],keys[1],'selection counts update within the same presentation');
-    assert.notEqual(keys[1],keys[2],'adding rows requires a new presentation');
+    assert.equal(updates,3,'counts and row replacements update without concealing the selection');
 }
 function hoverChecks() {
     const {ctx}=context();
