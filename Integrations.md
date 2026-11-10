@@ -17,3 +17,9 @@ Biome textures and visual settings are from version 1.0.0 by ferretmaster: https
 ## Lobby System Preview
 
 The lobby preview is adapted from Lobby System Preview 1.1.4 by mikeyh. Its interface and code live in `ui/mods/dynastiya.lobby_preview`; the original mod is available at https://forums.planetaryannihilation.com/threads/wip-server-lobby-lobby-system-preview.69144/.
+
+## Legion Expansion
+
+The Legion faction is from Legion Expansion 1.33.1-124674 by nicb1, Crembels, KillerKiwiJuice, Anonemous2, mgmetal13, zx0, Luther, Alpha2546, PRoeleert, wondible, mikeyh, Quitch, Stuart98, dom314, CptConundrum, Elodea, AndreasG, Clopse, Graushwein, N30N, Qzipco, WPMarshall and xankar: https://github.com/Legion-Expansion/Legion-Expansion. It is used under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (https://creativecommons.org/licenses/by-nc-sa/4.0/), with JavaScript under the MIT License; this integration is distributed under the same terms.
+
+Models, textures, effects, shaders, strategic icons and commander images are unchanged. The build bar layout and icon registration live in `ui/mods/dynastiya.legion`. Changes: the welcome screen, the intro video button and the theme setting were removed. The in-match HUD stays red for Legion and purple for mixed armies, without glows; Legion Commanders and players are marked by a flat red frame in the lobby.

@@ -7,6 +7,9 @@ api.dynastiyaTranslate({
     'The host has enabled conflicting server mods. Only the host can disable them:':
         'Хост включил конфликтующие серверные моды. Отключить их может только он:',
     'The changes take effect after you leave the lobby.': 'Изменения вступят в силу после выхода из лобби.',
-    'Disable conflicting mods': 'Отключить конфликтующие моды'
+    'Disable conflicting mods': 'Отключить конфликтующие моды',
+    // Фракция Legion (dynastiya.legion). Юниты переводит словарь игры legion.json.
+    'To play as the Legion, choose a Commander with a red frame.': 'Чтобы играть за Legion, выберите командира в красной рамке.',
+    'orbital structure': 'орбитальные постройки'
     // Cancel и Close переводит словарь игры: его строки здесь не переопределяются.
 });

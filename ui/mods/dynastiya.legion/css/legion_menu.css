@@ -1,0 +1,41 @@
+.div_game_menu_item {
+  color: white !important;
+}
+
+.legionui .div_game_menu {
+  border-image: url("coui://ui/mods/dynastiya.legion/img/menu/img_game_menu_bground_legion.png")
+    26 26 26 26 fill !important;
+}
+
+.mixedui .div_game_menu {
+  border-image: url("coui://ui/mods/dynastiya.legion/img/menu/img_game_menu_bground_mixed.png")
+    26 26 26 26 fill !important;
+}
+
+.legionui .active .div_game_menu_item:hover {
+  background: rgba(255, 0, 0, 0.7);
+  border: 1px solid rgba(158, 0, 0, 0.5);
+}
+
+.mixedui .active .div_game_menu_item:hover {
+  background: rgba(179, 74, 218, 0.7);
+  border: 1px solid rgba(99, 14, 138, 0.5);
+}
+
+.legionui .active .div_game_menu_item:active {
+  background: rgba(255, 0, 0, 0.85);
+  border: 1px solid rgba(158, 0, 0, 0.5);
+}
+
+.mixedui .active .div_game_menu_item:active {
+  background: rgba(179, 74, 218, 0.85);
+  border: 1px solid rgba(99, 14, 138, 0.5);
+}
+
+.legionui .div_game_menu_cont {
+  border-bottom: 1px solid rgba(158, 0, 0, 0.5);
+}
+
+.mixedui .div_game_menu_cont {
+  border-bottom: 1px solid rgba(99, 14, 138, 0.5);
+}

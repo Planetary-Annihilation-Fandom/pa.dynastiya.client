@@ -1,0 +1,5 @@
+/* Командиры Legion в выборе и слоты игроков за Legion отмечены красной рамкой. */
+.div-commander-picker-item.dyn-legion,
+.slot-player.dyn-legion .slot-player-commander {
+    border: 1px solid #da1e28 !important;
+}
