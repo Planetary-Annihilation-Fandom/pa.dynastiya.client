@@ -79,7 +79,8 @@
       "coui://ui/mods/dynastiya.animation/animation.css",
       "coui://ui/mods/dynastiya.control_feedback/control_feedback.css",
       "coui://ui/mods/dynastiya.control_feedback/instant_motion.js",
-      "coui://ui/mods/dynastiya.tooltip/tooltip.js"
+      "coui://ui/mods/dynastiya.tooltip/tooltip.js",
+      "coui://ui/mods/dynastiya.mod_conflicts/load.js"
     ],
     "live_game_econ": [
       "coui://ui/mods/dynastiya.layout/live_game_econ.css"

@@ -1,0 +1,55 @@
+/*
+ * Текст «Династии» по образцу наборов типов Carbon: роль текста задаётся классом, а размер
+ * и межстрочный интервал роль берёт из шкалы ниже. Экран не пишет font-size: 12px — он выбирает
+ * подпись или пояснение, и все подписи интерфейса остаются одного размера.
+ *
+ * | Класс              | Роль                                   | Размер                          |
+ * |--------------------|----------------------------------------|---------------------------------|
+ * | dyn-text           | основной текст                         | 14/22, expressive — 16/24       |
+ * | dyn-heading-01..05 | заголовок компонента или раздела       | 14, 16 жирные; 20, 24, 30       |
+ * | dyn-label          | подпись к значению, сообщение          | 12/20, expressive — 14/22       |
+ * | dyn-helper         | пояснение, второстепенный цвет         | 12/20, expressive — 14/22       |
+ *
+ * Модификаторы: dyn-expressive — экспрессивный набор Carbon (-02), на ступень крупнее
+ * продуктивного (-01), для заметного текста в окнах и предупреждениях; dyn-strong — жирное
+ * начертание. Внешних отступов у ролей нет: их задаёт контейнер.
+ *
+ * Движок игры (Chromium 40) не поддерживает CSS-переменные, поэтому значения шкалы
+ * записаны в классах. Шрифт — Sansation игры: Light, Regular и Bold.
+ */
+.dyn-text,
+.dyn-heading-01,
+.dyn-heading-02,
+.dyn-heading-03,
+.dyn-heading-04,
+.dyn-heading-05,
+.dyn-label,
+.dyn-helper {
+    margin: 0;
+    font-family: 'Sansation', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #e8eef2;
+}
+
+.dyn-text { font-size: 14px; line-height: 22px; }
+.dyn-text.dyn-expressive { font-size: 16px; line-height: 24px; }
+
+/* 01 и 02 — заголовки компонентов, жирные; 03–05 — заголовки разделов, крупный размер
+   выделяет их без жирности. */
+.dyn-heading-01 { font-size: 14px; line-height: 22px; font-weight: bold; }
+.dyn-heading-02 { font-size: 16px; line-height: 24px; font-weight: bold; }
+.dyn-heading-03 { font-size: 20px; line-height: 28px; }
+.dyn-heading-04 { font-size: 24px; line-height: 32px; }
+.dyn-heading-05 { font-size: 30px; line-height: 38px; font-weight: 300; }
+
+.dyn-label,
+.dyn-helper { font-size: 12px; line-height: 20px; }
+.dyn-label.dyn-expressive,
+.dyn-helper.dyn-expressive { font-size: 14px; line-height: 22px; }
+
+.dyn-helper { color: #9aa8b2; }
+
+.dyn-strong { font-weight: bold; }
