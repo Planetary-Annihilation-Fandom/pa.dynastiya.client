@@ -17,6 +17,7 @@
     //
     // Кнопка без cancel не закрывает окно сама: run решает, что делать дальше.
     // Текст окна собирают из ролей api.dynastiyaUi.text: основной текст в окне — expressive.
+    // Длинный список — <ul class="dyn-modal__list dyn-scroll">: он прокручивается сам, с тенями у краёв.
     api.dynastiyaUi = api.dynastiyaUi || {};
     if (api.dynastiyaUi.modal) return;
     if (!api.dynastiyaUi.text) loadScript('coui://ui/mods/dynastiya.components/text.js');
@@ -45,6 +46,7 @@
 
     api.dynastiyaUi.modal = function (options) {
         if (!cssLoaded) {
+            loadCSS('coui://ui/mods/dynastiya.components/scroll.css');
             loadCSS('coui://ui/mods/dynastiya.components/modal.css');
             cssLoaded = true;
         }

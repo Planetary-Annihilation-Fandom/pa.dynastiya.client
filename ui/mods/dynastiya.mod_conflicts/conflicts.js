@@ -58,6 +58,7 @@
 
     function list(body, mods) {
         var ul = document.createElement('ul');
+        ul.className = 'dyn-modal__list dyn-scroll';
         _.forEach(mods, function (mod) {
             ul.appendChild(api.dynastiyaUi.text('text', nameOf(mod), { tag: 'li', expressive: true, strong: true }));
         });

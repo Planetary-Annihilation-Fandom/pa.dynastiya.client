@@ -77,6 +77,12 @@
     list-style: none;
 }
 
+.dyn-modal__list {
+    max-height: 172px;
+    padding: 8px 12px 4px;
+    border: 1px solid rgba(131, 131, 131, 0.35);
+}
+
 .dyn-modal__body li {
     position: relative;
     margin-bottom: 4px;
