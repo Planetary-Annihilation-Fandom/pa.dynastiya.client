@@ -17,6 +17,8 @@ function payload(health) {
         display_name:'Vehicle Factory',health:{current:health,max:100}});
 }
 async function main() {
+    assert.equal(await read(hover, 'return model.dynastiyaHoverPresentation === true;'),true,
+        'Hover adapter must be mounted and loaded by this scene, not injected into an earlier document');
     assert.equal(await read(game, 'return model.hasWorldHoverTarget();'), false, 'Pointer must be off units during this check');
     assert.equal(await read(hover, 'return model.hasWorldHoverTarget();'), false);
     try {

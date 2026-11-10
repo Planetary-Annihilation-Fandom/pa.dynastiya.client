@@ -55,4 +55,13 @@
             _.delay(api.Panel.onBodyResize);
         }
     };
+    var applySelection = handlers.selection;
+    model.parseSelection = handlers.selection = function (payload) {
+        var presentation = api.Panel.dockPresentation;
+        if (!presentation) { applySelection(payload); return; }
+        // Counts stay live; adding/removing/reordering rows changes the border
+        // geometry and must not expose a half-rebuilt native backing view.
+        var key = JSON.stringify(Object.keys(payload.spec_ids || {}));
+        presentation.present(payload, applySelection, key);
+    };
 }());
