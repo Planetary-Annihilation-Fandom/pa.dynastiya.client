@@ -24,10 +24,9 @@
         // progress bars, camera coordinates, order values and text input stay live.
         var keys = {
             live_game_action_bar: function () { return fields('showCommands showOrders allowMove allowAttack allowAssist allowRepair allowReclaim allowPatrol allowUse allowSpecialMove allowUnload allowLoad allowFireSecondaryWeapon allowMassTeleport allowStop allowFireOrders allowMoveOrders allowEnergyOrders allowBuildStanceOrders'); },
-            live_game_build_hover: function () { return [value('name'), value('siconUrl'), value('desc')]; },
             live_game_celestial_control: function () { return stateFields('active findingTargetPlanet findingTargetSurfacePosition actionIndex'); },
             live_game_chat: function () { return fields('chatSelected teamChat spectatorChat'); },
-            live_game_control_group_bar: function () { return [fields('hasSelection restart hoverIndex'),
+            live_game_control_group_bar: function () { return [fields('hasSelection restart'),
                 groupShape(value('currentFocusPlanetIdleFabberGroup')), groupShape(value('currentFocusPlanetIdleFactoryGroup')),
                 (value('controlGroupList') || []).map(groupShape)]; },
             live_game_devmode: function () { return [fields('cheatAllowChangeVision cheatAllowChangeControl'), ids('players')]; },
@@ -37,8 +36,8 @@
             live_game_options_bar: function () { return [stateFields('pip uber_bar custom_formations'), value('showServerRate')]; },
             live_game_paused_popup: function () { return fields('paused restart saving ranked'); },
             live_game_pip: function () { return fields('alertMode mirrorMode'); },
-            live_game_planets: function () { return [ids('planets'), fields('landing targeting celestialControl showCelestialViewModels')]; },
-            live_game_players: function () { return [ids('players'), fields('showPlayerListPanel showSpectatorPanel spectatorPanelMode showEconomyData showArmyData showAllianceData')]; },
+            live_game_planets: function () { return ids('planets'); },
+            live_game_players: function () { return ids('players'); },
             live_game_popup: function () { return [value('visible'), value('params')]; },
             live_game_sandbox: function () { return [value('sandbox_expanded'), (value('sandbox_units') || []).length]; },
             live_game_time_bar: function () { return fields('visible isSpectator showPlayFromHere'); },
@@ -49,6 +48,10 @@
         // countdowns, control-group counts and chat messages remain live.
         // Hover/selection/buildbar own their keyed data adapters; do not install
         // a second key owner on the same dockPresentation controller.
+        // Hovering a group, changing build descriptions or opening retained
+        // player/planet sections only updates existing DOM. Stock bindings and
+        // resize handlers already handle them; preparing the entire native view
+        // here blanks unrelated rows and can break pointer hover for a frame.
         if (keys[scene] && api.Panel.dockPresentation)
             dispose.push(api.Panel.watchPresentation(api.Panel.dockPresentation, keys[scene]));
         model.dynastiyaPresentationPolicy = keys[scene] ? 'structural-key' :

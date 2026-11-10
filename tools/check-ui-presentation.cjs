@@ -51,6 +51,25 @@ for(const name of fs.readdirSync(path.join(media,'ui/main/game/live_game')).filt
 }
 console.log('Local presentation: keyed/forced rebuilds, images, live input, stale frames, watcher cleanup and HUD policy initialization passed');
 
+// Visibility/hover changes must not invoke whole-view preparation. Actual row
+// identity changes still do; the buildbar/selection adapters keep their own gate.
+for(const scene of ['control_group_bar','build_hover','players','planets']) {
+ let prepared=0;
+ const model={hoverIndex:ko.observable(-1),name:ko.observable(''),desc:ko.observable(''),
+  showPlayerListPanel:ko.observable(false),showCelestialViewModels:ko.observable(false),
+  players:ko.observableArray([]),planets:ko.observableArray([])};
+ const ctx={ko,api:{Panel:{dockPresentation:{present(){prepared++;}},watchPresentation:api.Panel.watchPresentation}},
+  app:{registerWithCoherent(){}},window:{location:{pathname:'/live_game/live_game_'+scene+'.html'}},$:()=>({on(){}})};
+ vm.runInNewContext(policies,ctx);ctx.app.registerWithCoherent(model,{});
+ model.hoverIndex(1);model.name('Factory');model.desc('Long description');
+ model.showPlayerListPanel(true);model.showCelestialViewModels(true);
+ assert.equal(prepared,0,scene+' retains its view during hover/open');
+ if(scene==='players'||scene==='planets') {
+  model[scene]([{id:1,name:'New row'}]);
+  assert.equal(prepared,1,scene+' still prepares actual row replacement');
+ }
+}
+
 // Lobby server updates must never blank persistent sections. Exercise policy
 // installation, not just the presentation primitive with an artificial key.
 {
