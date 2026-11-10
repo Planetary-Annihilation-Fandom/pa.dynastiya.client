@@ -5,6 +5,9 @@ const path = require('node:path');
 const vm = require('node:vm');
 const media = process.argv[2];
 const ko = require(path.join(media, 'ui/main/shared/js/thirdparty/knockout-3.5.1.debug.js'));
+const koUtility = fs.readFileSync(path.join(media,'ui/main/shared/js/ko_utility.js'),'utf8');
+vm.runInNewContext(koUtility.slice(koUtility.indexOf('    ko.extenders.numeric ='),
+    koUtility.indexOf('    ko.extenders.positive =')), {ko});
 const _ = require(path.join(media, 'ui/main/shared/js/thirdparty/lodash-4.7.20.js'));
 _.contains = _.includes;
 _.pluck = (items, key) => _.map(items, key);
@@ -129,6 +132,36 @@ function selectionChecks() {
     send({ bot: [9] });
     assert.notEqual(model.selectionList()[0], bot, 'removed rows are released');
 }
+function hoverChecks() {
+    const {ctx}=context();
+    const calls=[];
+    ctx.api.Panel.dockPresentation={present(data,apply,key) {calls.push(key);apply(data);}};
+    ctx.scene_mod_list.live_game_hover=true;
+    ctx.loadMods=()=>run(ctx,patch('hover'));
+    run(ctx,stock('world_popup'));
+    const send=(entity,health,extra={})=>ctx.handlers.hover(Object.assign({entity,
+        spec_id:'/pa/units/land/vehicle_factory/vehicle_factory.json',display_name:'Factory',
+        health:{current:health,max:100}},extra));
+    send(1,10);
+    const current=ctx.model.worldHoverTarget();
+    send(1,88);
+    assert.equal(ctx.model.worldHoverTarget(),current,'progress preserves the bound model');
+    assert.equal(current.healthPercentString(),'88%');
+    assert.equal(calls.at(-1),calls.at(-2),'progress keeps its content key');
+    send(2,25);
+    assert.notEqual(calls.at(-1),calls.at(-2),'same name on another entity needs presentation');
+    assert.equal(current.entity(),2);
+    const target={entity:3,spec_id:'/pa/units/land/tank/tank.json',health:{current:20,max:100}};
+    send(2,25,{tool_details:{build_target:true,target_details:target}});
+    const nested=current.target();
+    assert.equal(nested.healthPercentString(),'20%','adopted target computeds remain alive');
+    target.health.current=80;
+    send(2,25,{tool_details:{build_target:true,target_details:target}});
+    assert.equal(current.target(),nested);
+    assert.equal(nested.healthPercentString(),'80%');
+    ctx.handlers.hover({});
+    assert.equal(ctx.model.hasWorldHoverTarget(),false);
+}
 function chatChecks() {
     const { ctx } = context();
     scene(ctx, 'chat');
@@ -185,6 +218,7 @@ function optionsChecks() {
     assert.equal(requests[3].args[0], 'toggleMenu');
 }
 buildChecks();
+hoverChecks();
 selectionChecks();
 chatChecks();
 planetChecks();

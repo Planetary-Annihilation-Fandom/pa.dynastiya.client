@@ -75,7 +75,8 @@
       "coui://ui/mods/dynastiya.layout/live_game_econ.css"
     ],
     "live_game_hover": [
-      "coui://ui/mods/dynastiya.layout/live_game_hover.css"
+      "coui://ui/mods/dynastiya.layout/live_game_hover.css",
+      "coui://ui/mods/dynastiya.live_game/hover.js"
     ]
   }
 }

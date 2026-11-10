@@ -41,7 +41,16 @@ async function main() {
             return {revision:api.Panel.dockPresentation.revision,hidden:document.documentElement.hasAttribute('data-dynastiya-dock-pending')};`);
         assert.equal(result.revision,baseline.revision);
         assert.equal(result.hidden,false,'Actual geometry changes must not blank the hover panel');
-        console.log('Factory hover: progress and geometry updates do not conceal/reprepare the panel');
+        const switched = await read(hover, `var data=${payload(42)};data.entity=987655;
+            handlers.hover(data);return {revision:api.Panel.dockPresentation.revision,
+                entity:model.worldHoverTarget().entity(),percent:model.worldHoverTarget().healthPercentString(),
+                hidden:document.documentElement.hasAttribute('data-dynastiya-dock-pending')};`);
+        assert.ok(switched.revision>baseline.revision,'same-name entity change starts a new presentation');
+        assert.equal(switched.entity,987655);
+        assert.equal(switched.percent,'42%');
+        assert.equal(switched.hidden,true,'old native texture stays concealed while new content is prepared');
+        await cdp.waitFor(port,hover,'return !api.Panel.dockPresentation.pending;',10,100);
+        console.log('Factory hover: continuous progress/geometry updates and concealed same-name entity replacement passed');
     } finally {
         await read(hover, "var el=document.getElementById('dynastiya-hover-resize-check');if(el)el.parentNode.removeChild(el);return true;");
         await read(hover, 'handlers.hover({});return true;');

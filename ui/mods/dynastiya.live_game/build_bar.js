@@ -28,7 +28,16 @@
         // commands and queue changes still reach parseSelection synchronously.
         $.when(model.unitSpecs, model.getSpecTag).then(function () {
             waiting = false;
-            model.parseSelection(latestSelection);
+            var selection = latestSelection;
+            var presentation = api.Panel.dockPresentation;
+            if (presentation) {
+                // Counts and queues update in place; a different set of builder
+                // specs requires a new build grid, regardless of unit names.
+                var key = JSON.stringify(Object.keys(selection.spec_ids || {}).sort());
+                presentation.present(selection, function (value) {
+                    model.parseSelection(value);
+                }, key);
+            } else model.parseSelection(selection);
         }, function () { waiting = false; });
     };
 }());

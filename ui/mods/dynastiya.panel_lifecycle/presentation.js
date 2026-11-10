@@ -19,6 +19,33 @@
     var cache = Object.create(null);
     var closed = false;
     var presented = false;
+    var hasKey = false;
+    var contentKey;
+
+    // Keep this namespace separate from Panel.update, which moves native views.
+    // apply(data) must synchronously commit the model; async callers invoke this
+    // only after their resources resolve, using their latest requested data.
+    state.update = function (data, apply) {
+        apply(data);
+        panel.onBodyResize();
+    };
+    state.present = function (data, apply, key) {
+        var keyed = arguments.length >= 3;
+        if (keyed && hasKey && key === contentKey) {
+            state.update(data, apply);
+            return;
+        }
+        hasKey = keyed;
+        contentKey = key;
+        presented = false;
+        state.pending = true;
+        target = undefined;
+        // Conceal the previous content before Knockout replaces it, even when
+        // the new content has exactly the same dimensions as the old content.
+        root.setAttribute('data-dynastiya-dock-pending', '');
+        apply(data);
+        panel.onBodyResize(true);
+    };
 
     function dock() { return document.getElementsByTagName('body-dock')[0] || document.body; }
     function requestSettle() {

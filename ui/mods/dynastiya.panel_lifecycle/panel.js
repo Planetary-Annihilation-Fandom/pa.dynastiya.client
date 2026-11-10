@@ -345,11 +345,11 @@ function init_panel() {
 
     var bodySize = {width: -1, height: -1};
     if (panel.pageId !== panel.parentId) {
-        panel.onBodyResize = function() {
+        panel.onBodyResize = function(force) {
             var dock = document.getElementsByTagName('body-dock')[0] || document.body;
             var newWidth = dock.offsetWidth;
             var newHeight = dock.offsetHeight;
-            if ((newWidth !== bodySize.width) || (newHeight !== bodySize.height)) {
+            if (force === true || (newWidth !== bodySize.width) || (newHeight !== bodySize.height)) {
                 bodySize.width = newWidth;
                 bodySize.height = newHeight;
                 var payload = { id: panel.pageId, width: newWidth, height: newHeight };
