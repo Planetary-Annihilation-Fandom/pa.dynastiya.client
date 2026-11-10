@@ -8,6 +8,6 @@
 | `instant_motion.js` | Мгновенные jQuery-эффекты и завершение известных анимаций появления/исчезновения за 1 мс |
 | `main.js` | Скрытие заставки и возврат из видео без ожидания animationend |
 
-CSS и `instant_motion.js` подключены через `global_mod_list`, `main.js` через сцену `main`. Конечная геометрия, видимость и `pointer-events` панелей остаются под управлением исходных классов. Время чтения сообщений и готовность сцен сохраняются; непрерывные пульсации и боевые вспышки этой правкой не отключаются. Подробности: `docs/ui/instant-motion.md` серверного репозитория.
+CSS и `instant_motion.js` подключены через `global_mod_list`, `main.js` через сцену `main`. Конечная геометрия, видимость и `pointer-events` панелей остаются под управлением исходных классов. Время чтения сообщений и готовность сцен сохраняются; непрерывные пульсации и боевые вспышки этой правкой не отключаются.
 
-Общие правила и результаты проверки находятся в серверном репозитории: `docs/ui/control-feedback.md`, `docs/ui/changes.md`. Изменения генератора планет вынесены в отдельную [задачу #11](https://github.com/Planetary-Annihilation-Fandom/pa.dynastiya.server/issues/11).
+Общие правила UI находятся в [`docs/ui/README.md`](https://github.com/Planetary-Annihilation-Fandom/pa.dynastiya.server/blob/main/docs/ui/README.md) серверного репозитория. Изменения генератора планет вынесены в отдельную [задачу #11](https://github.com/Planetary-Annihilation-Fandom/pa.dynastiya.server/issues/11).
