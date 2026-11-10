@@ -167,9 +167,12 @@
                 tooltip: '!LOC:Click to generate planet',
                 click_sound: 'default',
                 rollover_sound: 'default',
-                click: generate" data-placement="bottom">
-                <label class="generate-planet-label">Generate Planet</label>
+                click: generate,
+                enable: !generationPending() && model.canChangeSettings(),
+                attr: { 'aria-busy': generationPending() ? 'true' : 'false' }" data-placement="bottom">
+                <label class="generate-planet-label" data-bind="text: generationPending() ? loc('!LOC:Generating...') : loc('!LOC:Generate Planet')">Generate Planet</label>
             </button>
+            <div class="generation-error" role="alert" data-bind="visible: generationError, text: generationError"></div>
         </div>
     </div>
 </body>

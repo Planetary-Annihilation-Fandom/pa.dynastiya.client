@@ -72,10 +72,76 @@ var biomes_id_list = [
 ];
 
 var generationRequest = 0;
+var generationPending = ko.observable(false);
+var generationError = ko.observable('');
+var generationDisposed = false;
+var applyingGeneratedSystem = false;
+
+function cancelGeneration() {
+    ++generationRequest;
+    generationPending(false);
+    generationError('');
+}
+
+var generationSystemSubscription = model.system.subscribe(function () {
+    if (!applyingGeneratedSystem) cancelGeneration();
+});
+var generationPermissionSubscription = model.canChangeSettings.subscribe(function (allowed) {
+    if (!allowed) cancelGeneration();
+});
+
+$(window).on('pagehide.dynastiyaGenerator unload.dynastiyaGenerator', function () {
+    generationDisposed = true;
+    cancelGeneration();
+    generationSystemSubscription.dispose();
+    generationPermissionSubscription.dispose();
+});
 
 function generate() {
+    if (generationDisposed || generationPending() || !model.canChangeSettings()) return;
     var request = ++generationRequest;
-    var previousSystem = model.system();
+    generationError('');
+    generationPending(true);
+
+    function current() {
+        return !generationDisposed && request === generationRequest && model.canChangeSettings();
+    }
+    function failed(error) {
+        if (!current()) return;
+        console.error('Dynastiya planet generation failed', error);
+        generationError(loc('!LOC:Planet generation failed. Try again.'));
+        generationPending(false);
+    }
+
+    // Paint the pending label before preparing the planet on the UI thread.
+    requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+            if (!current()) return;
+            try {
+                generateSystem().then(function (system) {
+                    if (!current()) return;
+                    // jQuery 2 Deferred does not turn callback exceptions into rejection.
+                    try {
+                        applyingGeneratedSystem = true;
+                        model.system(system);
+                        model.updateSystem(system);
+                        model.changeSettings();
+                        model.requestUpdateCheatConfig();
+                        generationPending(false);
+                    } catch (error) {
+                        failed(error);
+                    } finally {
+                        applyingGeneratedSystem = false;
+                    }
+                }, failed);
+            } catch (error) {
+                failed(error);
+            }
+        });
+    });
+}
+
+function generateSystem() {
 
     // TODO: use biome generation option
     var biome = _data.get_option('biome');
@@ -130,19 +196,8 @@ function generate() {
     console.log(biome);
     console.log(biome_id);
 
-    get_random_system('Generated', get_generation_size(), biome_id, get_metal_density(),
-        get_additional_surface_parameters(temperature, undefined, undefined)).then(function (system) {
-            // A slow name response must not replace a newer generation or selection.
-            if (request !== generationRequest || model.system() !== previousSystem || !model.isGameCreator()) return;
-            model.system(system);
-            model.updateSystem(model.system());
-            model.changeSettings();
-            model.requestUpdateCheatConfig();
-        }, function (error) {
-            if (request !== generationRequest || model.system() !== previousSystem || !model.isGameCreator()) return;
-            console.error('Map generation failed', error);
-            model.localChatMessage('Map Generator', 'Could not generate a system. Please try again.');
-        })
+    return get_random_system('Generated', get_generation_size(), biome_id, get_metal_density(),
+        get_additional_surface_parameters(temperature, undefined, undefined));
 
     /**
      * Returns a random biome ID from the provided list of biomes or from the default list if none is provided.
@@ -376,17 +431,27 @@ function get_random_system(planet_title, planet_size, biomeName, base_metal_dens
     var pgen = _.map(planets, function (plnt, index) {
         var nameGet = $.Deferred();
         // No terrain data is consumed here; only the random name is needed.
-        api.game.getRandomPlanetName().then(function (name) { nameGet.resolve(name); }, function (error) { nameGet.reject(error); });
-        return nameGet.then(function (name) {
-            plnt.name = name;
-            return plnt;
-        });
+        api.game.getRandomPlanetName().then(function (name) {
+            try {
+                plnt.name = name;
+                nameGet.resolve(plnt);
+            } catch (error) {
+                nameGet.reject(error);
+            }
+        }, function (error) { nameGet.reject(error); });
+        return nameGet;
     });
 
-    return $.when.apply($, pgen).then(function () {
-        rSystem.planets = Array.prototype.slice.call(arguments, 0);
-        return rSystem;
-    });
+    var result = $.Deferred();
+    $.when.apply($, pgen).then(function () {
+        try {
+            rSystem.planets = Array.prototype.slice.call(arguments, 0);
+            result.resolve(rSystem);
+        } catch (error) {
+            result.reject(error);
+        }
+    }, function (error) { result.reject(error); });
+    return result;
 
 
     function calculate_metal(base_metal_density) {

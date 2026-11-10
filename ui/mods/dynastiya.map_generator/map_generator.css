@@ -97,6 +97,22 @@ button.option.selected {
     border: 1px solid #06FAE8;
 }
 
+#frame-body button.option:focus,
+#frame-body button.generate:focus {
+    outline: 2px solid #FFFFFF;
+    outline-offset: 2px;
+}
+
+#frame-body button.generate:disabled {
+    cursor: default;
+    opacity: 0.65;
+}
+
+#frame-body .generation-error {
+    color: #FFB4B4;
+    margin-top: 6px;
+}
+
 button.option.xl {
     width: 60px !important;
 }

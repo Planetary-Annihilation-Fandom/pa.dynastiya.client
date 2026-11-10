@@ -79,8 +79,9 @@ function checkHistory() {
 async function checkGenerator() {
     const names = [];
     const applied = [];
-    const errors = [];
-    const $ = () => {}; // DOM-ready initialization is outside this mechanism test.
+    let onExit;
+    const frames = [];
+    const $ = () => ({ on(events, callback) { onExit = callback; } });
     $.Deferred = () => {
         let resolve, reject;
         const promise = new Promise((yes, no) => { resolve = yes; reject = no; });
@@ -89,12 +90,12 @@ async function checkGenerator() {
     $.when = value => Promise.resolve(value);
     $.getJSON = () => { throw new Error('unused terrain request'); };
     const model = {
-        system: ko.observable({}), isGameCreator: ko.observable(true),
+        system: ko.observable({}), canChangeSettings: ko.observable(true),
         slots: () => 2, armies: () => [{ slots: () => [{ playerName: () => 'Host' }] }],
-        updateSystem: value => applied.push(value), changeSettings() {}, requestUpdateCheatConfig() {},
-        localChatMessage: (source, text) => errors.push(text)
+        updateSystem: value => applied.push(value), changeSettings() {}, requestUpdateCheatConfig() {}
     };
     const ctx = vm.createContext({ $, ko, model, _: lodash,
+        window: {}, loc: text => text, requestAnimationFrame: fn => frames.push(fn),
         console: { log() {}, error() {} }, require: { config: () => () => {} },
         api: { game: { getRandomPlanetName: () => {
             const pending = $.Deferred(); names.push(pending); return pending;
@@ -106,25 +107,51 @@ async function checkGenerator() {
     ctx._planetnames = { generate_planet_name: () => 'Planet', generate_system_name: () => 'System' };
     ctx._surface = { generate_landing_zones: () => [] };
     const flush = () => new Promise(resolve => setImmediate(resolve));
+    const paint = () => { while (frames.length) frames.shift()(); };
     ctx.generate(); ctx.generate();
-    names[1].resolve('New'); await flush();
-    names[0].resolve('Old'); await flush();
+    assert.equal(ctx.generationPending(), true);
+    assert.equal(names.length, 0, 'preparation waits for pending state to paint');
+    paint();
+    assert.equal(names.length, 1, 'double activation must not start another request');
+    names[0].resolve('New'); await flush();
     assert.equal(applied.length, 1);
     assert.equal(applied[0].planets[0].name, 'New');
-    ctx.generate();
+    assert.equal(ctx.generationPending(), false);
+    ctx.generate(); paint();
     model.system({ name: 'Selected elsewhere' });
-    names[2].resolve('Stale'); await flush();
-    assert.equal(applied.length, 1);
-    ctx.generate(); model.isGameCreator(false);
+    assert.equal(ctx.generationPending(), false);
+    ctx.generate(); paint();
+    names[1].resolve('Stale'); await flush();
+    assert.equal(ctx.generationPending(), true, 'old response must not finish the new request');
+    names[2].resolve('Replacement'); await flush();
+    assert.equal(applied.length, 2);
+    ctx.generate(); paint(); model.canChangeSettings(false);
+    model.canChangeSettings(true);
     names[3].resolve('Demoted'); await flush();
-    assert.equal(applied.length, 1);
-    const rejected = ctx.get_random_system('test', 400, 'moon', 20);
-    names[4].reject(new Error('name failed'));
-    await assert.rejects(rejected, /name failed/);
-    model.isGameCreator(true);
-    ctx.generate(); names[5].reject(new Error('name failed')); await flush();
-    assert.equal(errors.length, 1);
-    assert.equal(applied.length, 1);
+    assert.equal(applied.length, 2, 'regaining host rights must not revive an old request');
+    ctx.generate(); paint(); names[4].reject(new Error('name failed')); await flush();
+    assert.ok(ctx.generationError());
+    assert.equal(ctx.generationPending(), false);
+    const originalGenerate = ctx.generateSystem;
+    ctx.generateSystem = () => { throw new Error('synchronous failure'); };
+    ctx.generate(); paint();
+    assert.ok(ctx.generationError());
+    assert.equal(ctx.generationPending(), false);
+    ctx.generateSystem = originalGenerate;
+    const originalUpdate = model.updateSystem;
+    model.updateSystem = () => { throw new Error('callback failure'); };
+    ctx.generate(); paint(); names[5].resolve('Callback failure'); await flush();
+    assert.ok(ctx.generationError());
+    assert.equal(ctx.generationPending(), false);
+    model.updateSystem = originalUpdate;
+    ctx.generate(); paint(); names[6].resolve('Retry'); await flush();
+    assert.equal(ctx.generationError(), '');
+    assert.equal(applied.length, 3);
+    ctx.generate(); paint(); onExit(); names[7].resolve('After leaving'); await flush();
+    ctx.generate(); paint();
+    assert.equal(applied.length, 3);
+    assert.equal(names.length, 8);
+    assert.equal(ctx.generationPending(), false);
 }
 
 function checkPreview() {

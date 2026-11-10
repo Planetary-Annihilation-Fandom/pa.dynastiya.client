@@ -34,10 +34,10 @@ define(['require', './data', 'text!./map_generator.html'], function (require) {
                     var button = $(jquery_element).find("button");
                     // im using button[0] because button is a jquery object and the first element is the vanilla button
                     if (button[0] === data.currentTarget) {
-                        $(button).addClass('selected').blur();
+                        $(button).addClass('selected');
                         $(button).children('img').addClass('selected');
                     } else {
-                        $(button).removeClass('selected').blur();
+                        $(button).removeClass('selected');
                         $(button).children('img').removeClass('selected');
                     }
                 });
