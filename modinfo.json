@@ -7,7 +7,7 @@
     "overhaul"
   ],
   "context": "client",
-  "date": "2026-11-09",
+  "date": "2026-11-10",
   "description": "A large-scale overhaul focused on a cohesive, complete gameplay experience.",
   "display_name": "Dynastiya Client",
   "forum": "https://steamcommunity.com/app/386070/discussions/0/",
@@ -16,7 +16,7 @@
   "identifier": "com.pa.dynastiya.client",
   "signature": "not yet implemented",
   "titansOnly": true,
-  "version": "0.1.4",
+  "version": "0.1.5",
   "scenes": {
     "live_game_action_bar": [
       "coui://ui/mods/dynastiya.layout/live_game_action_bar.css"
