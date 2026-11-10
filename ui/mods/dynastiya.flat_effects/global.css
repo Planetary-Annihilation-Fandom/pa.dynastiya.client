@@ -23,10 +23,6 @@ button:disabled, input:disabled, select:disabled, .btn.disabled,
 .background_glow, .title_watermark, #logo_slide_top, #logo_slide_bottom {
     display: none !important;
 }
-.user_pause_bar {
-    background: #493e0b !important;
-    border-bottom: 2px solid #ffe36c !important;
-}
 .badge_animation { opacity: 1 !important; }
 
 /* Static warning colors replace the corresponding flashing classes. */
