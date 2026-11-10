@@ -28,14 +28,23 @@ const model = {
     canDirectReconnect: ko.computed(() => false),
     reconnectToGameInfo: ko.observable(), reconnectToGameInfoMaxAge: ko.observable(300000),
     allowUbernetActions: ko.observable(true), uberId: ko.observable('a'),
-    liveStreams: ko.observableArray([]), liveStreamsReady: ko.observable(false)
+    liveStreams: ko.observableArray([]), liveStreamsReady: ko.observable(false),
+    showingLiveStreamsTab: ko.observable(false), showingLeaderboardTab: ko.observable(false),
+    fetchMiniboard() { model.boardRequests = (model.boardRequests || 0) + 1; },
+    setup() {
+        model.fetchLiveStreams(); model.fetchMiniboard();
+        model.liveStreamsTimer = ctx.setInterval(model.fetchLiveStreams, 60000);
+        model.miniboardTimer = ctx.setInterval(model.fetchMiniboard, 60000);
+    }
 };
 const ctx = vm.createContext({ model, ko, _, $, window: {}, loc: value => value,
     SPLASH_DELAY_SECONDS: 2, engine: { asyncCall: $.getJSON },
     Date: { now: () => now },
     api: { content: { ownsTitans: () => true } },
     setTimeout(fn) { const id = ++serial; timers.set(id, fn); return id; },
-    clearTimeout(id) { timers.delete(id); }
+    clearTimeout(id) { timers.delete(id); },
+    setInterval(fn) { const id = ++serial; timers.set(id, fn); return id; },
+    clearInterval(id) { timers.delete(id); }
 });
 // Exercise the real installed event formatter, including its active overrides.
 const stock = fs.readFileSync(path.join(media, 'ui/main/game/start/start.js'), 'utf8');
@@ -107,6 +116,20 @@ model.fetchLiveStreams(); pending.reject();
 assert.equal(model.liveStreams().length, 0);
 model.fetchLiveStreams(); pending.resolve({ data: [{ ...stream }] });
 assert.equal(model.liveStreams().length, 1, 'retry after failure');
+model.setup();
+assert.equal(timers.size, 0, 'hidden feed tabs have no refresh timers');
+model.showingLiveStreamsTab(true);
+assert.equal(timers.size, 1);
+pending.resolve({ data: [{ ...stream }] });
+model.showingLiveStreamsTab(false);
+assert.equal(timers.size, 0);
+model.showingLeaderboardTab(true);
+assert.equal(model.boardRequests, 2, 'reopening fetches fresh rankings');
+assert.equal(timers.size, 1);
+model.showingLeaderboardTab(false);
+assert.equal(timers.size, 0);
+model.showingLeaderboardTab(true);
+assert.equal(timers.size, 1);
 model.reconnectToGameInfo({ timestamp: now, type: 'local' });
 exit();
 assert.equal(timers.size, 0);

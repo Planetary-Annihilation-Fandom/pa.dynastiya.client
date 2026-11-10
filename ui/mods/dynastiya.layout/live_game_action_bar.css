@@ -1,0 +1,19 @@
+/* Stock closed bars are shifted only 40px; their receiveMouse children can
+   override the parent's pointer-events:none. Keep their measured geometry for
+   dock preparation, but hide the paint and every descendant's hit target. */
+.div_command_bar_top_cont:not(.show),
+.div_orders_bar_top_cont:not(.show),
+.div_order_item_menu:not(.show),
+.div_command_item:not(.show) {
+    visibility: hidden;
+}
+.div_command_bar_top_cont:not(.show),
+.div_command_bar_top_cont:not(.show) *,
+.div_orders_bar_top_cont:not(.show),
+.div_orders_bar_top_cont:not(.show) *,
+.div_order_item_menu:not(.show),
+.div_order_item_menu:not(.show) *,
+.div_command_item:not(.show),
+.div_command_item:not(.show) * {
+    pointer-events: none !important;
+}

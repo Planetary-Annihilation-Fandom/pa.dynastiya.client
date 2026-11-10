@@ -15,14 +15,21 @@
     });
 
     var retireAudio;
+    var refreshAudioVisibility;
     function installAudioRefresh() {
         if (retireAudio) retireAudio();
         var item = model.settingsItemMap()['audio.device'];
         if (!item) return;
         var retired = false;
-        var pending = false;
+        var pending = !!item.loadSelectOptionsDeferred;
         var options = item.sourceOptions;
+        function visible() { return model.activeSettingsGroupIndex() === 1; }
         function stop() { clearTimeout(item.refreshTimeout); }
+        function schedule() {
+            stop();
+            if (!retired && visible() && options.refresh)
+                item.refreshTimeout = setTimeout(item.reloadSelectOptions, Math.max(5000, options.refresh * 1000));
+        }
         retireAudio = function () {
             retired = true;
             stop();
@@ -31,14 +38,13 @@
                 item.loadSelectOptionsDeferred.then(stop, stop);
         };
         item.reloadSelectOptions = function () {
-            if (retired || pending) return;
+            if (retired || pending || !visible()) return;
             stop();
             pending = true;
             var selected = item.value.peek();
             function finish() {
                 pending = false;
-                if (!retired && options.refresh)
-                    item.refreshTimeout = setTimeout(item.reloadSelectOptions, Math.max(5000, options.refresh * 1000));
+                schedule();
             }
             try {
                 options.deferred(selected).then(function (values) {
@@ -58,13 +64,20 @@
                 }, finish);
             } catch (error) { finish(); }
         };
-        // Stock initialization schedules retries only on success.
-        if (item.loadSelectOptionsDeferred)
-            item.loadSelectOptionsDeferred.then(null, function () {
-                if (!retired) item.refreshTimeout = setTimeout(item.reloadSelectOptions, 5000);
-            });
+        refreshAudioVisibility = function () {
+            stop();
+            if (visible()) item.reloadSelectOptions();
+        };
+        // Stock initialization can finish after the tab closes and install a
+        // timer of its own. Retain its choices, but replace that timer in both cases.
+        if (item.loadSelectOptionsDeferred) {
+            var initialized = function () { pending = false; schedule(); };
+            item.loadSelectOptionsDeferred.then(initialized, initialized);
+        }
+        stop();
     }
     installAudioRefresh();
+    model.activeSettingsGroupIndex.subscribe(function () { refreshAudioVisibility(); });
     model.settingsItemMap.subscribe(installAudioRefresh);
     $(window).on('unload', function () { if (retireAudio) retireAudio(); });
 }());

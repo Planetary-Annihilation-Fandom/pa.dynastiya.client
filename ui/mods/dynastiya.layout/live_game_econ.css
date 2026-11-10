@@ -1,3 +1,13 @@
+/* Opacity alone leaves the closed economy bar's receiveMouse controls active.
+   Preserve its size for presentation preparation and keep incoming economy data. */
+.div-econ-bar:not(.show-econ) {
+    visibility: hidden;
+}
+.div-econ-bar:not(.show-econ),
+.div-econ-bar:not(.show-econ) * {
+    pointer-events: none !important;
+}
+
 /* Both net rates (+999.9K) and percentages share a slot. A change in text
    must not resize the neighbouring storage bars; larger values may still grow. */
 body .div-metal .div_rate_ctr_cont,

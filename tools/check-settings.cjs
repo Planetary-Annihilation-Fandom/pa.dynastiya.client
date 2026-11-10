@@ -57,6 +57,10 @@ const tick = () => { const [id, fn] = timers.entries().next().value; timers.dele
     // Both old and replacement initial requests resolve; only the current model keeps a timer.
     requests.splice(0).forEach(request => request.resolve([{ text: 'A', value: 'A' }]));
     await flush();
+    assert.equal(timers.size, 0, 'hidden audio tab must not poll after initial completion');
+    model.activeSettingsGroupIndex(1);
+    assert.equal(requests.length, 1, 'reopening refreshes available devices');
+    requests.shift().resolve([{ text: 'A', value: 'A' }]); await flush();
     assert.equal(timers.size, 1);
     const audio = model.settingsItemMap()['audio.device'];
     let writes = 0;
@@ -78,6 +82,14 @@ const tick = () => { const [id, fn] = timers.entries().next().value; timers.dele
     assert.equal(requests.length, 1);
     requests.shift().resolve([{ text: 'C', value: 'C' }]); await flush();
     assert.equal(writes, 2);
+    tick();
+    model.activeSettingsGroupIndex(0);
+    requests.shift().resolve([{ text: 'C', value: 'C' }]); await flush();
+    assert.equal(timers.size, 0, 'late response must not restart a hidden tab');
+    model.activeSettingsGroupIndex(1);
+    assert.equal(requests.length, 1);
+    requests.shift().resolve([{ text: 'C', value: 'C' }]); await flush();
+    assert.equal(timers.size, 1, 'reopening installs one refresh timer');
     tick();
     unload();
     requests.shift().resolve([{ text: 'C', value: 'C' }]); await flush();

@@ -89,7 +89,39 @@
     };
     model.fetchTwitchChannels = model.fetchLiveStreams;
 
+    var stopTabRefresh = [];
+    var setup = model.setup;
+    model.setup = function () {
+        var result = setup.apply(model, arguments);
+        // Keep the first requests: the stock splash waits for their readiness.
+        // Only these two feeds belong exclusively to optional tabs. Regions,
+        // announcements and events also serve the always-visible menu controls.
+        stopTabRefresh.splice(0).forEach(function (stop) { stop(); });
+        function tabRefresh(visible, fetch, timerName) {
+            clearInterval(model[timerName]);
+            model[timerName] = undefined;
+            function stop() {
+                clearInterval(model[timerName]);
+                model[timerName] = undefined;
+            }
+            function change(open) {
+                stop();
+                if (!open) return;
+                fetch();
+                model[timerName] = setInterval(fetch, 60000);
+            }
+            var subscription = visible.subscribe(change);
+            // setup already fetched once; do not duplicate an initial request.
+            if (visible()) model[timerName] = setInterval(fetch, 60000);
+            stopTabRefresh.push(function () { stop(); subscription.dispose(); });
+        }
+        tabRefresh(model.showingLiveStreamsTab, model.fetchLiveStreams, 'liveStreamsTimer');
+        tabRefresh(model.showingLeaderboardTab, model.fetchMiniboard, 'miniboardTimer');
+        return result;
+    };
+
     $(window).on('unload', function () {
+        stopTabRefresh.splice(0).forEach(function (stop) { stop(); });
         clearTimeout(reconnectTimer);
         model.canDirectReconnect.dispose();
     });
