@@ -18,6 +18,9 @@
   "titansOnly": true,
   "version": "0.1.4",
   "scenes": {
+    "settings": [
+      "coui://ui/mods/dynastiya.settings/settings.js"
+    ],
     "start": [
       "coui://ui/mods/dynastiya.start/start.js"
     ],
