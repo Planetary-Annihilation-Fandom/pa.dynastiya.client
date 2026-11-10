@@ -70,5 +70,11 @@ for (const file of files.filter(f => f.endsWith('.css'))) {
     inventory.push({source:relative, override:name, bundled:bundled.includes(relative), rules:rules.length});
 }
 fs.writeFileSync(path.join(output,'inventory.json'), JSON.stringify(inventory,null,2)+'\n');
+const loader = path.join(output, 'main.js');
+const source = fs.readFileSync(loader, 'utf8');
+const marker = /\/\* resource-index:start \*\/[\s\S]*?\/\* resource-index:end \*\//;
+if (!marker.test(source)) throw Error('Missing resource index marker in flat effects loader');
+const runtimeInventory = inventory.map(entry => [entry.source, entry.override, entry.bundled ? 1 : 0]);
+fs.writeFileSync(loader, source.replace(marker, '/* resource-index:start */\n    var inventory = '+JSON.stringify(runtimeInventory)+';\n    /* resource-index:end */'));
 console.log(JSON.stringify(inventory,null,2));
 module.exports = {stripShadow,styleRules};

@@ -35,18 +35,41 @@ $(function () {
 })
 
 function awake() {
-    // loading modules first to ensure they are loaded
+    // The lobby needs controls immediately, but not the generation algorithms.
     require_mod_modules(
-        ['./view', './math', './data', './scripts/planetnames', './surface'],
-        function (view, math, data, planetnames, surface) {
+        ['./view', './data'],
+        function (view, data) {
             _view = view;
-            _math = math;
             _data = data;
-            _planetnames = planetnames;
-            _surface = surface;
 
             $('#system').append(_view.html);
         })
+}
+
+var generationResources;
+function loadGenerationResources() {
+    if (generationResources) return generationResources;
+    var ready = $.Deferred();
+    generationResources = ready.promise();
+    function failedLoad(error) {
+        generationResources = null;
+        // RequireJS remembers failed modules; clear them so Retry can load again.
+        (error.requireModules || []).forEach(function (id) { require_mod_modules.undef(id); });
+        ready.reject(error);
+    }
+    // Share the first request and retain RequireJS's modules for subsequent
+    // generations. Guests and hosts who never generate need none of this code.
+    try {
+        require_mod_modules(['./math', './scripts/planetnames', './surface'], function (math, planetnames, surface) {
+            _math = math;
+            _planetnames = planetnames;
+            _surface = surface;
+            ready.resolve();
+        }, failedLoad);
+    } catch (error) {
+        failedLoad(error);
+    }
+    return ready.promise();
 }
 
 // called from initialized html
@@ -117,23 +140,32 @@ function generate() {
     requestAnimationFrame(function () {
         requestAnimationFrame(function () {
             if (!current()) return;
+            function runGeneration() {
+                if (!current()) return;
+                try {
+                    generateSystem().then(function (system) {
+                        if (!current()) return;
+                        // jQuery 2 Deferred does not turn callback exceptions into rejection.
+                        try {
+                            applyingGeneratedSystem = true;
+                            model.system(system);
+                            model.updateSystem(system);
+                            model.changeSettings();
+                            model.requestUpdateCheatConfig();
+                            generationPending(false);
+                        } catch (error) {
+                            failed(error);
+                        } finally {
+                            applyingGeneratedSystem = false;
+                        }
+                    }, failed);
+                } catch (error) {
+                    failed(error);
+                }
+            }
             try {
-                generateSystem().then(function (system) {
-                    if (!current()) return;
-                    // jQuery 2 Deferred does not turn callback exceptions into rejection.
-                    try {
-                        applyingGeneratedSystem = true;
-                        model.system(system);
-                        model.updateSystem(system);
-                        model.changeSettings();
-                        model.requestUpdateCheatConfig();
-                        generationPending(false);
-                    } catch (error) {
-                        failed(error);
-                    } finally {
-                        applyingGeneratedSystem = false;
-                    }
-                }, failed);
+                if (_math && _planetnames && _surface) runGeneration();
+                else loadGenerationResources().then(runGeneration, failed);
             } catch (error) {
                 failed(error);
             }
