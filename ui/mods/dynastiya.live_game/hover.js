@@ -4,8 +4,8 @@
     model.dynastiyaHoverPresentation = true;
     var presentation = api.Panel.dockPresentation;
     var HoverModel = model.worldHoverTarget().constructor;
-    // Copy stock model inputs only. Numeric extenders wrap both input fields
-    // and read-only derived fields in writable computeds in the shipped PA UI.
+    // Копируются только входные поля стандартной модели. В PA числовые
+    // расширители оборачивают и входные, и вычисляемые поля в записываемые computed.
     var inputs = ('id entity isFeature name reclaimable isMetalSpot location operator status ' +
         'showHealth healthFraction showAmmo ammoFraction showShield shieldFraction isDead ' +
         'metalGain energyGain energyLoss metalLoss damage rateOfFire projectilesPerFire ' +
@@ -35,7 +35,7 @@
                 else {
                     if (current.target()) dispose(current.target());
                     current.target(next.target());
-                    // Ownership moved to the live model, not the temporary one.
+                    // Цель теперь принадлежит основной модели, а не временной.
                     next.target(null);
                 }
             } else current[key](next[key]());
@@ -46,13 +46,15 @@
         if (visible) {
             var next = new HoverModel(data);
             var current = model.worldHoverTarget();
-            // Preserve the `with` binding and its DOM during progress ticks.
-            // Structural changes are concealed by present before this runs.
+            // Привязка with и её разметка сохраняются при изменении прогресса.
+            // Карточка другого объекта скрыта через present ещё до этого места.
             copy(current, next);
             dispose(next);
         }
         model.hasWorldHoverTarget(visible);
     }
+    // Карточка другого юнита — полная замена: прежняя карточка не должна
+    // оставаться на экране даже на кадр, поэтому present.
     handlers.hover = function (data) {
         presentation.present(data, apply, JSON.stringify(keyFor(data)));
     };

@@ -3,7 +3,8 @@
     if (model.dynastiyaSelection) return;
     model.dynastiyaSelection = true;
 
-    // Install before bindings: retain the summary model and rows across updates.
+    // Устанавливается до привязок: модель сводки и строки сохраняются между
+    // обновлениями, поэтому KO не пересоздаёт разметку на каждое сообщение.
     var selection = model.selectionModel();
     model.selectionList.dispose();
     selection.list.dispose();
@@ -45,7 +46,7 @@
         }
         rows = nextRows;
         selection.total(total);
-        // Preserve the stock model's public fields for other scene mods.
+        // Публичные поля стандартной модели нужны другим модам этой сцены.
         if (!_.isEqual(selection.types(), types)) selection.types(types);
         var counts = list.map(function (row) { return row.count(); });
         if (!_.isEqual(selection.counts(), counts)) selection.counts(counts);
@@ -59,8 +60,10 @@
     model.parseSelection = handlers.selection = function (payload) {
         var presentation = api.Panel.dockPresentation;
         if (!presentation) { applySelection(payload); return; }
-        // The retained list commits synchronously; it has no asynchronous staged
-        // replacement. Resize after applying rows, without blanking the selection.
-        presentation.update(payload, applySelection);
+        // Ключ — набор типов юнитов. Изменение числа юнитов того же типа
+        // обновляет строку на месте (update). Новый или исчезнувший тип меняет
+        // размер окна: replace держит прежний кадр, пока окно не примет новый
+        // размер, иначе новые строки видны обрезанными по старым границам (#22).
+        presentation.replace(payload, applySelection, JSON.stringify(Object.keys(payload.spec_ids || {})));
     };
 }());

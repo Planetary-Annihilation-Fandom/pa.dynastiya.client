@@ -1,4 +1,4 @@
-/* Presentation policy for every stock HUD scene and the priority full pages. */
+/* Режимы подготовки для стандартных сцен HUD и основных полноэкранных страниц. */
 (function () {
     'use strict';
     if (api.Panel.presentationPolicies) return;
@@ -20,8 +20,9 @@
             return names.split(' ').map(function (name) { return state[name]; });
         }
         function groupShape(group) { return [!!(group && group.total), Object.keys(group && group.breakdown || {})]; }
-        // Each key contains identity/sections only. Resource totals, clocks,
-        // progress bars, camera coordinates, order values and text input stay live.
+        // Ключ описывает только состав и разделы окна: какие строки, кнопки и
+        // режимы видны. Ресурсы, часы, полосы прогресса, координаты камеры и
+        // вводимый текст в ключ не входят и обновляются на месте.
         var keys = {
             live_game_action_bar: function () { return fields('showCommands showOrders allowMove allowAttack allowAssist allowRepair allowReclaim allowPatrol allowUse allowSpecialMove allowUnload allowLoad allowFireSecondaryWeapon allowMassTeleport allowStop allowFireOrders allowMoveOrders allowEnergyOrders allowBuildStanceOrders'); },
             live_game_celestial_control: function () { return stateFields('active findingTargetPlanet findingTargetSurfacePosition actionIndex'); },
@@ -36,7 +37,7 @@
             live_game_options_bar: function () { return [stateFields('pip uber_bar custom_formations'), value('showServerRate')]; },
             live_game_paused_popup: function () { return fields('paused restart saving ranked'); },
             live_game_pip: function () { return fields('alertMode mirrorMode'); },
-            live_game_planets: function () { return ids('planets'); },
+            live_game_planets: function () { return [ids('planets'), fields('showCelestialViewModels landing targeting celestialControl')]; },
             live_game_players: function () { return ids('players'); },
             live_game_popup: function () { return [value('visible'), value('params')]; },
             live_game_sandbox: function () { return [value('sandbox_expanded'), (value('sandbox_units') || []).length]; },
@@ -44,23 +45,25 @@
             live_game_time_bar_alerts: function () { return [value('visible'), (value('items') || []).map(function (item) { return [ko.unwrap(item.name), ko.unwrap(item.ready)]; })]; },
             live_game_unit_alert: function () { return [value('showingPreview'), ids('alerts'), ids('combatList'), ids('defeatedArmyAlerts'), ids('specialWeaponAlerts')]; }
         };
-        // These readers do not own rendering or a prepared replacement to reveal.
-        // Stock KO updates retained DOM. Only request measurement here;
-        // concealing the whole native view here blanks unrelated controls too.
-        // Explicit preparation in buildbar/world-hover adapters is independent.
+        // Смена ключа меняет состав окна, а значит и его размер. replace держит
+        // прежний кадр, пока нативное окно не примет новый размер; иначе новая
+        // разметка сначала видна обрезанной по старым границам (#21, #22).
+        // present здесь не подходит: он скрыл бы все кнопки окна на время смены.
+        // Страницы без body-dock (игроки) replace сам переводит в update.
+        // Панель строительства и карточка наведения управляют показом сами.
         if (keys[scene] && api.Panel.dockPresentation)
-            dispose.push(api.Panel.watchPresentation(api.Panel.dockPresentation, keys[scene], 'update'));
-        model.dynastiyaPresentationPolicy = keys[scene] ? 'live-update' :
+            dispose.push(api.Panel.watchPresentation(api.Panel.dockPresentation, keys[scene], 'replace'));
+        model.dynastiyaPresentationPolicy = keys[scene] ? 'live-replace' :
             (/live_game_(world_popup|selection|build_bar)/.test(scene) ? 'data-adapter' :
                 (/^(start|new_game|live_game)$/.test(scene) ? 'local-sections' : 'live'));
 
-        // Install after KO has associated each section with its binding context.
-        // Local sections must never hide the full lobby, game world or main menu.
+        // Подключается после привязок, когда у каждого раздела есть контекст KO.
+        // Локальный раздел никогда не скрывает всё лобби, мир игры или меню.
         var selectors = {
             start: '.top-nav-dropdown,.div_tutorial_popup,#events,#events-panel,#mod-highlights-panel,#news,#mini-board,#streams,#videos,#links-panel,#player-profile,#login,#connecting,#error,#reconnectDlg,.div_build_number_dialog',
-            // Persistent lobby sections already share one native viewport. KO
-            // updates them in place: never conceal a roster, system or options
-            // block for changing server data. Only newly opened overlays prepare.
+            // Постоянные разделы лобби делят одно окно, и KO обновляет их на
+            // месте. Состав игроков, система и параметры не скрываются при
+            // изменении данных сервера; готовятся только вновь открытые окна.
             new_game: '.div-system-picker-cont,.div-commander-picker-cont,.div-color-picker-cont,#error,#start-error',
             live_game: '.div_tutorial_bar,.div_game_over_popup_overlay,.div_gamestats_panel'
         };
@@ -86,8 +89,8 @@
                 var local = element.dynastiyaPresentationSurface = api.Panel.createPresentation(element);
                 ko.utils.domNodeDisposal.addDisposeCallback(element, release);
                 dispose.push(release);
-                // KO owns actual visibility. Opening retained DOM is an update,
-                // not a second preparation after it has already become visible.
+                // Видимостью управляет KO. Открытие сохранённой разметки — это
+                // update, а не повторная подготовка уже показанного блока.
                 if (read) {
                     var owners = [read];
                     for (var parent = element.parentElement; parent; parent = parent.parentElement) {
@@ -107,8 +110,8 @@
                     change(visible());
                     releases.push(function () { subscription.dispose(); visible.dispose(); });
                 } else {
-                    // jQuery owns dialog visibility; never hide it again in the
-                    // shown callback. Closing only cancels outstanding work.
+                    // Видимостью диалога управляет jQuery; после показа его не
+                    // скрываем. Закрытие только отменяет незаконченную подготовку.
                     var dialog = $(element);
                     dialog.on('dialogopen.dynastiyaPresentation shown.bs.modal.dynastiyaPresentation', function () {
                         local.update(null, function () {});
@@ -120,8 +123,8 @@
                 releases.push(local.dispose);
             }
             Array.prototype.forEach.call((root || document).querySelectorAll(selectors[scene]), attach);
-            // KO creates colour pickers and other conditional sections later.
-            // Ignore text replacements; only inspect newly inserted elements.
+            // Выбор цвета и другие условные разделы KO создаёт позже. Смотрим
+            // только новые элементы, замены текста пропускаем.
             var observer = new MutationObserver(function (records) {
                 records.forEach(function (record) {
                     Array.prototype.forEach.call(record.addedNodes, function (node) {
