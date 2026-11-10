@@ -5,6 +5,7 @@ function init_panel() {
     var PANEL_RESIZE_UPDATE_PERIOD = 200;
     var ANIMATION_UPDATE_PERIOD = 5;
     var INVISIBLE_UPDATE_PERIOD = 1000;
+    var hudScene = window.location && /\/game\/live_game\//.test(window.location.pathname);
 
     // Note: $div should be equivalent to $(div).  Passing them both individually
     // saves some performance, and this is called in a very performance-sensitive
@@ -107,6 +108,13 @@ function init_panel() {
             result._$dock = $('<panel-dock style="display:inline-block"></panel-dock>');
             $div.append(result._$dock);
         }
+        // A docked HUD view has no content dimensions until its first resize
+        // message. Creating it visible exposes a zero/stale-sized backing view.
+        result._awaitingDock = !!(hudScene && /\/game\/live_game\//.test(result.src) && /^dock/.test(result.fit));
+        if (result._awaitingDock) {
+            result.visible = false;
+            config.visible = false;
+        }
         result.region = calcRegion($div, div);
         result.updatePeriod = updatePeriod;
 
@@ -183,18 +191,16 @@ function init_panel() {
 
         var region;
 
-        // Note: Must be part of polling to handle parent visibility properly
-        self.updateVisibility();
-
-        // A hidden panel still polls visibility, but needs no geometry read.
-        var curRegion = self.visible ? calcRegion(self._$div, self._div) : self.region;
-        if (self.visible && regionsAreDifferent(curRegion, self.region)) {
+        // Move while still hidden. Showing first can expose the previous dock
+        // position for one native frame when a bottom-anchored panel grows.
+        var willBeVisible = !self._awaitingDock && self._$div.is(':visible');
+        var curRegion = willBeVisible ? calcRegion(self._$div, self._div) : self.region;
+        if (willBeVisible && regionsAreDifferent(curRegion, self.region)) {
             self.region = curRegion;
-
             region = JSON.stringify(self.region);
-
             engine.call('panel.move', self.id, region);
         }
+        self.updateVisibility();
 
         if (self._updateTimeout !== undefined)
             window.clearTimeout(self._updateTimeout);
@@ -217,7 +223,7 @@ function init_panel() {
         if (!this.hasOwnProperty('id'))
             return false;
 
-        var isVisible = this._$div.is(':visible');
+        var isVisible = !this._awaitingDock && this._$div.is(':visible');
         if (this.visible !== isVisible)
         {
             this.visible = isVisible;
@@ -233,10 +239,8 @@ function init_panel() {
         if (!self.hasOwnProperty('id'))
             return;
 
-        if (self.updateVisibility()) {
-            // Note: This updates the polling period to the invisible rate
-            this.update();
-        }
+        // update() applies the region before changing native visibility.
+        self.update();
 
         var newSrc = self._$div.attr('src') || '';
         if (self.src !== newSrc) {
@@ -320,6 +324,7 @@ function init_panel() {
         if (!panel)
             return;
 
+        if (payload.width > 0 && payload.height > 0) panel._awaitingDock = false;
         panel._$dock.width(payload.width);
         panel._$dock.height(payload.height);
         panel.update();
@@ -426,6 +431,32 @@ function init_panel() {
             panel._resizeTimer = setInterval(panel.onBodyResize, PANEL_RESIZE_UPDATE_PERIOD);
             $(window).on('beforeunload', function() { clearInterval(panel._resizeTimer); });
             panel.onBodyResize();
+        }
+        if (hudScene && !panel._layoutObserver) {
+            // KO inserts/removes whole sections between polling ticks. Measure
+            // the resulting layout before paint; image loads also request a pass.
+            function scheduleLayout() {
+                if (panel._layoutFrame !== undefined) return;
+                panel._layoutFrame = window.requestAnimationFrame(function () {
+                    panel._layoutFrame = undefined;
+                    panel.onBodyResize();
+                    panel.update();
+                });
+            }
+            panel._layoutObserver = new MutationObserver(scheduleLayout);
+            panel._layoutObserver.observe(document.documentElement, {
+                childList: true, subtree: true, characterData: true,
+                attributes: true, attributeFilter: ['class', 'style', 'src']
+            });
+            window.addEventListener('resize', scheduleLayout);
+            document.addEventListener('load', scheduleLayout, true);
+            $(window).on('beforeunload', function () {
+                panel._layoutObserver.disconnect();
+                if (panel._layoutFrame !== undefined) window.cancelAnimationFrame(panel._layoutFrame);
+                window.removeEventListener('resize', scheduleLayout);
+                document.removeEventListener('load', scheduleLayout, true);
+            });
+            scheduleLayout();
         }
     };
 

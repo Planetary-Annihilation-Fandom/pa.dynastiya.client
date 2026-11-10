@@ -7,10 +7,10 @@ if (!media) throw new Error('Pass the installed PA media directory');
 const ko = require(path.join(media, 'ui/main/shared/js/thirdparty/knockout-3.5.1.debug.js'));
 const _ = require(path.join(media, 'ui/main/shared/js/thirdparty/lodash-4.7.20.js'));
 const root = path.resolve(__dirname, '../ui/mods/dynastiya.panel_lifecycle');
-function fixture() {
+function fixture(scene) {
     const calls = [], pending = [], timers = new Map(), frames = new Map();
     let next = 0, reads = 0;
-    const win = { innerWidth: 1000, innerHeight: 800 };
+    const win = { innerWidth: 1000, innerHeight: 800, location: { pathname: scene || "/main/game/start/start.html" }, addEventListener() {}, removeEventListener() {} };
     function node() {
         return { visible: true, clientWidth: 400, clientHeight: 300, clientLeft: 0, clientTop: 0,
             hasAttribute() { return false; }, getBoundingClientRect() { reads++; return { left: 10, top: 20, width: 400, height: 300 }; } };
@@ -21,6 +21,7 @@ function fixture() {
         if (element.wrapper) return element.wrapper;
         const data = {}, events = {};
         const wrapper = { jquery: true, 0: element, length: 1,
+            width(value) { element.clientWidth = value; }, height(value) { element.clientHeight = value; },
             attr() {}, zIndex: () => 0, children: () => [], append() {}, is: () => element.visible,
             data(key, value) { if (arguments.length > 1) data[key] = value; return data[key]; },
             removeData(key) { delete data[key]; },
@@ -37,16 +38,17 @@ function fixture() {
     Object.assign(win, { setTimeout: set, clearTimeout: id => timers.delete(id),
         requestAnimationFrame: fn => { frames.set(++next, fn); return next; }, cancelAnimationFrame: id => frames.delete(id) });
     const api = { getWorldView: () => 0 };
+    const globalHandlers = {};
     const ctx = vm.createContext({ window: win, $, ko, _, api, console,
         setTimeout: set, clearTimeout: win.clearTimeout, setInterval: set, clearInterval: win.clearTimeout,
         MutationObserver: class { observe() {} disconnect() {} },
-        globalHandlers: {}, handlers: {}, document: {}, engine: { call(name, ...args) {
+        globalHandlers, handlers: {}, document: { documentElement: {}, addEventListener() {}, removeEventListener() {} }, engine: { call(name, ...args) {
             calls.push([name, ...args]);
             if (name === 'panel.create' || name === 'game.createHolodeck') return { then(fn) { pending.push(fn); } };
         } }
     });
     for (const name of ['panel', 'holodeck']) vm.runInContext(fs.readFileSync(path.join(root, name + '.js'), 'utf8'), ctx);
-    return { api, $, node, calls, pending, timers, frames, win, get reads() { return reads; } };
+    return { api, $, node, calls, pending, timers, frames, win, globalHandlers, get reads() { return reads; } };
 }
 for (const [type, create, destroy, registry, data] of [
     ['Panel', 'panel.create', 'panel.destroy', 'panelsById', 'panel'],
@@ -105,6 +107,40 @@ for (const [type, create, destroy, registry, data] of [
     assert.deepEqual(Object.keys(f.api[registry]), []);
     assert.equal(f.$(f.win).count('beforeunload'), 0);
 }
+// Showing a resized bottom-docked view must move its native region first.
+{
+    const f = fixture();
+    const div = f.node();
+    const item = new f.api.Panel(div);
+    f.pending.shift()(91);
+    div.visible = false; item.update();
+    div.getBoundingClientRect = () => ({ left: 10, top: 500, width: 400, height: 280 });
+    f.calls.length = 0;
+    div.visible = true; item.update();
+    const move = f.calls.findIndex(c => c[0] === 'panel.move');
+    const show = f.calls.findIndex(c => c[0] === 'panel.visible' && c[2] === true);
+    assert.ok(move >= 0 && show > move, 'native region must be current before reveal');
+    item.destroy();
+}
+// A freshly created HUD dock remains hidden until content reports its size.
+{
+    const f = fixture('/main/game/live_game/live_game.html');
+    const item = new f.api.Panel(f.node(), {
+        src: 'coui://ui/main/game/live_game/live_game_selection.html', fit: 'dock-bottom-left'
+    });
+    const config = JSON.parse(f.calls.find(c => c[0] === 'panel.create')[1]);
+    assert.equal(config.visible, false);
+    f.pending.shift()(92);
+    assert.equal(item.visible, false);
+    f.api.Panel.ready();
+    f.globalHandlers['panel.resize']({ id: 92, width: 0, height: 0 });
+    assert.equal(item.visible, false, 'an empty initial dock must not reveal the view');
+    f.globalHandlers['panel.resize']({ id: 92, width: 307, height: 160 });
+    assert.equal(item._awaitingDock, false);
+    assert.equal(item.visible, true);
+    assert.ok(f.api.Panel._layoutObserver, 'HUD observes layout changes between polling ticks');
+    item.destroy();
+}
 // Scope is selected at boot, including child HUD panels, before any scene binds panels.
 for (const [scene, expected] of [['/main/main.html', 2], ['/main/game/new_game/new_game.html', 2],
     ['/main/game/live_game/live_game_chat.html', 2], ['/main/game/settings/settings.html', 2],
@@ -117,4 +153,4 @@ for (const [scene, expected] of [['/main/main.html', 2], ['/main/game/new_game/n
     vm.runInContext(source, ctx); vm.runInContext(source, ctx);
     assert.equal(scripts.length, expected, scene);
 }
-console.log('Panel lifecycle checks passed: late creation, removal, cleanup, hide/reopen, geometry and scene scope');
+console.log('Panel lifecycle checks passed: late creation, removal, cleanup, hide/reopen, geometry, move-before-show, initial HUD docking and scene scope');
