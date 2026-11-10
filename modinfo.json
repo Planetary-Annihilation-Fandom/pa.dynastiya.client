@@ -18,6 +18,21 @@
   "titansOnly": true,
   "version": "0.1.4",
   "scenes": {
+    "live_game_build_bar": [
+      "coui://ui/mods/dynastiya.live_game/build_bar.js"
+    ],
+    "live_game_selection": [
+      "coui://ui/mods/dynastiya.live_game/selection.js"
+    ],
+    "live_game_chat": [
+      "coui://ui/mods/dynastiya.live_game/chat.js"
+    ],
+    "live_game_planets": [
+      "coui://ui/mods/dynastiya.live_game/planets.js"
+    ],
+    "live_game_options_bar": [
+      "coui://ui/mods/dynastiya.live_game/options_bar.js"
+    ],
     "settings": [
       "coui://ui/mods/dynastiya.settings/settings.js"
     ],
