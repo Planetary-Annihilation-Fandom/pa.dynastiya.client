@@ -1,5 +1,7 @@
 # Integrations
 
+The original mods listed here conflict with Dynastiya. When adding an integration, add the original mod's identifier to `ui/mods/dynastiya.mod_conflicts/conflicts.js`: Dynastiya then offers to disable it.
+
 ## Godblessed Map Generator
 
 The lobby generator is adapted from version 5.0.0-up0 by tatapstar, TT and MaréchalGryzzly. Its interface and code live in `ui/mods/dynastiya.map_generator`; the RequireJS text plugin retains its own license. JavaScript syntax and resource paths were adapted for Dynastiya and the game's browser.
