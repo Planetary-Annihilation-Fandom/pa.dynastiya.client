@@ -44,3 +44,27 @@ for(const name of fs.readdirSync(path.join(media,'ui/main/game/live_game')).filt
  assert.ok(model.dynastiyaPresentationPolicy,scene+' has a policy');
 }
 console.log('Local presentation: keyed/forced rebuilds, images, live input, stale frames, watcher cleanup and HUD policy initialization passed');
+
+// Lobby server updates must never blank persistent sections. Exercise policy
+// installation, not just the presentation primitive with an artificial key.
+{
+ const nodes=['.armies-wrapper','#system','#game_options','#mod_names','#cheat_info','.div-commander-picker-cont'].map(selector=>({
+  selector,id:selector[0]==='#'?selector.slice(1):'',querySelectorAll:()=>[],
+  classList:{contains:()=>false},matches(list){return list.split(',').includes(selector);}
+ }));
+ const attached=[];
+ const fakeKo=Object.assign({},ko,{applyBindings(){},contextFor:()=>({}),
+  bindingProvider:{instance:{getBindingAccessors:()=>({})}},
+  utils:{domNodeDisposal:{addDisposeCallback(){}}}});
+ const document={body:{},querySelectorAll:list=>nodes.filter(n=>n.matches(list))};
+ const ctx={ko:fakeKo,document,api:{Panel:{
+  createPresentation(node){attached.push(node.selector);return {present(){},dispose(){}};},
+  watchPresentation:()=>()=>{}
+ }},app:{registerWithCoherent(){}},
+ window:{location:{pathname:'/main/game/new_game/new_game.html'}},
+ MutationObserver:class{observe(){}disconnect(){}},$:()=>({on(){}})};
+ vm.runInNewContext(policies,ctx);
+ const model={};ctx.app.registerWithCoherent(model,{});fakeKo.applyBindings(model);
+ assert.deepEqual(attached,['.div-commander-picker-cont'],'only the overlay receives conceal/reveal behavior');
+ console.log('Lobby policy: roster, selected system, settings and mod status remain live; picker prepares locally');
+}

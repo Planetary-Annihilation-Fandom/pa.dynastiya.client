@@ -15,11 +15,6 @@
                     ko.unwrap(row.entity), ko.unwrap(row.army_id), ko.unwrap(row.type)];
             });
         }
-        function listIdentity(name) {
-            return (value(name) || []).map(function (row) {
-                return ['id','name','title','url','link','display_name','channel_url','status'].map(function (field) { return ko.unwrap(row[field]); });
-            });
-        }
         function stateFields(names) {
             var state = value('state') || {};
             return names.split(' ').map(function (name) { return state[name]; });
@@ -64,7 +59,10 @@
         // Local sections must never hide the full lobby, game world or main menu.
         var selectors = {
             start: '.top-nav-dropdown,.div_tutorial_popup,#events,#events-panel,#mod-highlights-panel,#news,#mini-board,#streams,#videos,#links-panel,#player-profile,#login,#connecting,#error,#reconnectDlg,.div_build_number_dialog',
-            new_game: '.div-system-picker-cont,.div-commander-picker-cont,.div-color-picker-cont,.armies-wrapper,#error,#start-error,#mod_names,#cheat_info,#game_options,#system',
+            // Persistent lobby sections already share one native viewport. KO
+            // updates them in place: never conceal a roster, system or options
+            // block for changing server data. Only newly opened overlays prepare.
+            new_game: '.div-system-picker-cont,.div-commander-picker-cont,.div-color-picker-cont,#error,#start-error',
             live_game: '.div_tutorial_bar,.div_game_over_popup_overlay,.div_gamestats_panel'
         };
         var applyBindings = ko.applyBindings;
@@ -89,34 +87,11 @@
                 var local = element.dynastiyaPresentationSurface = api.Panel.createPresentation(element);
                 ko.utils.domNodeDisposal.addDisposeCallback(element, release);
                 dispose.push(release);
-                // Static sections need only their initial complete frame. For
-                // lists, explicit identity watches below prepare replacements.
+                // Prepare opening a section, not every change to its rows.
+                // Persistent menu lists update live just like the lobby roster.
                 if (read) releases.push(api.Panel.watchPresentation(local, function () { return !!ko.unwrap(read()); }));
                 local.present(null, function () {});
                 releases.push(local.dispose);
-                if (scene === 'new_game' && element.id === 'system')
-                    releases.push(api.Panel.watchPresentation(local, function () {
-                        var system = value('processedSelectedSystem') || {};
-                        return [ko.unwrap(system.name), (ko.unwrap(system.planets) || []).map(function (p) { return [ko.unwrap(p.name), ko.unwrap(p.index)]; })];
-                    }));
-                if (scene === 'new_game' && element.classList.contains('armies-wrapper'))
-                    releases.push(api.Panel.watchPresentation(local, function () {
-                        return (value('armies') || []).map(function (army) {
-                            return [ko.unwrap(army.aiArmy), (ko.unwrap(army.slots) || []).map(function (slot) {
-                                return [ko.unwrap(slot.playerName), ko.unwrap(slot.commander)];
-                            })];
-                        });
-                    }));
-                if (scene === 'new_game' && element.id === 'game_options')
-                    releases.push(api.Panel.watchPresentation(local, function () { return fields('gameType canChangeSettings dynamicAlliances bountyMode eradicationMode'); }));
-                if (scene === 'new_game' && /^(mod_names|cheat_info)$/.test(element.id))
-                    releases.push(api.Panel.watchPresentation(local, function () { return fields('activeModTextArray activeCheatTextArray'); }));
-                var lists = {news:'newsItems','mini-board':'miniboardPlayers',streams:'liveStreams',videos:'communityVideos',
-                    events:'activeEvents','events-panel':'announcements','mod-highlights-panel':'featuredMods'};
-                if (scene === 'start' && lists[element.id])
-                    releases.push(api.Panel.watchPresentation(local, function () {
-                        return [listIdentity(lists[element.id]), element.id === 'news' ? value('expandedNewsIndex') : null];
-                    }));
             }
             Array.prototype.forEach.call((root || document).querySelectorAll(selectors[scene]), attach);
             // KO creates colour pickers and other conditional sections later.
