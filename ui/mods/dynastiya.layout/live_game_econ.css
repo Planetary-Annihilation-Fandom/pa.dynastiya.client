@@ -8,6 +8,16 @@
     pointer-events: none !important;
 }
 
+/* The reward is a notification, not a control. Its full-width transparent box
+   inherits receiveMouse from metal and otherwise covers neighbouring controls. */
+.div_econ_notification_bar,
+.div_econ_notification_bar * {
+    pointer-events: none !important;
+}
+.div_econ_notification_bar:not(.bounty_reward_notification) {
+    visibility: hidden;
+}
+
 /* Both net rates (+999.9K) and percentages share a slot. A change in text
    must not resize the neighbouring storage bars; larger values may still grow. */
 body .div-metal .div_rate_ctr_cont,

@@ -33,7 +33,9 @@ async function main() {
         ['live_game_action_bar', '.div_orders_bar_top_cont', 'show', '<div class="div_orders_bar_top_cont"><div class="div_orders_bar receiveMouse"><div class="div_order_item_menu show"><a id="hit">Order</a></div></div></div>'],
         ['live_game_action_bar', '.div_order_item_menu', 'show', '<div class="div_order_item_menu"><a id="hit" class="receiveMouse">Submenu</a></div>'],
         ['live_game_action_bar', '.div_command_item', 'show', '<div class="div_command_item"><a id="hit" class="receiveMouse">Item</a></div>'],
-        ['live_game_econ', '.div-econ-bar', 'show-econ', '<div class="div-econ-bar ignoreMouse"><div class="div-metal receiveMouse"><a id="hit" class="receiveMouse">Metal</a></div></div>']
+        ['live_game_econ', '.div-econ-bar', 'show-econ', '<div class="div-econ-bar ignoreMouse"><div class="div-metal receiveMouse"><a id="hit" class="receiveMouse">Metal</a></div></div>'],
+        ['live_game_unit_alert', '.combat_stack', 'displayed', '<div class="combat_stack"><div class="combat"><a id="hit" class="receiveMouse">Combat</a></div></div>'],
+        ['live_game_unit_alert', '.loss_summary', 'show', '<div class="combat"><div class="loss_summary"><a id="hit" class="receiveMouse">Losses</a></div></div>']
     ]) {
         const stock = fs.readFileSync(path.join(media, 'ui/main/game/live_game', scene + '.css'), 'utf8');
         await read(`var frame=document.createElement('iframe');frame.id='dynastiya-hidden-check';

@@ -17,17 +17,21 @@ ko.applyBindings = () => {};
 function context() {
     let resizes = 0;
     const events = [];
-    const $ = () => ({ ready: fn => fn(), focus() {}, blur() {}, keydown() {} });
+    const timers = new Map();
+    let serial = 0, unload;
+    const $ = () => ({ ready: fn => fn(), focus() {}, blur() {}, keydown() {}, attr() {}, on(name, fn) { unload = fn; } });
     const api = { Panel: { onBodyResize() { resizes++; }, query: () => ({ then() {} }), message(...args) { events.push(args); } } };
     const ctx = vm.createContext({ ko, _: Object.assign({}, _, { delay() {} }), $, api,
         Build: { iconForSpecId: id => 'icon:' + id }, document: {}, window: {},
         UberUtility: { createTimeString: value => String(value) },
         app: { registerWithCoherent() {} }, scene_mod_list: {}, loc: text => text,
-        console: { log() {} }, setInterval() {}, keyboard: {},
+        console: { log() {} }, setInterval() { throw Error('idle interval is forbidden'); }, keyboard: {},
+        setTimeout(fn, delay) { timers.set(++serial, { fn, delay }); return serial; },
+        clearTimeout(id) { timers.delete(id); },
         Date: class extends Date { static now() { return 20000; } }
     });
     ctx.self = ctx;
-    return { ctx, events, resizes: () => resizes };
+    return { ctx, events, timers, unload: () => unload(), resizes: () => resizes };
 }
 function run(ctx, text) { vm.runInContext(text, ctx); }
 function scene(ctx, name) {
@@ -168,7 +172,7 @@ function hoverChecks() {
     assert.equal(ctx.model.hasWorldHoverTarget(),false);
 }
 function chatChecks() {
-    const { ctx } = context();
+    const { ctx, timers, unload } = context();
     scene(ctx, 'chat');
     const model = ctx.model;
     const messages = [1, 1000, 4999, 5000, 8000].map(time_stamp => ({ time_stamp }));
@@ -183,6 +187,44 @@ function chatChecks() {
     assert.equal(model.chatLog().length, 5);
     model.removeOldChatMessages();
     assert.equal(writes, 1);
+    assert.equal(timers.size, 1, 'one deadline for the next expiring message');
+    let historyWrites = 0;
+    const history = model.dynastiyaChatLog.subscribe(() => historyWrites++);
+    assert.equal(model.dynastiyaChatLog().length, 0);
+    model.state({ selected: true });
+    assert.equal(model.dynastiyaChatLog().length, 5);
+    assert.equal(timers.size, 0, 'hidden transient feed does not tick while history is open');
+    model.state({ selected: false });
+    const cached = model.dynastiyaChatLog();
+    const before = historyWrites;
+    model.chatLog.push({ time_stamp: 19000 });
+    assert.equal(historyWrites, before, 'closed history does not append hidden DOM rows');
+    assert.equal(model.dynastiyaChatLog(), cached);
+    model.state({ selected: true });
+    assert.equal(model.dynastiyaChatLog().length, 6);
+    assert.equal(model.dynastiyaChatLog()[0], messages[0], 'history keeps model identity');
+    model.state({ selected: false });
+    model.visibleChat([]);
+    assert.equal(timers.size, 0, 'empty chat has no timer');
+    history.dispose(); unload();
+}
+function pauseChecks() {
+    const { ctx, timers, unload } = context();
+    ctx.scene_mod_list.live_game_paused_popup = true;
+    ctx.loadMods = () => run(ctx, patch('paused'));
+    run(ctx, stock('paused_popup'));
+    ctx.handlers.ranked(true);
+    ctx.handlers.control_state({ paused: true, restart: false, saving: false });
+    assert.equal(timers.size, 1);
+    const before = ctx.model.timer();
+    ctx.handlers.control_state({ paused: true, restart: false, saving: false });
+    assert.equal(timers.size, 1);
+    assert.equal(ctx.model.timer(), before, 'duplicate state does not reset the countdown');
+    ctx.handlers.control_state({ paused: false, restart: false, saving: false });
+    assert.equal(timers.size, 0, 'closing pause cancels its deadline immediately');
+    ctx.handlers.control_state({ paused: true, restart: false, saving: false });
+    assert.equal(timers.size, 1);
+    unload(); assert.equal(timers.size, 0);
 }
 function planetChecks() {
     const { ctx } = context();
@@ -226,6 +268,7 @@ buildChecks();
 hoverChecks();
 selectionChecks();
 chatChecks();
+pauseChecks();
 planetChecks();
 optionsChecks();
 const info = JSON.parse(fs.readFileSync(path.join(__dirname, '../modinfo.json'), 'utf8'));

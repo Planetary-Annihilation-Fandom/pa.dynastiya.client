@@ -28,6 +28,12 @@ assert.equal(local.pending,false,'latest generation is revealed');
 const mode=ko.observable('first');const dispose=api.Panel.watchPresentation(local,()=>mode());
 mode('second');assert.equal(local.pending,true);const pending=local.revision;
 mode('second');assert.equal(local.revision,pending);dispose();mode('third');assert.equal(local.revision,pending);
+img.complete=false;local.present({},()=>{},'cancel');frame();
+local.cancel();const closedScans=scans;img.complete=true;events.load();frame();frame();
+assert.equal(local.pending,false);assert.equal(scans,closedScans,'late load cannot resume closed preparation');
+assert.equal(attrs.size,0);assert.equal(frames.size,0);
+local.present({},()=>{},'cancel');assert.equal(local.pending,true,'same key must prepare after cancellation');
+frame();local.cancel();frame();assert.equal(attrs.size,0,'stale reveal frame is cancelled');
 local.dispose();frame();assert.equal(attrs.size,0);assert.equal(frames.size,0);assert.deepEqual(Object.keys(events),[]);
 
 // Every shipped HUD script has an explicit policy or a documented live/static
@@ -67,4 +73,20 @@ console.log('Local presentation: keyed/forced rebuilds, images, live input, stal
  const model={};ctx.app.registerWithCoherent(model,{});fakeKo.applyBindings(model);
  assert.deepEqual(attached,['.div-commander-picker-cont'],'only the overlay receives conceal/reveal behavior');
  console.log('Lobby policy: roster, selected system, settings and mod status remain live; picker prepares locally');
+}
+
+// Closing an ancestor must cancel a picker even if its own open flag stays true.
+{
+ const ownerOpen=ko.observable(true),pickerOpen=ko.observable(false),calls=[];
+ const parent={parentElement:null},node={parentElement:parent};
+ const fakeKo=Object.assign({},ko,{applyBindings(){},contextFor:()=>({}),
+  bindingProvider:{instance:{getBindingAccessors:e=>({visible:()=>e===node?pickerOpen:ownerOpen})}},
+  utils:{domNodeDisposal:{addDisposeCallback(){}}}});
+ const ctx={ko:fakeKo,document:{body:{},querySelectorAll:()=>[node]},api:{Panel:{
+  createPresentation:()=>({present(){calls.push('open');},cancel(){calls.push('close');},dispose(){}})
+ }},app:{registerWithCoherent(){}},window:{location:{pathname:'/main/game/new_game/new_game.html'}},
+ MutationObserver:class{observe(){}disconnect(){}},$:()=>({on(){},off(){}})};
+ vm.runInNewContext(policies,ctx);const model={};ctx.app.registerWithCoherent(model,{});fakeKo.applyBindings(model);
+ assert.deepEqual(calls,['close']);pickerOpen(true);ownerOpen(false);ownerOpen(true);pickerOpen(false);
+ assert.deepEqual(calls,['close','open','close','open','close']);
 }

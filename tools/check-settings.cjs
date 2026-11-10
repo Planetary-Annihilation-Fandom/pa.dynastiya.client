@@ -8,7 +8,7 @@ const ko = require(path.join(media, 'ui/main/shared/js/thirdparty/knockout-3.5.1
 const _ = require(path.join(media, 'ui/main/shared/js/thirdparty/lodash-4.7.20.js'));
 _.contains = _.includes;
 const timers = new Map();
-let serial = 0, requests = [], unload;
+let serial = 0, requests = [], unload, initialVisibility;
 const api = { Panel: { pageName: 'game', pageId: 1 }, settings: {
     isDirty: ko.observable(false), isDefault: ko.observable(true), data: {},
     getSynchronous(group, key) { return this.data[group + '.' + key] ?? this.definitions[group].settings[key].default; },
@@ -37,6 +37,8 @@ const settingsApi = fs.readFileSync(path.join(media, 'ui/main/shared/js/api/sett
 vm.runInContext(settingsApi.slice(settingsApi.indexOf('ko.extenders.setting =')), ctx);
 vm.runInContext(fs.readFileSync(path.join(media, 'ui/main/game/settings/settings.js'), 'utf8'), ctx);
 const model = ctx.model;
+model.inPanel(true);
+api.Panel.query = () => ({ then(fn) { initialVisibility = fn; } });
 let conflictPasses = 0;
 const original = model.updateKeyConflicts;
 model.updateKeyConflicts = () => { conflictPasses++; original(); };
@@ -44,6 +46,8 @@ vm.runInContext(fs.readFileSync(path.join(__dirname, '../ui/mods/dynastiya.setti
 const flush = async () => { for (let i = 0; i < 6; i++) await Promise.resolve(); };
 const tick = () => { const [id, fn] = timers.entries().next().value; timers.delete(id); fn(); };
 (async () => {
+    model.active(false);model.active(true);
+    initialVisibility(false); // old query response must not override a newer opening
     model.settingsItemMap()['keyboard.b'].value('a');
     assert.equal(model.settingsItemMap()['keyboard.a'].conflicts().length, 1);
     model.activeSettingsGroupIndex(1);
@@ -62,6 +66,11 @@ const tick = () => { const [id, fn] = timers.entries().next().value; timers.dele
     assert.equal(requests.length, 1, 'reopening refreshes available devices');
     requests.shift().resolve([{ text: 'A', value: 'A' }]); await flush();
     assert.equal(timers.size, 1);
+    model.active(false);assert.equal(timers.size,0,'stock parents can suspend through focus');
+    model.active(true);assert.equal(requests.length,1,'stock parents can reopen without owner messages');
+    requests.shift().resolve([{text:'A',value:'A'}]);await flush();
+    ctx.handlers['dynastiya.settingsVisible'](true);
+    model.active(false);assert.equal(timers.size,1,'managed visibility is independent of focus');
     const audio = model.settingsItemMap()['audio.device'];
     let writes = 0;
     audio.selectOptions.subscribe(() => writes++);
@@ -90,6 +99,18 @@ const tick = () => { const [id, fn] = timers.entries().next().value; timers.dele
     assert.equal(requests.length, 1);
     requests.shift().resolve([{ text: 'C', value: 'C' }]); await flush();
     assert.equal(timers.size, 1, 'reopening installs one refresh timer');
+    ctx.handlers['dynastiya.settingsVisible'](false);
+    assert.equal(timers.size, 0, 'whole settings panel can close on the audio tab');
+    audio.reloadSelectOptions();assert.equal(requests.length,0);
+    ctx.handlers['dynastiya.settingsVisible'](true);
+    assert.equal(requests.length,1,'whole-panel reopening refreshes audio without changing tabs');
+    requests.shift().resolve([{text:'C',value:'C'}]);await flush();
+    model.settingsItemMap()['keyboard.a'].setAsActiveKey();
+    assert.equal(model.settingsItemMap()['keyboard.a'].active(),true);
+    ctx.handlers['dynastiya.settingsVisible'](false);
+    assert.equal(model.settingsItemMap()['keyboard.a'].active(),false,'closing cancels retained key capture');
+    ctx.handlers['dynastiya.settingsVisible'](true);
+    requests.shift().resolve([{text:'C',value:'C'}]);await flush();
     tick();
     unload();
     requests.shift().resolve([{ text: 'C', value: 'C' }]); await flush();

@@ -219,7 +219,37 @@ function checkPreview() {
     assert.equal(ready.length, 3, 'unloaded scene must not create a view');
 }
 
+function checkHiddenLists() {
+    let formatted = 0, unload;
+    const source = ko.observableArray([{ name: 'A' }]);
+    const model = {showSystemPicker: ko.observable(false), canChangeSettings: ko.observable(true), recentSystems: source, defaultSystems: source,
+        systemGenerator: { createdRandomSystems: source },
+        processSystem(row) { formatted++; return {name:row.name}; },
+        processRecentSystem(row) { formatted++; return {name:row.name}; }};
+    model.processedRecentSystems = ko.computed(() => []);
+    model.processedDefaultSystems = ko.computed(() => []);
+    model.systemGenerator.processedRandomSystems = ko.computed(() => []);
+    const ctx = vm.createContext({ko, _:lodash, model, window:{}, $:()=>({on(name,fn){unload=fn;}})});
+    run('dynastiya.lobby_preview/hidden_sections.js', ctx);
+    const sub = model.processedRecentSystems.subscribe(()=>{});
+    assert.equal(formatted,0,'initially closed picker does not format any list');
+    model.showSystemPicker(true);
+    const first = model.processedRecentSystems()[0];
+    const count = formatted;
+    model.showSystemPicker(false);model.showSystemPicker(true);
+    assert.equal(formatted,count,'unchanged reopening reuses formatted rows');
+    assert.equal(model.processedRecentSystems()[0],first);
+    model.showSystemPicker(false);source.push({name:'B'});
+    assert.equal(formatted,count,'closed picker does not format background history updates');
+    model.showSystemPicker(true);
+    assert.equal(model.processedRecentSystems().length,2);
+    assert.equal(model.systemGenerator.processedRandomSystems().length,2);
+    model.canChangeSettings(false);const suspended=formatted;source.push({name:'C'});
+    assert.equal(formatted,suspended,'hidden permission-owned controls do not format new rows');
+    model.canChangeSettings(true);assert.equal(model.processedRecentSystems().length,3);
+    sub.dispose();unload();
+}
 (async () => {
-    checkOptions(); checkHistory(); await checkGenerator(); checkPreview();
+    checkOptions(); checkHistory(); await checkGenerator(); checkPreview(); checkHiddenLists();
     console.log('Lobby checks passed: options, history, generation races, preview lifecycle');
 })().catch(error => { console.error(error); process.exitCode = 1; });

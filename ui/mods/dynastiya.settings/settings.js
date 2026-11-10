@@ -2,6 +2,20 @@
     'use strict';
     if (model.dynastiyaSettings) return;
     model.dynastiyaSettings = true;
+    var panelVisible = ko.observable(!model.inPanel());
+    var visibilityRevision = 0;
+    var ownerControlsVisibility = false;
+    handlers['dynastiya.settingsVisible'] = function (open) {
+        ownerControlsVisibility = true;
+        visibilityRevision++;
+        panelVisible(!!open);
+    };
+    if (model.inPanel()) {
+        var requestedRevision = visibilityRevision;
+        api.Panel.query(api.Panel.parentId, 'panel.invoke', ['showSettings']).then(function (open) {
+            if (requestedRevision === visibilityRevision) panelVisible(!!open);
+        });
+    }
 
     ['restoreDefaults', 'restoreGroupDefaults'].forEach(function (name) {
         var original = model[name];
@@ -23,8 +37,8 @@
         var retired = false;
         var pending = !!item.loadSelectOptionsDeferred;
         var options = item.sourceOptions;
-        function visible() { return model.activeSettingsGroupIndex() === 1; }
-        function stop() { clearTimeout(item.refreshTimeout); }
+        function visible() { return panelVisible() && model.activeSettingsGroup() === 'audio'; }
+        function stop() { clearTimeout(item.refreshTimeout); item.refreshTimeout = undefined; }
         function schedule() {
             stop();
             if (!retired && visible() && options.refresh)
@@ -55,7 +69,7 @@
                         item.reloadSelectOptions();
                         return;
                     }
-                    if (!retired) {
+                    if (!retired && visible()) {
                         if (options.empty) values.unshift({ text: options.empty, value: undefined });
                         // Keep the current choices during the request and retain unchanged DOM.
                         if (!_.isEqual(values, item.selectOptions())) item.selectOptions(values);
@@ -77,7 +91,24 @@
         stop();
     }
     installAudioRefresh();
-    model.activeSettingsGroupIndex.subscribe(function () { refreshAudioVisibility(); });
-    model.settingsItemMap.subscribe(installAudioRefresh);
-    $(window).on('unload', function () { if (retireAudio) retireAudio(); });
+    var subscriptions = [model.activeSettingsGroupIndex.subscribe(function () {
+        model.cancelCaptureKeyCombo();
+        if (refreshAudioVisibility) refreshAudioVisibility();
+    }), model.activeKeyboardGroupIndex.subscribe(model.cancelCaptureKeyCombo),
+    model.active.subscribe(function (active) {
+        // Other stock parents (outside this task) also embed settings. They do
+        // not send owner messages; keep their reopen path through stock focus.
+        if (model.inPanel() && !ownerControlsVisibility) {
+            visibilityRevision++;
+            panelVisible(!!active);
+        }
+    }),
+    panelVisible.subscribe(function (open) {
+        if (!open) model.cancelCaptureKeyCombo();
+        if (refreshAudioVisibility) refreshAudioVisibility();
+    }), model.settingsItemMap.subscribe(installAudioRefresh)];
+    $(window).on('unload', function () {
+        if (retireAudio) retireAudio();
+        subscriptions.forEach(function (subscription) { subscription.dispose(); });
+    });
 }());

@@ -1,0 +1,12 @@
+/* Closed combat stacks and summaries retain geometry for the dock, but do
+   not paint their background/images or expose nested controls to the mouse. */
+div.combat_stack:not(.displayed),
+div.combat .loss_summary:not(.show) {
+    visibility: hidden;
+}
+div.combat_stack:not(.displayed),
+div.combat_stack:not(.displayed) *,
+div.combat .loss_summary:not(.show),
+div.combat .loss_summary:not(.show) * {
+    pointer-events: none !important;
+}

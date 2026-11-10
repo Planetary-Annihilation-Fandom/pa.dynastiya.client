@@ -21,6 +21,12 @@
     "live_game_action_bar": [
       "coui://ui/mods/dynastiya.layout/live_game_action_bar.css"
     ],
+    "live_game_unit_alert": [
+      "coui://ui/mods/dynastiya.layout/live_game_unit_alert.css"
+    ],
+    "live_game_paused_popup": [
+      "coui://ui/mods/dynastiya.live_game/paused.js"
+    ],
     "server_browser": [
       "coui://ui/mods/dynastiya.server_browser/server_browser.js",
       "coui://ui/mods/dynastiya.layout/server_browser.css",
@@ -58,6 +64,7 @@
     "new_game": [
       "coui://ui/mods/dynastiya.map_generator/map_generator.js",
       "coui://ui/mods/dynastiya.lobby_preview/recent_systems.js",
+      "coui://ui/mods/dynastiya.lobby_preview/hidden_sections.js",
       "coui://ui/mods/dynastiya.lobby_preview/new_game.css",
       "coui://ui/mods/dynastiya.lobby_preview/new_game.js",
       "coui://ui/mods/dynastiya.layout/new_game.css"
@@ -76,6 +83,9 @@
     ],
     "live_game_econ": [
       "coui://ui/mods/dynastiya.layout/live_game_econ.css"
+    ],
+    "live_game": [
+      "coui://ui/mods/dynastiya.live_game/hidden_sections.js"
     ],
     "live_game_hover": [
       "coui://ui/mods/dynastiya.layout/live_game_hover.css",

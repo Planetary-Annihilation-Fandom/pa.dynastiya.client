@@ -63,6 +63,16 @@
             });
         }
         state.update = function (data, apply) { if (!closed) { apply(data); api.Panel.onBodyResize(); } };
+        // Closing the owner cancels preparation, not its retained DOM. A late
+        // image event must not resume scans or reveal an obsolete opening.
+        state.cancel = function () {
+            keyed = false;
+            state.revision++;
+            state.pending = false;
+            if (frame !== undefined) window.cancelAnimationFrame(frame);
+            frame = undefined;
+            element.removeAttribute('data-dynastiya-content-pending');
+        };
         state.present = function (data, apply, nextKey) {
             if (closed) return;
             if (arguments.length >= 3 && keyed && key === nextKey) { state.update(data, apply); return; }

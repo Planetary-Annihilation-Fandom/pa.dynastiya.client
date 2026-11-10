@@ -89,8 +89,35 @@
                 dispose.push(release);
                 // Prepare opening a section, not every change to its rows.
                 // Persistent menu lists update live just like the lobby roster.
-                if (read) releases.push(api.Panel.watchPresentation(local, function () { return !!ko.unwrap(read()); }));
-                local.present(null, function () {});
+                if (read) {
+                    var owners = [read];
+                    for (var parent = element.parentElement; parent; parent = parent.parentElement) {
+                        var parentContext = ko.contextFor(parent);
+                        if (!parentContext) continue;
+                        var parentBindings = ko.bindingProvider.instance.getBindingAccessors(parent, parentContext) || {};
+                        if (parentBindings.visible) owners.push(parentBindings.visible);
+                    }
+                    var visible = ko.computed(function () {
+                        return owners.every(function (owner) { return !!ko.unwrap(owner()); });
+                    });
+                    var change = function (open) {
+                        if (open) local.present(null, function () {});
+                        else local.cancel();
+                    };
+                    var subscription = visible.subscribe(change);
+                    change(visible());
+                    releases.push(function () { subscription.dispose(); visible.dispose(); });
+                } else {
+                    // jQuery dialogs own their display outside KO. Do not prepare
+                    // an initially closed dialog or keep waiting after it closes.
+                    var dialog = $(element);
+                    dialog.on('dialogopen.dynastiyaPresentation shown.bs.modal.dynastiyaPresentation', function () {
+                        local.present(null, function () {});
+                    });
+                    dialog.on('dialogclose.dynastiyaPresentation hidden.bs.modal.dynastiyaPresentation', local.cancel);
+                    releases.push(function () { dialog.off('.dynastiyaPresentation'); });
+                    if (element.offsetWidth || element.offsetHeight) local.present(null, function () {});
+                }
                 releases.push(local.dispose);
             }
             Array.prototype.forEach.call((root || document).querySelectorAll(selectors[scene]), attach);

@@ -6,6 +6,14 @@
     // jQuery effects use JS timers, not CSS transitions. Keep their callbacks.
     if (window.jQuery && jQuery.fx) jQuery.fx.off = true;
 
+    // Bootstrap 3 waits on emulated transition timers even when CSS transitions
+    // are disabled. Remove only its modal fade marker before show computes the
+    // backdrop lifecycle; closed transparent backdrops must not retain input.
+    if (/\/game\/(new_game|start|settings|server_browser|live_game)\//.test(window.location.pathname))
+        $(document).on('show.bs.modal.dynastiyaInstantMotion', '.modal', function () {
+            $(this).removeClass('fade');
+        });
+
     // Keep the animation lifecycle for scene listeners, but finish
     // entrance/exit motion on the next UI update. Semantic display delays remain.
     var names = {
