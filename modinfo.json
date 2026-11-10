@@ -18,6 +18,9 @@
   "titansOnly": true,
   "version": "0.1.4",
   "scenes": {
+    "server_browser": [
+      "coui://ui/mods/dynastiya.server_browser/server_browser.js"
+    ],
     "live_game_build_bar": [
       "coui://ui/mods/dynastiya.live_game/build_bar.js"
     ],
