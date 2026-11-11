@@ -20,24 +20,29 @@
         ]);
     }
 
-    var tabTimer;
-    ko.computed(function () {
-        var buildSet = model.buildSet();
-        clearTimeout(tabTimer);
-        if (!buildSet) return;
-        var hotkeys = model.hotkeys();
-        var groups = buildSet.tabsByGroup();
-        tabTimer = setTimeout(function () {
-            if (model.buildSet() !== buildSet) return;
-            _.forEach(buildSet.tabs(), function (tab) {
-                var baseTab = tab.group().replace('L_', '');
-                if (!tab.label() && groups[baseTab]) tab.label(groups[baseTab].label());
-                tab.hotkey(hotkeys['tab_' + baseTab] || '');
-                tab.buildGroup = tab.buildGroup || ko.observable(baseTab);
-                tab.buildGroup(baseTab);
+    // Вкладки L_* создаются в конструкторе набора без подписи. Подпись и группа
+    // задаются там же, до первой отрисовки. Горячая клавиша вычисляется: штатный
+    // расчёт при каждой смене вкладки записывает '' для неизвестной ему группы
+    // tab_L_*, и эта запись игнорируется.
+    var BuildSet = model.BuildSet;
+    model.BuildSet = function () {
+        BuildSet.apply(this, arguments);
+        var tabs = this.tabs();
+        var labels = {};
+        tabs.forEach(function (tab) { labels[tab.group()] = tab.label(); });
+        tabs.forEach(function (tab) {
+            var baseTab = tab.group().replace('L_', '');
+            tab.buildGroup = ko.observable(baseTab);
+            if (tab.group() === baseTab) return;
+            if (!tab.label() && labels[baseTab]) tab.label(labels[baseTab]);
+            tab.hotkey = ko.computed({
+                read: function () { return model.hotkeys()['tab_' + baseTab] || ''; },
+                write: function () {}
             });
-        }, 0);
-    });
+        });
+    };
+    model.BuildSet.prototype = BuildSet.prototype;
+    Object.keys(BuildSet).forEach(function (key) { model.BuildSet[key] = BuildSet[key]; });
 
     // Горячая клавиша вкладки открывает видимую вкладку своего типа: у строителя
     // Legion это L_bot, у строителя MLA — bot.

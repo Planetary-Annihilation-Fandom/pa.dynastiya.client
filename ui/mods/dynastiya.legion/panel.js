@@ -1,48 +1,15 @@
-/* Тема меняет оформление на месте; данные и размеры ведёт штатная модель панели. */
+/* Привязки и картинки Legion в панелях HUD. Тему армии и классы body ведёт
+ * dynastiya.faction_theme/panel.js; здесь только то, что относится к Legion. */
 (function () {
     'use strict';
     if (model.dynastiyaLegionPanel) return;
-    var armyTheme = ko.observable('vanilla');
-    model.dynastiyaLegionPanel = armyTheme;
-    var page = location.pathname.split('/').pop();
-    var selectionTheme = page === 'live_game_build_bar.html' || page === 'live_game_action_bar.html';
-    var theme = ko.computed(function () {
-        if (page === 'live_game_build_bar.html') {
-            var set = model.buildSet();
-            return legion.faction(set ? Object.keys(set.selectedSpecs()) : []);
-        }
-        if (page === 'live_game_action_bar.html') {
-            var selection = model.selection();
-            return legion.faction(Object.keys(selection && selection.spec_ids || {}));
-        }
-        return armyTheme();
-    });
-    function apply(value) {
-        var body = document.body;
-        body.classList.toggle('legion', selectionTheme && value === 'legion');
-        body.classList.toggle('mixed', selectionTheme && value === 'mixed');
-        body.classList.toggle('legionui', !selectionTheme && value === 'legion');
-        body.classList.toggle('mixedui', !selectionTheme && value === 'mixed');
-    }
-    function update(value) {
-        // update не прячет окно и не меняет ключ уже подготовленного содержимого.
-        var presentation = api.Panel.dockPresentation;
-        if (presentation) presentation.update(value, apply);
-        else apply(value);
-    }
-    theme.subscribe(update);
-    update(theme());
-    var received = false;
-    handlers['dynastiya.legion.theme'] = function (value) {
-        received = true;
-        armyTheme(value);
-    };
-    api.Panel.query(api.Panel.parentId, 'panel.invoke', ['dynastiyaLegionTheme']).then(function (value) {
-        // Ответ на старый запрос не должен отменить более свежее сообщение.
-        if (!received && ['vanilla', 'legion', 'mixed'].indexOf(value) >= 0) armyTheme(value);
-    });
+    var theme = dynastiyaFactionTheme.panel;
+    model.dynastiyaLegionPanel = theme.army;
+    var page = theme.page;
+    var image = theme.image;
 
-    // Дополняем привязки, сохраняя click/mousedown/visible и устойчивые строки #22.
+    // Привязки дописываются до ko.applyBindings сцены, сохраняя click/mousedown/visible
+    // и устойчивые строки #22.
     ko.bindingHandlers.dynastiyaLegionUnit = {
         update: function (element, accessor) {
             element.classList.toggle('legion', legion.isUnit(ko.unwrap(accessor())));
@@ -75,12 +42,6 @@
             'dynastiyaLegionArmyIcon: $data.commanders || []');
     }
 
-    function image(source, folder) {
-        var value = armyTheme();
-        if (value === 'vanilla') return source;
-        return 'coui://ui/mods/dynastiya.legion/img/' + folder + '/' +
-            (value === 'legion' ? 'red' : 'purple') + '/' + source.split('/').pop();
-    }
     // Обёртки создаются один раз. Исходный getter продолжает выбирать картинку
     // по состоянию кнопки, а тема меняет только каталог уже существующего ресурса.
     function imageGetter(name, folder) {
