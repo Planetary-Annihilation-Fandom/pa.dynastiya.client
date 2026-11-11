@@ -3,27 +3,25 @@
     if (model.dynastiyaLegionLobby) return;
     model.dynastiyaLegionLobby = true;
 
-    var COMMANDERS = [
-        '/pa/units/commanders/l_overwatch/l_overwatch.json',
-        '/pa/units/commanders/l_cyclops/l_cyclops.json',
-        '/pa/units/commanders/l_cataphract/l_cataphract.json',
-        '/pa/units/commanders/l_raptor/l_raptor.json',
-        '/pa/units/commanders/l_quad/l_quad.json',
-        '/pa/units/commanders/l_tank/l_tank.json'
-    ];
-
     model.isLegion = function (commander) {
-        return _.includes(COMMANDERS, commander);
+        return _.includes(legion.commanders, legion.specPath(commander));
     };
 
-    // Привязки дописываются до применения ko к разметке лобби: командир Legion
-    // и слот игрока за Legion получают класс, остальное поведение стандартное.
-    $('#commander-picker .div-commander-picker-item').attr('data-bind',
-        "css: { 'dyn-legion': model.isLegion($data) }, click: function () { model.setCommander($index()) }, click_sound: 'default', rollover_sound: 'default'");
-    $('#ai-commander-picker .div-commander-picker-item').attr('data-bind',
-        "css: { 'dyn-legion': model.isLegion($data) }, click: function () { model.setAICommander(model.selectedAI(), $data) }, click_sound: 'default', rollover_sound: 'default'");
-    $('.slot-player').attr('data-bind',
-        "css: { 'dyn-legion': !$data.isEmpty() && model.isLegion($data.commander()), ready: isReady, loading: isLoading }");
+    // Дополняем исходные bindings выбора и слотов; обработчики и visible остаются штатными.
+    ko.bindingHandlers.dynastiyaLegionCommander = {
+        update: function (element, accessor) {
+            element.classList.toggle('dyn-legion', model.isLegion(ko.unwrap(accessor())));
+        }
+    };
+    function bind(selector, expression) {
+        $(selector).each(function () {
+            var original = this.getAttribute('data-bind') || '';
+            this.setAttribute('data-bind', original + ', dynastiyaLegionCommander: ' + expression);
+        });
+    }
+    bind('#commander-picker .div-commander-picker-item', '$data');
+    bind('#ai-commander-picker .div-commander-picker-item', '$data');
+    bind('.slot-player', "$data.isEmpty() ? '' : $data.commander()");
 
     // Подсказка нужна, только если сервер лобби предлагает командиров Legion.
     var hinted = false;
