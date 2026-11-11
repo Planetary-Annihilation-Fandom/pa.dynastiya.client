@@ -10,7 +10,9 @@
         'com.pa.ferretmaster.ferret-visuals': 'Ferret\'s Better Biome Visuals',
         'com.pa.mikeyh.lobby-system-preview': 'Lobby System Preview',
         'com.pa.legion-expansion-client': 'Legion Expansion Client',
-        'com.pa.legion-expansion-server': 'Legion Expansion'
+        'com.pa.legion-expansion-server': 'Legion Expansion',
+        'com.pa.nik.exiles': 'Exiles Faction',
+        'com.pa.nik.exiles_client': 'Exiles Faction Client'
     };
     // Отказ запоминается до перезапуска игры для конкретного набора конфликтов:
     // новый конфликтующий мод снова покажет окно.
