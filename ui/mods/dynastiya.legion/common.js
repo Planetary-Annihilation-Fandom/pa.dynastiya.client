@@ -10,3 +10,13 @@ legion.faction = function (specs) {
     var count = list.filter(legion.isUnit).length;
     return count ? (count === list.length ? 'legion' : 'mixed') : 'vanilla';
 };
+// Тема HUD: классы и картинки Legion подключаются к общему модулю фракционных тем.
+// Красный вариант — только Legion, фиолетовый — Legion вместе с другими фракциями.
+if (window.dynastiyaFactionTheme) dynastiyaFactionTheme.register({
+    id: 'legion',
+    isUnit: legion.isUnit,
+    classes: { army: ['legionui', 'mixedui'], selection: ['legion', 'mixed'] },
+    image: function (source, folder, mixed) {
+        return 'coui://ui/mods/dynastiya.legion/img/' + folder + '/' + (mixed ? 'purple' : 'red') + '/' + source.split('/').pop();
+    }
+});
