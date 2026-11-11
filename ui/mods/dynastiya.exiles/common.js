@@ -1,8 +1,5 @@
-/* Exiles регистрируется в общем модуле тем; исходный мод не менял рамки HUD. */
+/* Признаки фракции Exiles; спецификации могут содержать тег армии после .json. */
 var exiles = window.dynastiyaExiles || (window.dynastiyaExiles = {});
-exiles.commanders = ['blueberry', 'maxim', 'brainiac', 'taurus'].map(function (name) {
-    return '/pa/units/commanders/exiles_' + name + '/exiles_' + name + '.json';
-});
 exiles.specs = [
     "/pa/units/commanders/exiles_blueberry/exiles_blueberry.json",
     "/pa/units/commanders/exiles_maxim/exiles_maxim.json",
@@ -119,8 +116,31 @@ exiles.specs = [
 ];
 exiles.specPath = function (spec) { return typeof spec === 'string' ? spec.replace(/\.json\..*$/, '.json') : ''; };
 exiles.isUnit = function (spec) { return exiles.specs.indexOf(exiles.specPath(spec)) >= 0; };
+// Исходный мод не менял рамки HUD, поэтому классов темы у Exiles нет: в теме HUD
+// их юниты считаются чужими, как юниты MLA. Общий модуль ведёт значок игрока,
+// рамку командира в лобби и вкладки билдбара.
 if (window.dynastiyaFactionTheme) dynastiyaFactionTheme.register({
-    id: 'exiles', isUnit: exiles.isUnit,
-    playerIcon: 'coui://ui/mods/com.pa.nik.exiles/img/exiles_icon_outline.png',
-    classes: { army: ['exilesui', 'exilesmixedui'], selection: ['exiles', 'exilesmixed'] }
+    id: 'exiles',
+    isUnit: exiles.isUnit,
+    player: {
+        classes: ['exilescom'],
+        icons: ['coui://ui/mods/com.pa.nik.exiles/img/exiles_icon_outline.png']
+    },
+    lobby: {
+        commanders: exiles.specs.slice(0, 4),
+        frame: 'dyn-exiles',
+        title: '!LOC:Exiles',
+        hint: '!LOC:To play as the Exiles, choose a Commander with a blue frame.'
+    },
+    tabs: [
+        ['t_air', 'air'],
+        ['t_ammo', 'ammo', true],
+        ['t_bot', 'bot'],
+        ['t_combat', 'combat', true],
+        ['t_economy', 'utility', true],
+        ['t_factory', 'factory', true],
+        ['t_foundry', 'vehicle'],
+        ['t_naval', 'sea'],
+        ['t_tank', 'vehicle']
+    ]
 });
