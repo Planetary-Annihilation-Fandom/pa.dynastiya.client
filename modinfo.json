@@ -16,7 +16,7 @@
   "identifier": "com.pa.dynastiya.client",
   "signature": "not yet implemented",
   "titansOnly": true,
-  "version": "0.1.10",
+  "version": "0.1.11",
   "scenes": {
     "live_game_action_bar": [
       "coui://ui/mods/dynastiya.faction_theme/theme.js",
