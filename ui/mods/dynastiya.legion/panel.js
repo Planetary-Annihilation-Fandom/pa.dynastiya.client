@@ -1,5 +1,6 @@
 /* Привязки и картинки Legion в панелях HUD. Тему армии и классы body ведёт
- * dynastiya.faction_theme/panel.js; здесь только то, что относится к Legion. */
+ * dynastiya.faction_theme/panel.js, значки игроков — faction_theme/players.js;
+ * здесь только то, что относится к Legion. */
 (function () {
     'use strict';
     if (model.dynastiyaLegionPanel) return;
@@ -19,33 +20,6 @@
         $('.div_unit_selection').each(function () {
             this.setAttribute('data-bind', (this.getAttribute('data-bind') || '') + ', dynastiyaLegionUnit: type');
         });
-    }
-    if (page === 'live_game_players.html') {
-        ko.bindingHandlers.dynastiyaLegionArmy = {
-            update: function (element, accessor) {
-                var value = legion.faction(ko.unwrap(accessor()));
-                element.classList.toggle('legcom', value === 'legion');
-                element.classList.toggle('mixcom', value === 'mixed');
-            }
-        };
-        $('.player_masked').each(function () {
-            this.setAttribute('data-bind', (this.getAttribute('data-bind') || '') + ', dynastiyaLegionArmy: $data.commanders || []');
-        });
-        ko.bindingHandlers.dynastiyaLegionArmyIcon = {
-            update: function (element, accessor) {
-                var specs = ko.unwrap(accessor());
-                var factionTheme = dynastiyaFactionTheme.parse(dynastiyaFactionTheme.of(specs));
-                if (factionTheme.faction && !factionTheme.mixed && factionTheme.faction.playerIcon) {
-                    element.src = factionTheme.faction.playerIcon;
-                    return;
-                }
-                var value = legion.faction(specs);
-                element.src = value === 'vanilla' ? 'img/players_list_panel/icon_player_outline.png' :
-                    'coui://ui/mods/dynastiya.legion/img/icon_player_outline_' + (value === 'legion' ? 'l' : 'm') + '.png';
-            }
-        };
-        $('img[src="img/players_list_panel/icon_player_outline.png"]').attr('data-bind',
-            'dynastiyaLegionArmyIcon: $data.commanders || []');
     }
 
     // Обёртки создаются один раз. Исходный getter продолжает выбирать картинку
