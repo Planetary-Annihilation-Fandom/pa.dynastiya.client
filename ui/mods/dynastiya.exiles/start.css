@@ -1,0 +1,8 @@
+.dyn-exiles-overview-banner {
+    height: 150px;
+    background-image: url('coui://ui/mods/exiles_eventboard/img/exiles_backdrop3.png');
+    background-position: center;
+    background-size: cover;
+    margin-bottom: 16px;
+}
+.dyn-exiles-overview-links a { display: block; margin: 8px 0; }

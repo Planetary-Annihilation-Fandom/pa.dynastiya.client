@@ -10,6 +10,14 @@ api.dynastiyaTranslate({
     'Disable conflicting mods': 'Отключить конфликтующие моды',
     // Фракция Legion (dynastiya.legion). Юниты переводит словарь игры legion.json.
     'To play as the Legion, choose a Commander with a red frame.': 'Чтобы играть за Legion, выберите командира в красной рамке.',
+    'To play as the Exiles, choose a Commander with a blue frame.': 'Чтобы играть за Exiles, выберите командира в синей рамке.',
+    "A high-tech faction with mastery over teleportation and arc weaponry.": "Высокотехнологичная фракция, владеющая телепортацией и электрическим оружием.",
+    "More than 100 units, with full AI support.": "Более 100 юнитов с поддержкой ИИ.",
+    "EMP, blink teleportation, invisibility and mass transports.": "ЭМИ, скачки телепортации, невидимость и массовая переброска войск.",
+    "Choose an Exiles Commander with a blue frame in the lobby.": "Выберите в лобби командира Exiles с синей рамкой.",
+    "View Exiles Units": "Юниты Exiles",
+    "Join Exiles Discord": "Discord Exiles",
+    "Support the Exiles creators": "Поддержать авторов Exiles",
     'orbital structure': 'орбитальные постройки'
     // Cancel и Close переводит словарь игры: его строки здесь не переопределяются.
 });

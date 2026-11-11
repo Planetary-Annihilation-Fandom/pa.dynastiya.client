@@ -33,7 +33,13 @@
         });
         ko.bindingHandlers.dynastiyaLegionArmyIcon = {
             update: function (element, accessor) {
-                var value = legion.faction(ko.unwrap(accessor()));
+                var specs = ko.unwrap(accessor());
+                var factionTheme = dynastiyaFactionTheme.parse(dynastiyaFactionTheme.of(specs));
+                if (factionTheme.faction && !factionTheme.mixed && factionTheme.faction.playerIcon) {
+                    element.src = factionTheme.faction.playerIcon;
+                    return;
+                }
+                var value = legion.faction(specs);
                 element.src = value === 'vanilla' ? 'img/players_list_panel/icon_player_outline.png' :
                     'coui://ui/mods/dynastiya.legion/img/icon_player_outline_' + (value === 'legion' ? 'l' : 'm') + '.png';
             }
