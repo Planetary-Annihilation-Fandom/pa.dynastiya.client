@@ -20,12 +20,15 @@
         ]);
     }
 
+    var tabTimer;
     ko.computed(function () {
         var buildSet = model.buildSet();
+        clearTimeout(tabTimer);
         if (!buildSet) return;
         var hotkeys = model.hotkeys();
         var groups = buildSet.tabsByGroup();
-        setTimeout(function () {
+        tabTimer = setTimeout(function () {
+            if (model.buildSet() !== buildSet) return;
             _.forEach(buildSet.tabs(), function (tab) {
                 var baseTab = tab.group().replace('L_', '');
                 if (!tab.label() && groups[baseTab]) tab.label(groups[baseTab].label());
@@ -39,29 +42,15 @@
     // Горячая клавиша вкладки открывает видимую вкладку своего типа: у строителя
     // Legion это L_bot, у строителя MLA — bot.
     handlers.start_build_sequence = model.startBuildSequence = function (params) {
-        var tabs = _.filter(model.buildSet().tabs(), function (tab) {
-            return tab.visible() && tab.buildGroup() === params.group;
+        var buildSet = model.buildSet();
+        if (!buildSet) return;
+        var tabs = _.filter(buildSet.tabs(), function (tab) {
+            var group = tab.buildGroup ? tab.buildGroup() : tab.group().replace('L_', '');
+            return tab.visible() && group === params.group;
         });
         if (!tabs.length) return;
         model.activeBuildGroup(tabs[0].group());
         if (params.locked) model.activeBuildGroupLocked(params.locked);
     };
 
-    // Фракционная тема панели: красная, если выбраны только строители Legion,
-    // фиолетовая при смешанном выделении.
-    loadCSS('coui://ui/mods/dynastiya.legion/css/legion_build_bar.css');
-    loadScript('coui://ui/mods/dynastiya.legion/common.js');
-    function faction(data) {
-        var buildSet = data.buildSet();
-        if (!buildSet) return null;
-        var specs = _.keys(buildSet.selectedSpecs());
-        var count = _.filter(specs, function (spec) {
-            return _.includes(legion.builders, legion.specPath(spec));
-        }).length;
-        if (count && count === specs.length) return 'legion';
-        return count ? 'mixed' : 'vanilla';
-    }
-    model.isLegion = function (data) { return faction(data) === 'legion'; };
-    model.isMixed = function (data) { return faction(data) === 'mixed'; };
-    $('.body_panel').attr('data-bind', 'css: { legion: model.isLegion($data), mixed: model.isMixed($data) }');
 }());

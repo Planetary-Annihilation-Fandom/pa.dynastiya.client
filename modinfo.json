@@ -19,8 +19,10 @@
   "version": "0.1.8",
   "scenes": {
     "live_game_action_bar": [
+      "coui://ui/mods/dynastiya.legion/common.js",
       "coui://ui/mods/dynastiya.layout/live_game_action_bar.css",
-      "coui://ui/mods/dynastiya.legion/live_game_action_bar.js"
+      "coui://ui/mods/dynastiya.legion/css/legion_action_bar.css",
+      "coui://ui/mods/dynastiya.legion/panel.js"
     ],
     "live_game_unit_alert": [
       "coui://ui/mods/dynastiya.layout/live_game_unit_alert.css"
@@ -34,25 +36,34 @@
       "coui://ui/mods/dynastiya.layout/landing.css"
     ],
     "live_game_build_bar": [
+      "coui://ui/mods/dynastiya.legion/common.js",
       "coui://ui/mods/dynastiya.live_game/build_bar.js",
-      "coui://ui/mods/dynastiya.legion/build_bar.js"
+      "coui://ui/mods/dynastiya.legion/build_bar.js",
+      "coui://ui/mods/dynastiya.legion/css/legion_build_bar.css",
+      "coui://ui/mods/dynastiya.legion/panel.js"
     ],
     "live_game_selection": [
+      "coui://ui/mods/dynastiya.legion/common.js",
       "coui://ui/mods/dynastiya.live_game/selection.js",
-      "coui://ui/mods/dynastiya.legion/live_game_selection.js"
+      "coui://ui/mods/dynastiya.legion/css/legion_selection.css",
+      "coui://ui/mods/dynastiya.legion/panel.js"
     ],
     "live_game_chat": [
       "coui://ui/mods/dynastiya.live_game/chat.js"
     ],
     "live_game_planets": [
+      "coui://ui/mods/dynastiya.legion/common.js",
       "coui://ui/mods/dynastiya.live_game/planets.js",
       "coui://ui/mods/dynastiya.layout/live_game_planets.css",
-      "coui://ui/mods/dynastiya.legion/live_game_planets.js"
+      "coui://ui/mods/dynastiya.legion/css/legion_planets.css",
+      "coui://ui/mods/dynastiya.legion/panel.js"
     ],
     "live_game_options_bar": [
+      "coui://ui/mods/dynastiya.legion/common.js",
       "coui://ui/mods/dynastiya.live_game/options_bar.js",
       "coui://ui/mods/dynastiya.layout/live_game_options_bar.css",
-      "coui://ui/mods/dynastiya.legion/live_game_options_bar.js"
+      "coui://ui/mods/dynastiya.legion/css/legion_options_bar.css",
+      "coui://ui/mods/dynastiya.legion/panel.js"
     ],
     "settings": [
       "coui://ui/mods/dynastiya.settings/settings.js",
@@ -67,6 +78,7 @@
       "coui://ui/mods/dynastiya.control_feedback/main.js"
     ],
     "new_game": [
+      "coui://ui/mods/dynastiya.legion/common.js",
       "coui://ui/mods/dynastiya.map_generator/map_generator.js",
       "coui://ui/mods/dynastiya.lobby_preview/recent_systems.js",
       "coui://ui/mods/dynastiya.lobby_preview/hidden_sections.js",
@@ -91,11 +103,15 @@
       "coui://ui/mods/dynastiya.mod_conflicts/load.js"
     ],
     "live_game_econ": [
+      "coui://ui/mods/dynastiya.legion/common.js",
       "coui://ui/mods/dynastiya.layout/live_game_econ.css",
-      "coui://ui/mods/dynastiya.legion/live_game_econ.js"
+      "coui://ui/mods/dynastiya.legion/css/legion_econ.css",
+      "coui://ui/mods/dynastiya.legion/panel.js"
     ],
     "live_game": [
-      "coui://ui/mods/dynastiya.live_game/hidden_sections.js"
+      "coui://ui/mods/dynastiya.live_game/hidden_sections.js",
+      "coui://ui/mods/dynastiya.legion/common.js",
+      "coui://ui/mods/dynastiya.legion/hud.js"
     ],
     "live_game_hover": [
       "coui://ui/mods/dynastiya.layout/live_game_hover.css",
@@ -111,19 +127,29 @@
       "coui://ui/mods/dynastiya.legion/sandbox.js"
     ],
     "live_game_players": [
-      "coui://ui/mods/dynastiya.legion/live_game_players.js"
+      "coui://ui/mods/dynastiya.legion/common.js",
+      "coui://ui/mods/dynastiya.legion/css/legion_players.css",
+      "coui://ui/mods/dynastiya.legion/panel.js"
     ],
     "live_game_control_group_bar": [
-      "coui://ui/mods/dynastiya.legion/live_game_control_group_bar.js"
+      "coui://ui/mods/dynastiya.legion/common.js",
+      "coui://ui/mods/dynastiya.legion/css/legion_control_group_bar.css",
+      "coui://ui/mods/dynastiya.legion/panel.js"
     ],
     "live_game_time_bar": [
-      "coui://ui/mods/dynastiya.legion/live_game_time_bar.js"
+      "coui://ui/mods/dynastiya.legion/common.js",
+      "coui://ui/mods/dynastiya.legion/css/legion_time_bar.css",
+      "coui://ui/mods/dynastiya.legion/panel.js"
     ],
     "live_game_build_hover": [
-      "coui://ui/mods/dynastiya.legion/live_game_build_hover.js"
+      "coui://ui/mods/dynastiya.legion/common.js",
+      "coui://ui/mods/dynastiya.legion/css/legion_build_hover.css",
+      "coui://ui/mods/dynastiya.legion/panel.js"
     ],
     "live_game_menu": [
-      "coui://ui/mods/dynastiya.legion/live_game_menu.js"
+      "coui://ui/mods/dynastiya.legion/common.js",
+      "coui://ui/mods/dynastiya.legion/css/legion_menu.css",
+      "coui://ui/mods/dynastiya.legion/panel.js"
     ]
   }
 }
