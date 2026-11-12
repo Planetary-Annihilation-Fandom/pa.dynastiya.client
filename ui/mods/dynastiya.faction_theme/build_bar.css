@@ -1,12 +1,47 @@
-/* Переключатель фракций отделён от вкладок построек промежутком и линией.
- * Активная фракция выделена белым текстом: в темах Legion и смешанной активная
- * вкладка отличается только рамкой. */
-.div_build_bar_tab_cont .tab_grp .dyn-build-factions {
-    margin-right: 12px;
-    padding-right: 12px;
-    border-right: 1px solid rgba(255, 255, 255, 0.45);
+/* Ряд переключателя фракций под вкладками построек занимает пустое место рамки.
+ * Кнопки наследуют цвета вкладок текущей темы и уменьшены; тени и свечения
+ * штатных вкладок сняты. Активная фракция выделена белым текстом: в темах
+ * Legion и смешанной активная вкладка отличается только рамкой. */
+.div_build_bar_tab_cont .dyn-build-factions {
+    display: flex;
+    justify-content: center;
+    margin: 4px auto 0px;
 }
 
-.div_build_bar_tab_cont .tab_grp .dyn-build-faction.span_build_bar_tab_active {
+.div_build_bar_tab_cont .dyn-build-factions .dyn-build-faction {
+    display: flex;
+    align-items: center;
+    width: auto;
+    height: 20px;
+    margin: 0px 2px;
+    padding: 0px 8px 0px 4px;
+    font-size: 12px;
+    line-height: 20px;
+    box-shadow: none;
+    text-shadow: none;
+    -webkit-transition: none;
+}
+
+.div_build_bar_tab_cont .dyn-build-factions .dyn-build-faction-next {
+    margin-right: 10px;
+    padding: 0px 8px;
+}
+
+.div_build_bar_tab_cont .dyn-build-factions .dyn-build-faction.span_build_bar_tab_active {
     color: #fff;
+}
+
+.div_build_bar_tab_cont .dyn-build-faction-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+}
+
+.div_build_bar_tab_cont .dyn-build-faction-key {
+    margin-left: 6px;
+    opacity: 0.6;
+}
+
+.div_build_bar_tab_cont .div_build_bar_tab_background.dyn-build-factions-shown {
+    height: 80px;
 }

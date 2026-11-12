@@ -1,6 +1,14 @@
 // Русские строки «Династии». Ключ — английский текст из loc('!LOC:...').
 api.dynastiyaTranslate({
     'Bugs': 'Bugs',
+    // Клавиши фракций билдбара (dynastiya.faction_theme/keybinds.js).
+    'build bar factions': 'фракции билдбара',
+    'next build bar faction': 'следующая фракция билдбара',
+    'next faction': 'след. фракция',
+    'build bar faction MLA': 'фракция билдбара MLA',
+    'build bar faction Legion': 'фракция билдбара Legion',
+    'build bar faction Exiles': 'фракция билдбара Exiles',
+    'build bar faction Bugs': 'фракция билдбара Bugs',
     'A biological faction with evolving swarms and research upgrades.': 'Биологическая фракция с развивающимися роями и улучшениями через исследования.',
     'Research': 'Исследования',
     "Warrior Grunt Unlock": "Улучшение пехотинца",
