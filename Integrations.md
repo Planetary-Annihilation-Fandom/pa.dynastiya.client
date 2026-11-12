@@ -35,3 +35,13 @@ The lobby identifies Exiles commanders with a blue frame. Exiles registers its l
 Bug Faction 1.20 by Ferretmaster, BillTheBlueBot, Anonemous2, Taiga, Quitch and Quildtide: https://github.com/Ferret-Master/Bug-Faction-Client. The source CC BY-NC-SA 4.0 license is retained in `LICENSE.Bugs`. Units, research, models, effects, AI, strategic icons, audio and commander artwork are integrated; the original mods are not required. Lobby frames, player icons and build tabs register with the shared faction module. Research is applied while constructing build sets, without delayed slot mutations.
 
 Missing source effect and model references are repaired. Animation adapters preserve available clips and omit references to clips or skeleton controls absent from the shipped meshes. The source menu theme switcher and external FloatZone dependency are replaced by the shared overview and research dialog. Interception targets are merged with existing MLA/Legion defenses, using the already integrated Faction Compatibility license.
+
+## Second Wave Expansion
+
+Second Wave Expansion 0.16.1 by Anonemous2, billthebluebot, Taiga, Quitch, Quildtide, Ferretmaster, Tatarstan and DrWondertainment, with its companion client mod 1.1.12 by Anonemous2: https://github.com/Anonemous2/pa.mla.unit.addon, https://forums.planetaryannihilation.com/threads/wip-casual-mla-unit-addon.73484/. The source does not include a license file. Textures, strategic icons, unit build bar positions and the Chinese and Russian unit name translations are integrated; the original server and companion mods are not required. The units are in the server repository.
+
+The Second Wave strategic icons `stalker` and `swordfish` are renamed `sw_stalker` and `sw_swordfish`, because Exiles already registers icons with those names; the unregistered `sw_l_bill` icon is omitted. Fabrication towers of MLA, Legion and Bugs receive their patrol order through scoped automation in `ui/mods/dynastiya.second_wave`: one command per completed tower, with cleanup on scene exit.
+
+## Build Bar Tabs
+
+The faction switcher of the build bar is adapted from Build Bar Tabs 1.13 by Ferretmaster: https://github.com/Ferret-Master/build-bar-tabs. The source does not include a license file. When the selected builders belong to several factions, the build bar shows the tabs of one faction and faction buttons before them; the choice is kept for later selections. Tab ownership comes from the shared faction module (`ui/mods/dynastiya.faction_theme`) instead of tab name prefixes, the buttons use localized faction names instead of images, and switching hides tabs without re-parsing the selection, holding the previous frame until the new one is ready.

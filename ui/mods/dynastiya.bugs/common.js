@@ -303,7 +303,11 @@ bugs.research.labels = {
     "/pa/units/research/unlocks/bug_orbital_laser_unlock/bug_orbital_laser_unlock.json": "!LOC:Bug Orbital Laser Unlock",
     "/pa/units/research/unlocks/bug_ripper_stealth_unlock/bug_ripper_stealth_unlock.json": "!LOC:Stealth Ripper Unlock"
 };
-bugs.isUnit = function (spec) { return bugs.specs.indexOf(dynastiyaFactionTheme.specPath(spec)) >= 0; };
+// Постройки Bugs из Second Wave лежат в /pa/units/b_addon/.
+bugs.isUnit = function (spec) {
+    var path = dynastiyaFactionTheme.specPath(spec);
+    return bugs.specs.indexOf(path) >= 0 || path.indexOf('/pa/units/b_addon/') === 0;
+};
 dynastiyaFactionTheme.register({
     id: 'bugs', isUnit: bugs.isUnit, research: bugs.research,
     player: {

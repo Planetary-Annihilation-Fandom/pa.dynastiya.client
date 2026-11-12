@@ -50,6 +50,7 @@
       "coui://ui/mods/dynastiya.faction_theme/research_build_bar.js",
       "coui://ui/mods/dynastiya.live_game/build_bar.js",
       "coui://ui/mods/dynastiya.faction_theme/build_bar.js",
+      "coui://ui/mods/dynastiya.faction_theme/build_bar.css",
       "coui://ui/mods/dynastiya.legion/css/legion_build_bar.css",
       "coui://ui/mods/dynastiya.faction_theme/panel.js",
       "coui://ui/mods/dynastiya.legion/panel.js"
@@ -160,7 +161,8 @@
       "coui://ui/mods/dynastiya.faction_theme/hud.js",
       "coui://ui/mods/dynastiya.exiles/mechanics.js",
       "coui://ui/mods/dynastiya.bugs/audio.js",
-      "coui://ui/mods/dynastiya.bugs/mechanics.js"
+      "coui://ui/mods/dynastiya.bugs/mechanics.js",
+      "coui://ui/mods/dynastiya.second_wave/automation.js"
     ],
     "live_game_hover": [
       "coui://ui/mods/dynastiya.layout/live_game_hover.css",
@@ -169,12 +171,14 @@
     "shared_build": [
       "coui://ui/mods/dynastiya.legion/shared_build.js",
       "coui://ui/mods/dynastiya.exiles/shared_build.js",
-      "coui://ui/mods/dynastiya.bugs/shared_build.js"
+      "coui://ui/mods/dynastiya.bugs/shared_build.js",
+      "coui://ui/mods/dynastiya.second_wave/shared_build.js"
     ],
     "icon_atlas": [
       "coui://ui/mods/dynastiya.legion/icon_atlas.js",
       "coui://ui/mods/dynastiya.exiles/icon_atlas.js",
-      "coui://ui/mods/dynastiya.bugs/icon_atlas.js"
+      "coui://ui/mods/dynastiya.bugs/icon_atlas.js",
+      "coui://ui/mods/dynastiya.second_wave/icon_atlas.js"
     ],
     "live_game_sandbox": [
       "coui://ui/mods/dynastiya.legion/sandbox.js",
