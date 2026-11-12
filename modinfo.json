@@ -44,6 +44,8 @@
       "coui://ui/mods/dynastiya.legion/common.js",
       "coui://ui/mods/dynastiya.exiles/common.js",
       "coui://ui/mods/dynastiya.bugs/common.js",
+      "coui://ui/mods/dynastiya.context/ids.js",
+      "coui://ui/mods/dynastiya.context/match_storage.js",
       "coui://ui/mods/dynastiya.faction_theme/research.js",
       "coui://ui/mods/dynastiya.faction_theme/research_build_bar.js",
       "coui://ui/mods/dynastiya.live_game/build_bar.js",
@@ -118,8 +120,7 @@
       "coui://ui/mods/dynastiya.faction_theme/lobby.js",
       "coui://ui/mods/dynastiya.legion/new_game.css",
       "coui://ui/mods/dynastiya.exiles/new_game.css",
-      "coui://ui/mods/dynastiya.bugs/new_game.css",
-      "coui://ui/mods/dynastiya.bugs/lobby.js"
+      "coui://ui/mods/dynastiya.bugs/new_game.css"
     ],
     "system_editor": [
       "coui://ui/mods/dynastiya.biomes/system_editor.js"
@@ -151,6 +152,8 @@
       "coui://ui/mods/dynastiya.legion/common.js",
       "coui://ui/mods/dynastiya.exiles/common.js",
       "coui://ui/mods/dynastiya.bugs/common.js",
+      "coui://ui/mods/dynastiya.context/ids.js",
+      "coui://ui/mods/dynastiya.context/match_storage.js",
       "coui://ui/mods/dynastiya.faction_theme/research.js",
       "coui://ui/mods/dynastiya.faction_theme/research_hud.js",
       "coui://ui/mods/dynastiya.faction_theme/research_queue.js",
