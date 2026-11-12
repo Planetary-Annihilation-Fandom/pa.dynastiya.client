@@ -2,8 +2,9 @@
  * раскладку юнитов по ним задаёт shared_build.js фракции.
  *
  * Если выделенные строители относятся к разным фракциям, билдбар показывает
- * вкладки одной фракции и переключатель фракций перед ними (по Build Bar Tabs,
- * Ferretmaster). Фракция вкладки берётся из реестра; незарегистрированные
+ * вкладки одной фракции, а под ними — ряд переключателя (по Build Bar Tabs,
+ * Ferretmaster): кнопка перебора с его клавишей и кнопки фракций с иконкой
+ * командира. Фракция вкладки берётся из реестра; незарегистрированные
  * вкладки — MLA. Выбор игрока сохраняется для следующих выделений.
  *
  * Подпись и группа задаются в конструкторе набора, до первой отрисовки. Горячая
@@ -20,10 +21,13 @@
     var template = [];
     var order = ['mla'];
     var titles = { mla: '!LOC:MLA' };
+    var icons = { mla: iconOf('/pa/units/commanders/imperial_alpha/imperial_alpha.json') };
+    function iconOf(spec) { return spec ? 'coui:/' + spec.replace(/\.json$/, '_icon_buildbar.png') : ''; }
     dynastiyaFactionTheme.factions.forEach(function (faction) {
         if (faction.tabs && faction.tabs.length) {
             order.push(faction.id);
             titles[faction.id] = faction.lobby && faction.lobby.title || '!LOC:' + faction.id;
+            icons[faction.id] = iconOf(faction.lobby && faction.lobby.commanders && faction.lobby.commanders[0]);
         }
         (faction.tabs || []).forEach(function (tab) {
             bases[tab[0]] = tab[1];
@@ -79,7 +83,7 @@
             // Тот же состав фракций не пересоздаёт кнопки переключателя.
             if (list.join() === shown) return;
             shown = list.join();
-            set.dynastiyaFactions(list.map(function (id) { return { id: id, title: titles[id] }; }));
+            set.dynastiyaFactions(list.map(function (id) { return { id: id, title: titles[id], icon: icons[id] }; }));
         };
         set.selectedSpecs.subscribe(function () {
             filled = tabs.filter(function (tab) { return tab.visible(); });
@@ -107,18 +111,54 @@
         else apply();
     };
 
+    // Клавиши из keybinds.js: 'next' перебирает фракции выделения по кругу,
+    // id фракции выбирает её, если она есть в выделении.
+    handlers['dynastiya.build_faction'] = function (target) {
+        var set = model.buildSet();
+        if (!set || !set.dynastiyaFactions) return;
+        var ids = set.dynastiyaFactions().map(function (faction) { return faction.id; });
+        var id = target === 'next' ? ids[(ids.indexOf(set.dynastiyaFaction()) + 1) % ids.length] : target;
+        if (ids.length > 1 && ids.indexOf(id) >= 0) model.dynastiyaSelectBuildFaction(id);
+    };
+
+    // Клавиши кнопок берутся из собранных карт ввода, как у штатных вкладок.
+    // Одиночная клавиша назначается и с shift; показывается короткий вариант.
+    model.dynastiyaFactionKeys = ko.observable({});
+    function computeFactionKeys() {
+        var keys = {};
+        _.forIn(input_maps, function (map) {
+            _.forIn(map.keymap, function (name, key) {
+                var match = /^dynastiya_build_faction_(.+)$/.exec(name);
+                if (match && (!keys[match[1]] || key.length < keys[match[1]].length)) keys[match[1]] = key;
+            });
+        });
+        model.dynastiyaFactionKeys(keys);
+    }
+    computeFactionKeys();
+    input_maps_reload.progress(computeFactionKeys);
+
     // Сцена подключает моды до ko.applyBindings, поэтому разметка
-    // переключателя получает привязки вместе со штатной.
-    $('.div_build_bar_tab_cont .tab_grp').prepend(
+    // переключателя получает привязки вместе со штатной. Ряд продолжает
+    // рамку под вкладками; рамка с переключателем выше, и панель растёт вместе
+    // с ней.
+    $('.div_build_bar_tab_background').attr('data-bind', "css: { 'dyn-build-factions-shown': " +
+        'buildSet() && buildSet().dynastiyaFactions && buildSet().dynastiyaFactions().length }');
+    $('.div_build_bar_tab_background_inner').after(
         '<!-- ko with: buildSet() --><!-- ko if: $data.dynastiyaFactions && dynastiyaFactions().length -->' +
-        '<span class="tab_grp_body dyn-build-factions">' +
+        '<div class="dyn-build-factions">' +
+        '<span class="span_build_bar_tab dyn-build-faction dyn-build-faction-next" data-bind="' +
+        'click: function () { handlers[\'dynastiya.build_faction\'](\'next\'); },' +
+        ' click_sound: \'default\', rollover_sound: \'default\',' +
+        ' text: $root.dynastiyaFactionKeys().next || loc(\'!LOC:next faction\')"></span>' +
         '<!-- ko foreach: dynastiyaFactions -->' +
         '<span class="span_build_bar_tab dyn-build-faction" data-bind="' +
         'css: { span_build_bar_tab_active: $parent.dynastiyaFaction() === id },' +
         ' click: function () { $root.dynastiyaSelectBuildFaction(id); },' +
         ' click_sound: \'default\', rollover_sound: \'default\'">' +
-        '<span class="span_build_bar_tab_label" data-bind="text: loc(title)"></span></span>' +
-        '<!-- /ko --></span><!-- /ko --><!-- /ko -->');
+        '<img class="dyn-build-faction-icon" data-bind="attr: { src: icon }, visible: icon"/>' +
+        '<span class="dyn-build-faction-label" data-bind="text: loc(title)"></span>' +
+        '<span class="dyn-build-faction-key" data-bind="text: $root.dynastiyaFactionKeys()[id] || \'\', visible: $root.dynastiyaFactionKeys()[id]"></span>' +
+        '</span><!-- /ko --></div><!-- /ko --><!-- /ko -->');
 
     // Горячая клавиша вкладки открывает первую видимую вкладку своего типа:
     // у строителя Legion это L_bot, у строителя Exiles — t_bot, у MLA — bot.
