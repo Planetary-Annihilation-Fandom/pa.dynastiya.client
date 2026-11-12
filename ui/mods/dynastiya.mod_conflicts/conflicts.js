@@ -14,7 +14,10 @@
         'com.pa.nik.exiles': 'Exiles Faction',
         'com.pa.nik.exiles_client': 'Exiles Faction Client',
         'com.pa.ferretmaster.bugs': 'Bug Faction',
-        'com.pa.ferretmaster.bugs-client': 'Bug Faction Client'
+        'com.pa.ferretmaster.bugs-client': 'Bug Faction Client',
+        'pa.mla.unit.addon': 'Second Wave Expansion',
+        'pa.mla.unit.addon.companion': 'Second Wave Expansion - Companion',
+        'com.pa.ferretmaster.build-bar-tabs': 'Build Bar Tabs'
     };
     // Отказ запоминается до перезапуска игры для конкретного набора конфликтов:
     // новый конфликтующий мод снова покажет окно.

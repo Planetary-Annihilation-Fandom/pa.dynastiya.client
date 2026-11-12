@@ -22,8 +22,13 @@
     var latestSelection;
     function contentKey(selection, group) {
         return JSON.stringify([Object.keys(selection.spec_ids || {}).sort(), group,
-            window.dynastiyaResearch ? dynastiyaResearch.state() : null]);
+            window.dynastiyaResearch ? dynastiyaResearch.state() : null,
+            model.dynastiyaBuildFaction ? model.dynastiyaBuildFaction() : null]);
     }
+    // Выбранная фракция билдбара меняет набор вкладок, поэтому входит в ключ.
+    model.dynastiyaBuildBarKey = function (group) {
+        return latestSelection ? contentKey(latestSelection, group) : null;
+    };
     // Переключение вкладки меняет сетку и при тех же строителях. Вкладка и
     // выделение используют общий ключ: у окна один владелец показа.
     if (ko.isObservable(model.activeBuildGroup)) model.activeBuildGroup.subscribe(function (group) {

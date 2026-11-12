@@ -1,0 +1,12 @@
+/* Переключатель фракций отделён от вкладок построек промежутком и линией.
+ * Активная фракция выделена белым текстом: в темах Legion и смешанной активная
+ * вкладка отличается только рамкой. */
+.div_build_bar_tab_cont .tab_grp .dyn-build-factions {
+    margin-right: 12px;
+    padding-right: 12px;
+    border-right: 1px solid rgba(255, 255, 255, 0.45);
+}
+
+.div_build_bar_tab_cont .tab_grp .dyn-build-faction.span_build_bar_tab_active {
+    color: #fff;
+}
