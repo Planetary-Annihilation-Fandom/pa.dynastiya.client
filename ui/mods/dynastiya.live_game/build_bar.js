@@ -21,7 +21,8 @@
     var waiting = false;
     var latestSelection;
     function contentKey(selection, group) {
-        return JSON.stringify([Object.keys(selection.spec_ids || {}).sort(), group]);
+        return JSON.stringify([Object.keys(selection.spec_ids || {}).sort(), group,
+            window.dynastiyaResearch ? dynastiyaResearch.state() : null]);
     }
     // Переключение вкладки меняет сетку и при тех же строителях. Вкладка и
     // выделение используют общий ключ: у окна один владелец показа.
@@ -30,6 +31,7 @@
             api.Panel.dockPresentation.present(null, function () {}, contentKey(latestSelection, group));
     });
     handlers.selection = function (payload) {
+        model.dynastiyaLatestSelection = payload;
         latestSelection = payload;
         if (waiting) return;
         waiting = true;

@@ -12,7 +12,9 @@
         'com.pa.legion-expansion-client': 'Legion Expansion Client',
         'com.pa.legion-expansion-server': 'Legion Expansion',
         'com.pa.nik.exiles': 'Exiles Faction',
-        'com.pa.nik.exiles_client': 'Exiles Faction Client'
+        'com.pa.nik.exiles_client': 'Exiles Faction Client',
+        'com.pa.ferretmaster.bugs': 'Bug Faction',
+        'com.pa.ferretmaster.bugs-client': 'Bug Faction Client'
     };
     // Отказ запоминается до перезапуска игры для конкретного набора конфликтов:
     // новый конфликтующий мод снова покажет окно.
