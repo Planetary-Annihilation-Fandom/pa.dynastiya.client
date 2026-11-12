@@ -1,47 +1,42 @@
 /* Completed marker units drive research. Polling is scoped to a research faction;
- * one request at a time, with results discarded after army/match changes. */
+ * one request at a time, with results discarded after army/match changes.
+ * Confirmed research stays in the match storage after its marker dies. */
 (function () {
     'use strict';
-    var research = dynastiyaResearch, stopped = false, timer, generation = 0;
-    var match, army;
+    var research = dynastiyaResearch, storage = dynastiyaMatchStorage;
+    var stopped = false, timer, generation = 0, army;
     var world = api.getWorldView(0);
     function publish() {
         var value = research.state();
-        if (match && army >= 0 && !model.isSpectator() && !model.showTimeControls()) {
-            try { localStorage[research.key] = JSON.stringify(value); } catch (e) {}
-        }
+        // Chrono cam shows the past; the record keeps only the present.
+        if (!model.showTimeControls()) storage.set('research', value.completed, army);
         _.forEach(api.panels, function (panel) {
             if (panel && panel.id !== undefined && panel.id !== null && panel.message) panel.message('dynastiya.research', value);
         });
     }
     model.dynastiyaResearchState = function () { return research.state(); };
     research.state.subscribe(publish);
+    // The match storage holds one army's research per match; a new match or
+    // army starts from its own record (spectators have none).
     function context() {
-        var nextMatch = ko.unwrap(model.lobbyId) || localStorage.dynastiya_research_match || null;
-        var nextArmy = model.armyIndex();
-        if (nextMatch === match && nextArmy === army) return;
-        match = nextMatch; army = nextArmy; generation++;
-        if (match) localStorage.dynastiya_research_match = match;
-        var saved = research.read();
-        var restore = match && saved && saved.match === match && saved.army === army && !model.isSpectator() && !model.showTimeControls();
-        research.accept({ match: match, army: army, completed: restore ? saved.completed : [] });
+        army = dynastiyaIds.army(); generation++;
+        research.accept({ completed: storage.get('research', army) || [], enabled: research.state().enabled });
         publish();
     }
     function schedule() { if (!stopped) timer = setTimeout(scan, 1000); }
     function scan() {
         if (stopped) return;
-        context();
         var player = _.find(model.players() || [], function (p) { return p.id === model.armyId(); });
         var hasResearch = player && _.some(player.commanders, function (spec) {
             var faction = dynastiyaFactionTheme.factionOf(spec);
             return faction && faction.research;
         });
         research.accept(_.extend({}, research.state(), { enabled: !!hasResearch }));
-        if (!world || army === undefined || army < 0 || !hasResearch) return schedule();
-        var current = generation;
+        if (!world || !army || !hasResearch) return schedule();
+        var current = generation, index = army.index;
         var planets = (model.planetListState() || {}).planets || [];
         Promise.all(planets.filter(function (p) { return p.id !== undefined; }).map(function (p) {
-            return world.getArmyUnits(army, p.index);
+            return world.getArmyUnits(index, p.index);
         })).then(function (maps) {
             if (stopped || current !== generation) return;
             var ids = [], markers = [];
@@ -64,7 +59,7 @@
                     if (unit && (unit.built_frac === undefined || unit.built_frac >= 1) && completed.indexOf(markers[i]) < 0)
                         completed.push(markers[i]);
                 });
-                research.accept({ match: match, army: army, completed: completed, enabled: !!hasResearch });
+                research.accept({ completed: completed, enabled: !!hasResearch });
             });
         }).then(schedule, function (error) { console.error('Faction research', error); schedule(); });
     }
@@ -80,7 +75,9 @@
         };
     });
     window.addEventListener('unload', function () { stopped = true; generation++; clearTimeout(timer); });
-    if (ko.isObservable(model.armyIndex)) model.armyIndex.subscribe(context);
-    if (ko.isObservable(model.lobbyId)) model.lobbyId.subscribe(context);
+    dynastiyaIds.revision.subscribe(context);
+    // Chrono cam suspends the record; save what was confirmed meanwhile.
+    model.showTimeControls.subscribe(function (value) { if (!value) publish(); });
+    context();
     scan();
 }());

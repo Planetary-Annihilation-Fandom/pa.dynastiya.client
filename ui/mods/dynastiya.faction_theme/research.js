@@ -3,15 +3,11 @@
 (function () {
     'use strict';
     if (window.dynastiyaResearch) return;
-    var key = 'dynastiya_research';
-    var state = ko.observable({ match: null, army: null, completed: [] });
+    var state = ko.observable({ completed: [] });
     var definitions = [];
     dynastiyaFactionTheme.factions.forEach(function (faction) {
         if (faction.research) definitions.push(faction.research);
     });
-    function read() {
-        try { return JSON.parse(localStorage[key] || 'null'); } catch (e) { return null; }
-    }
     var availability = ko.pureComputed(function () {
         var locked = {}, replacements = {};
         definitions.forEach(function (definition) {
@@ -29,7 +25,7 @@
         return { locked: locked, replacements: replacements };
     });
     window.dynastiyaResearch = {
-        key: key, state: state, definitions: definitions, read: read,
+        state: state, definitions: definitions,
         availability: availability,
         accept: function (value) {
             if (!value || !_.isArray(value.completed)) return;

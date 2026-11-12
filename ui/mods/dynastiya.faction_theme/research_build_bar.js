@@ -3,8 +3,9 @@
 (function () {
     'use strict';
     var research = dynastiyaResearch;
-    var saved = research.read();
-    if (saved && saved.match === localStorage.dynastiya_research_match) research.accept(saved);
+    // The first BuildSet is built before live_game answers; start from the record.
+    var saved = dynastiyaMatchStorage.get('research', dynastiyaIds.army());
+    if (saved) research.accept({ completed: saved });
     var original;
     model.dynastiyaResearchParams = function (params) {
         original = params;
