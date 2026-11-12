@@ -1,5 +1,21 @@
 // Русские строки «Династии». Ключ — английский текст из loc('!LOC:...').
 api.dynastiyaTranslate({
+    'Bugs': 'Bugs',
+    'A biological faction with evolving swarms and research upgrades.': 'Биологическая фракция с развивающимися роями и улучшениями через исследования.',
+    'Research': 'Исследования',
+    "Warrior Grunt Unlock": "Улучшение пехотинца",
+    "Stealth Ripper Unlock": "Скрытный потрошитель",
+    "Cheap Combat Fab Unlock": "Дешёвый боевой строитель",
+    "Fast Needler Unlock": "Быстрый игломёт",
+    "Bug Boomer Mine Unlock": "Мины взрывников",
+    "Crusher Unlock": "Дробитель",
+    "Hydra Unlock": "Гидра",
+    "Bug Chomper Unlock": "Орбитальный пожиратель",
+    "Bug Orbital Carrier Unlock": "Орбитальный носитель",
+    "Bug Orbital Laser Unlock": "Орбитальный лазер",
+    "Advanced Orbital Radar Unlock": "Продвинутый орбитальный радар",
+    "Bug Orbital Fighter Vision Unlock": "Обзор орбитального истребителя",
+    'To play as Bugs, choose a Commander with a green frame.': 'Чтобы играть за Bugs, выберите командира в зелёной рамке.',
     // Конфликтующие моды (dynastiya.mod_conflicts)
     'Conflicting mods': 'Конфликтующие моды',
     'Dynastiya already includes these mods. Enabling them alongside Dynastiya breaks its features.':

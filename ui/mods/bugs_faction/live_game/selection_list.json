@@ -1,0 +1,13 @@
+{
+    "/pa/units/land/bug_ripper/bug_ripper.json":["/pa/audio/Little_Bug_Sound06.wav"],
+    "/pa/units/land/bug_ripper_stealth/bug_ripper_stealth.json":["/pa/audio/Little_Bug_Sound06.wav"],
+    "/pa/units/land/bug_gren/bug_gren.json":["/pa/audio/Little_Bug_Sound05.wav"],
+    "/pa/units/land/bug_aa/bug_aa.json":["/pa/audio/Little_Bug_Sound04.wav"],
+    "/pa/units/land/bug_runner/bug_runner.json":["/pa/audio/Little_Bug_Sound03.wav"],
+    "/pa/units/land/bug_boomer/bug_boomer.json":["/pa/audio/Little_Bug_Sound02.wav"],
+    "/pa/units/land/bug_boomer/bug_boomer_r.json":["/pa/audio/Little_Bug_Sound02.wav"],
+    "/pa/units/land/bug_needler/bug_needler.json":["/pa/audio/Little_Bug_Sound01.wav"],
+    "/pa/units/land/bug_needler/bug_needler_fast.json":["/pa/audio/Little_Bug_Sound01.wav"],
+    "/pa/units/land/bug_titan/bug_titan.json":["/pa/audio/Land_bug_Titan.wav"],
+    "/pa/units/land/bug_matriarch/bug_matriarch.json":["/pa/audio/demititan_bug.wav"]
+}

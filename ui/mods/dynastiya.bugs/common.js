@@ -1,0 +1,319 @@
+/* Bugs registers with the shared faction module; its HUD has no frame variants. */
+var bugs = window.dynastiyaBugs || (window.dynastiyaBugs = {});
+bugs.specs = [
+    "/pa/units/structure/control_node/portal/portal.json",
+    "/pa/units/structure/control_node/portal/portal_charging.json",
+    "/pa/units/structure/control_node/control_node.json",
+    "/pa/units/structure/control_node/portal/portal_ammo.json",
+    "/pa/units/structure/bug_nuke/ammo/bug_nuke_ammo.json",
+    "/pa/units/structure/bug_basic_torp/bug_basic_torp.json",
+    "/pa/units/structure/bug_advanced_torp/bug_advanced_torp.json",
+    "/pa/units/structure/bug_catalyst/bug_catalyst.json",
+    "/pa/units/structure/bug_halley/bug_halley.json",
+    "/pa/units/structure/bug_rag/bug_rag.json",
+    "/pa/units/structure/bug_nuke/bug_nuke.json",
+    "/pa/units/structure/bug_anti_nuke/bug_anti_nuke.json",
+    "/pa/units/structure/bug_mine/bug_mine.json",
+    "/pa/units/structure/bug_mine_big/bug_mine_big.json",
+    "/pa/units/structure/bug_anti_orbital/bug_anti_orbital.json",
+    "/pa/units/structure/bug_aa_small/bug_aa_small.json",
+    "/pa/units/structure/bug_aa_large/bug_aa_large.json",
+    "/pa/units/structure/bug_radar_advanced/bug_radar_advanced.json",
+    "/pa/units/structure/bug_radar/bug_radar.json",
+    "/pa/units/structure/bug_basic_energy/bug_basic_energy.json",
+    "/pa/units/structure/bug_advanced_energy/bug_advanced_energy.json",
+    "/pa/units/structure/bug_basic_extractor/bug_basic_extractor.json",
+    "/pa/units/structure/bug_advanced_extractor/bug_advanced_extractor.json",
+    "/pa/units/structure/bug_turret_small/bug_turret_small.json",
+    "/pa/units/structure/bug_turret_large/bug_turret_large.json",
+    "/pa/units/structure/bug_turret_acid/bug_turret_acid.json",
+    "/pa/units/structure/bug_wall/bug_wall.json",
+    "/pa/units/structure/bug_turret_needle/bug_turret_needle.json",
+    "/pa/units/structure/advanced_hive/advanced_hive.json",
+    "/pa/units/structure/basic_hive/basic_hive.json",
+    "/pa/units/structure/bug_swarm_hive/bug_swarm_hive.json",
+    "/pa/units/structure/bug_orbital_launcher/bug_orbital_launcher.json",
+    "/pa/units/structure/bug_jig/bug_jig.json",
+    "/pa/units/structure/bug_gas_hive/bug_gas_hive.json",
+    "/pa/units/structure/bug_anchor/bug_anchor.json",
+    "/pa/units/structure/basic_air_hive/basic_air_hive.json",
+    "/pa/units/structure/advanced_air_hive/advanced_air_hive.json",
+    "/pa/units/structure/basic_naval_hive/basic_naval_hive.json",
+    "/pa/units/structure/advanced_naval_hive/advanced_naval_hive.json",
+    "/pa/units/structure/bug_teleporter/bug_teleporter.json",
+    "/pa/units/structure/bug_arty_small/bug_arty_small.json",
+    "/pa/units/structure/bug_arty_large/bug_arty_large.json",
+    "/pa/units/structure/bug_combined_storage/bug_combined_storage.json",
+    "/pa/units/structure/bug_missile_defence_basic/bug_missile_defence_basic.json",
+    "/pa/units/structure/bug_air_drone_launcher/bug_air_drone_launcher.json",
+    "/pa/units/structure/bug_air_drone_launcher/bug_air_drone/bug_air_drone.json",
+    "/pa/units/structure/bug_stealth_turret/bug_stealth_turret.json",
+    "/pa/units/research/unlocks/base_unlock/base_research.json",
+    "/pa/units/research/unlocks/base_unlock/base_adv_research.json",
+    "/pa/units/research/unlocks/base_unlock/base_unlock.json",
+    "/pa/units/research/unlocks/bug_boomer_mine_unlock/research_boomer_mine.json",
+    "/pa/units/research/unlocks/bug_grunt_big_unlock/research_grunt.json",
+    "/pa/units/research/unlocks/bug_ripper_stealth_unlock/research_ripper.json",
+    "/pa/units/research/unlocks/bug_combat_fab_cheap_unlock/research_combat_fab.json",
+    "/pa/units/research/unlocks/bug_needler_fast_unlock/research_needler.json",
+    "/pa/units/research/unlocks/bug_crusher_unlock/research_crusher.json",
+    "/pa/units/research/unlocks/bug_hydra_unlock/research_hydra.json",
+    "/pa/units/research/unlocks/bug_ripper_stealth_unlock/bug_ripper_stealth_unlock.json",
+    "/pa/units/research/unlocks/bug_boomer_mine_unlock/bug_boomer_mine_unlock.json",
+    "/pa/units/research/unlocks/bug_grunt_big_unlock/bug_grunt_big_unlock.json",
+    "/pa/units/research/unlocks/bug_crusher_unlock/bug_crusher_unlock.json",
+    "/pa/units/research/unlocks/bug_hydra_unlock/bug_hydra_unlock.json",
+    "/pa/units/research/unlocks/bug_combat_fab_cheap_unlock/bug_combat_fab_cheap_unlock.json",
+    "/pa/units/research/unlocks/bug_needler_fast_unlock/bug_needler_fast_unlock.json",
+    "/pa/units/research/unlocks/bug_orbital_fighter_vision_unlock/research_bug_orbital_fighter_vision.json",
+    "/pa/units/research/unlocks/bug_orbital_battleship_unlock/research_bug_orbital_battleship.json",
+    "/pa/units/research/unlocks/bug_chomper_unlock/research_bug_chomper.json",
+    "/pa/units/research/unlocks/bug_orbital_laser_unlock/research_bug_orbital_laser.json",
+    "/pa/units/research/unlocks/bug_advanced_orbital_radar_unlock/research_bug_advanced_orbital_radar.json",
+    "/pa/units/research/unlocks/bug_orbital_fighter_vision_unlock/bug_orbital_fighter_vision_unlock.json",
+    "/pa/units/research/unlocks/bug_orbital_battleship_unlock/bug_orbital_battleship_unlock.json",
+    "/pa/units/research/unlocks/bug_chomper_unlock/bug_chomper_unlock.json",
+    "/pa/units/research/unlocks/bug_orbital_laser_unlock/bug_orbital_laser_unlock.json",
+    "/pa/units/research/unlocks/bug_advanced_orbital_radar_unlock/bug_advanced_orbital_radar_unlock.json",
+    "/pa/units/orbital/bug_lander/bug_lander.json",
+    "/pa/units/orbital/bug_orbital_mine/bug_orbital_mine.json",
+    "/pa/units/orbital/bug_orbital_battleship/bug_orbital_battleship.json",
+    "/pa/units/orbital/bug_orbital_battleship/bug_land_drone/bug_land_drone.json",
+    "/pa/units/orbital/bug_orbital_chomper/bug_orbital_chomper.json",
+    "/pa/units/orbital/bug_orbital_fabricator/bug_orbital_fabricator.json",
+    "/pa/units/orbital/bug_orbital_fabricator/bug_orbital_fabricator_landed.json",
+    "/pa/units/orbital/bug_orbital_fighter/bug_orbital_fighter.json",
+    "/pa/units/orbital/bug_orbital_fighter/bug_orbital_fighter_vision.json",
+    "/pa/units/orbital/bug_orbital_laser/bug_orbital_laser.json",
+    "/pa/units/orbital/bug_orbital_radar/bug_orbital_radar.json",
+    "/pa/units/orbital/bug_advanced_orbital_radar/bug_advanced_orbital_radar.json",
+    "/pa/units/air/bug_fighter/bug_fighter.json",
+    "/pa/units/air/bug_fighter_adv/bug_fighter_adv.json",
+    "/pa/units/air/bug_bomber/bug_bomber.json",
+    "/pa/units/air/bug_bomber_adv/bug_bomber_adv.json",
+    "/pa/units/air/bug_air_scout/bug_air_scout.json",
+    "/pa/units/air/bug_air_fab/bug_air_fab.json",
+    "/pa/units/air/bug_air_fab_adv/bug_air_fab_adv.json",
+    "/pa/units/air/bug_transport/bug_transport.json",
+    "/pa/units/air/bug_harpy/bug_harpy.json",
+    "/pa/units/air/bug_basilisk/bug_basilisk.json",
+    "/pa/units/air/bug_air_titan/bug_air_titan.json",
+    "/pa/units/sea/bug_ship_fab/bug_ship_fab.json",
+    "/pa/units/sea/bug_ship_fab_adv/bug_ship_fab_adv.json",
+    "/pa/units/land/bug_combat_fab/bug_combat_fab.json",
+    "/pa/units/land/bug_combat_fab/bug_combat_fab_cheap.json",
+    "/pa/units/land/bug_crusher/bug_crusher.json",
+    "/pa/units/land/bug_hydra/bug_hydra.json",
+    "/pa/units/land/bug_gren/bug_gren.json",
+    "/pa/units/land/bug_bot_fab/bug_bot_fab.json",
+    "/pa/units/land/bug_aa/bug_aa.json",
+    "/pa/units/land/bug_aa_big/bug_aa_big.json",
+    "/pa/units/land/bug_bot_fab_advanced/bug_bot_fab_advanced.json",
+    "/pa/units/land/bug_boomer/bug_boomer.json",
+    "/pa/units/land/bug_boomer/bug_boomer_r.json",
+    "/pa/units/land/bug_boomer_big/bug_boomer_big.json",
+    "/pa/units/land/bug_matriarch/bug_matriarch.json",
+    "/pa/units/land/bug_matriarch/bug_matriarch_death_unit.json",
+    "/pa/units/land/bug_ripper_stealth/bug_ripper_stealth.json",
+    "/pa/units/land/bug_ripper/bug_ripper.json",
+    "/pa/units/land/bug_runner/bug_runner.json",
+    "/pa/units/land/bug_scorcher/bug_scorcher.json",
+    "/pa/units/land/bug_titan/bug_titan.json",
+    "/pa/units/land/bug_laser_spider/bug_laser_spider.json",
+    "/pa/units/land/bug_grunt_big/bug_grunt_big.json",
+    "/pa/units/land/bug_belcher/bug_belcher.json",
+    "/pa/units/land/bug_needler/bug_needler.json",
+    "/pa/units/land/bug_needler/bug_needler_fast.json",
+    "/pa/units/land/bug_manticore/bug_manticore.json",
+    "/pa/units/land/bug_sniper/bug_sniper.json",
+    "/pa/units/land/bug_grunt/bug_grunt.json",
+    "/pa/units/commanders/base_bug_commander/base_commander.json",
+    "/pa/units/commanders/bug_commander/bug_commander.json"
+];
+bugs.research = {
+    "locked": [
+        "/pa/units/land/bug_grunt_big/bug_grunt_big.json",
+        "/pa/units/land/bug_ripper_stealth/bug_ripper_stealth.json",
+        "/pa/units/land/bug_combat_fab/bug_combat_fab_cheap.json",
+        "/pa/units/land/bug_needler/bug_needler_fast.json",
+        "/pa/units/land/bug_crusher/bug_crusher.json",
+        "/pa/units/land/bug_hydra/bug_hydra.json",
+        "/pa/units/land/bug_boomer/bug_boomer_r.json",
+        "/pa/units/structure/bug_mine/bug_mine.json",
+        "/pa/units/orbital/bug_orbital_fighter/bug_orbital_fighter_vision.json",
+        "/pa/units/orbital/bug_orbital_battleship/bug_orbital_battleship.json",
+        "/pa/units/orbital/bug_orbital_chomper/bug_orbital_chomper.json",
+        "/pa/units/orbital/bug_orbital_laser/bug_orbital_laser.json",
+        "/pa/units/orbital/bug_advanced_orbital_radar/bug_advanced_orbital_radar.json"
+    ],
+    "unlocks": [
+        [
+            "/pa/units/research/unlocks/bug_grunt_big_unlock/bug_grunt_big_unlock.json",
+            [
+                "/pa/units/land/bug_grunt_big/bug_grunt_big.json"
+            ],
+            [
+                "/pa/units/land/bug_grunt/bug_grunt.json",
+                "/pa/units/research/unlocks/bug_grunt_big_unlock/bug_grunt_big_unlock.json",
+                "/pa/units/research/unlocks/bug_grunt_big_unlock/research_grunt.json"
+            ],
+            true
+        ],
+        [
+            "/pa/units/research/unlocks/bug_ripper_stealth_unlock/bug_ripper_stealth_unlock.json",
+            [
+                "/pa/units/land/bug_ripper_stealth/bug_ripper_stealth.json"
+            ],
+            [
+                "/pa/units/land/bug_ripper/bug_ripper.json",
+                "/pa/units/research/unlocks/bug_ripper_stealth_unlock/bug_ripper_stealth_unlock.json",
+                "/pa/units/research/unlocks/bug_ripper_stealth_unlock/research_ripper.json"
+            ],
+            true
+        ],
+        [
+            "/pa/units/research/unlocks/bug_combat_fab_cheap_unlock/bug_combat_fab_cheap_unlock.json",
+            [
+                "/pa/units/land/bug_combat_fab/bug_combat_fab_cheap.json"
+            ],
+            [
+                "/pa/units/land/bug_combat_fab/bug_combat_fab.json",
+                "/pa/units/research/unlocks/bug_combat_fab_cheap_unlock/bug_combat_fab_cheap_unlock.json",
+                "/pa/units/research/unlocks/bug_combat_fab_cheap_unlock/research_combat_fab.json"
+            ],
+            true
+        ],
+        [
+            "/pa/units/research/unlocks/bug_needler_fast_unlock/bug_needler_fast_unlock.json",
+            [
+                "/pa/units/land/bug_needler/bug_needler_fast.json"
+            ],
+            [
+                "/pa/units/land/bug_needler/bug_needler.json",
+                "/pa/units/research/unlocks/bug_needler_fast_unlock/bug_needler_fast_unlock.json",
+                "/pa/units/research/unlocks/bug_needler_fast_unlock/research_needler.json"
+            ],
+            true
+        ],
+        [
+            "/pa/units/research/unlocks/bug_boomer_mine_unlock/bug_boomer_mine_unlock.json",
+            [
+                "/pa/units/land/bug_boomer/bug_boomer_r.json",
+                "/pa/units/structure/bug_mine/bug_mine.json"
+            ],
+            [
+                "/pa/units/land/bug_boomer/bug_boomer.json",
+                "/pa/units/structure/bug_mine/bug_mine.json",
+                "/pa/units/research/unlocks/bug_boomer_mine_unlock/bug_boomer_mine_unlock.json",
+                "/pa/units/research/unlocks/bug_boomer_mine_unlock/research_boomer_mine.json"
+            ],
+            true
+        ],
+        [
+            "/pa/units/research/unlocks/bug_crusher_unlock/bug_crusher_unlock.json",
+            [
+                "/pa/units/land/bug_crusher/bug_crusher.json"
+            ],
+            [
+                "/pa/units/research/unlocks/bug_crusher_unlock/bug_crusher_unlock.json",
+                "/pa/units/research/unlocks/bug_crusher_unlock/research_crusher.json"
+            ],
+            false
+        ],
+        [
+            "/pa/units/research/unlocks/bug_hydra_unlock/bug_hydra_unlock.json",
+            [
+                "/pa/units/land/bug_hydra/bug_hydra.json"
+            ],
+            [
+                "/pa/units/research/unlocks/bug_hydra_unlock/bug_hydra_unlock.json",
+                "/pa/units/research/unlocks/bug_hydra_unlock/research_hydra.json"
+            ],
+            false
+        ],
+        [
+            "/pa/units/research/unlocks/bug_chomper_unlock/bug_chomper_unlock.json",
+            [
+                "/pa/units/orbital/bug_orbital_chomper/bug_orbital_chomper.json"
+            ],
+            [
+                "/pa/units/research/unlocks/bug_chomper_unlock/bug_chomper_unlock.json",
+                "/pa/units/research/unlocks/bug_chomper_unlock/research_bug_chomper.json"
+            ],
+            false
+        ],
+        [
+            "/pa/units/research/unlocks/bug_orbital_battleship_unlock/bug_orbital_battleship_unlock.json",
+            [
+                "/pa/units/orbital/bug_orbital_battleship/bug_orbital_battleship.json"
+            ],
+            [
+                "/pa/units/research/unlocks/bug_orbital_battleship_unlock/bug_orbital_battleship_unlock.json",
+                "/pa/units/research/unlocks/bug_orbital_battleship_unlock/research_bug_orbital_battleship.json"
+            ],
+            false
+        ],
+        [
+            "/pa/units/research/unlocks/bug_orbital_laser_unlock/bug_orbital_laser_unlock.json",
+            [
+                "/pa/units/orbital/bug_orbital_laser/bug_orbital_laser.json"
+            ],
+            [
+                "/pa/units/research/unlocks/bug_orbital_laser_unlock/bug_orbital_laser_unlock.json",
+                "/pa/units/research/unlocks/bug_orbital_laser_unlock/research_bug_orbital_laser.json"
+            ],
+            false
+        ],
+        [
+            "/pa/units/research/unlocks/bug_advanced_orbital_radar_unlock/bug_advanced_orbital_radar_unlock.json",
+            [
+                "/pa/units/orbital/bug_advanced_orbital_radar/bug_advanced_orbital_radar.json"
+            ],
+            [
+                "/pa/units/research/unlocks/bug_advanced_orbital_radar_unlock/bug_advanced_orbital_radar_unlock.json",
+                "/pa/units/research/unlocks/bug_advanced_orbital_radar_unlock/research_bug_advanced_orbital_radar.json"
+            ],
+            false
+        ],
+        [
+            "/pa/units/research/unlocks/bug_orbital_fighter_vision_unlock/bug_orbital_fighter_vision_unlock.json",
+            [
+                "/pa/units/orbital/bug_orbital_fighter/bug_orbital_fighter_vision.json"
+            ],
+            [
+                "/pa/units/orbital/bug_orbital_fighter/bug_orbital_fighter.json",
+                "/pa/units/research/unlocks/bug_orbital_fighter_vision_unlock/bug_orbital_fighter_vision_unlock.json",
+                "/pa/units/research/unlocks/bug_orbital_fighter_vision_unlock/research_bug_orbital_fighter_vision.json"
+            ],
+            true
+        ]
+    ]
+};
+bugs.research.labels = {
+    "/pa/units/research/unlocks/bug_advanced_orbital_radar_unlock/bug_advanced_orbital_radar_unlock.json": "!LOC:Advanced Orbital Radar Unlock",
+    "/pa/units/research/unlocks/bug_boomer_mine_unlock/bug_boomer_mine_unlock.json": "!LOC:Bug Boomer Mine Unlock",
+    "/pa/units/research/unlocks/bug_chomper_unlock/bug_chomper_unlock.json": "!LOC:Bug Chomper Unlock",
+    "/pa/units/research/unlocks/bug_combat_fab_cheap_unlock/bug_combat_fab_cheap_unlock.json": "!LOC:Cheap Combat Fab Unlock",
+    "/pa/units/research/unlocks/bug_crusher_unlock/bug_crusher_unlock.json": "!LOC:Crusher Unlock",
+    "/pa/units/research/unlocks/bug_grunt_big_unlock/bug_grunt_big_unlock.json": "!LOC:Warrior Grunt Unlock",
+    "/pa/units/research/unlocks/bug_hydra_unlock/bug_hydra_unlock.json": "!LOC:Hydra Unlock",
+    "/pa/units/research/unlocks/bug_needler_fast_unlock/bug_needler_fast_unlock.json": "!LOC:Fast Needler Unlock",
+    "/pa/units/research/unlocks/bug_orbital_battleship_unlock/bug_orbital_battleship_unlock.json": "!LOC:Bug Orbital Carrier Unlock",
+    "/pa/units/research/unlocks/bug_orbital_fighter_vision_unlock/bug_orbital_fighter_vision_unlock.json": "!LOC:Bug Orbital Fighter Vision Unlock",
+    "/pa/units/research/unlocks/bug_orbital_laser_unlock/bug_orbital_laser_unlock.json": "!LOC:Bug Orbital Laser Unlock",
+    "/pa/units/research/unlocks/bug_ripper_stealth_unlock/bug_ripper_stealth_unlock.json": "!LOC:Stealth Ripper Unlock"
+};
+bugs.isUnit = function (spec) { return bugs.specs.indexOf(dynastiyaFactionTheme.specPath(spec)) >= 0; };
+dynastiyaFactionTheme.register({
+    id: 'bugs', isUnit: bugs.isUnit, research: bugs.research,
+    player: {
+        classes: ['bugscom', 'bugsmixcom'],
+        icons: ['coui://ui/mods/bugs_faction/img/bug_icon_outline.png', 'coui://ui/mods/bugs_faction/img/bug_mla_icon_outline.png']
+    },
+    lobby: {
+        commanders: ['/pa/units/commanders/bug_commander/bug_commander.json'],
+        frame: 'dyn-bugs', title: '!LOC:Bugs',
+        hint: '!LOC:To play as Bugs, choose a Commander with a green frame.'
+    },
+    tabs: [["b_naval", "sea", false], ["bug_adv_research", "utility", true], ["bug_air", "air", false], ["bug_ammo", "ammo", true], ["bug_combat", "combat", true], ["bug_factory", "factory", true], ["bug_ground", "bot", false], ["bug_ground_2", "bot", false], ["bug_nuke_ammo", "ammo", true], ["bug_orbital", "orbital", false], ["bug_orbital_research", "utility", true], ["bug_orbital_research_2", "utility", true], ["bug_orbital_structure", "orbital_structure", false], ["bug_research", "utility", true], ["bug_research_2", "utility", true], ["bug_utility", "utility", true]]
+});

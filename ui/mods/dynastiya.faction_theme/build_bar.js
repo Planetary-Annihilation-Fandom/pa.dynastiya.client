@@ -23,6 +23,7 @@
     var BuildSet = model.BuildSet;
     BuildSet.tabsTemplate = BuildSet.tabsTemplate.concat(template);
     model.BuildSet = function () {
+        if (model.dynastiyaResearchParams) arguments[0] = model.dynastiyaResearchParams(arguments[0]);
         BuildSet.apply(this, arguments);
         var tabs = this.tabs();
         var labels = {};
