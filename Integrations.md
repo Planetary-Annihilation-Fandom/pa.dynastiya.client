@@ -4,7 +4,7 @@ The original mods listed here conflict with Dynastiya. When adding an integratio
 
 ## Godblessed Map Generator
 
-The lobby generator is adapted from version 5.0.0-up0 by tatapstar, TT and MaréchalGryzzly. Its interface and code live in `ui/mods/dynastiya.map_generator`; the RequireJS text plugin retains its own license. JavaScript syntax and resource paths were adapted for Dynastiya and the game's browser.
+The lobby generator is adapted from version 5.0.0-up0 by tatapstar, TT and MaréchalGryzzly. Its interface and code live in `ui/mods/dynastiya.map_generator`; the RequireJS text plugin retains its [original license](licenses/requirejs-text.txt). JavaScript syntax and resource paths were adapted for Dynastiya and the game's browser.
 
 ## Biomes Lite
 
@@ -20,19 +20,21 @@ The lobby preview is adapted from Lobby System Preview 1.1.4 by mikeyh. Its inte
 
 ## Legion Expansion
 
+The complete upstream CC BY-NC-SA 4.0 and JavaScript MIT terms are retained in [licenses/legion-expansion.txt](licenses/legion-expansion.txt); original notices and component-specific terms are indexed in [licenses/README.md](licenses/README.md).
+
 The Legion faction is from Legion Expansion 1.33.1-124674 by nicb1, Crembels, KillerKiwiJuice, Anonemous2, mgmetal13, zx0, Luther, Alpha2546, PRoeleert, wondible, mikeyh, Quitch, Stuart98, dom314, CptConundrum, Elodea, AndreasG, Clopse, Graushwein, N30N, Qzipco, WPMarshall and xankar: https://github.com/Legion-Expansion/Legion-Expansion. It is used under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (https://creativecommons.org/licenses/by-nc-sa/4.0/), with JavaScript under the MIT License; this integration is distributed under the same terms.
 
 Models, textures, effects, shaders, strategic icons and commander images are unchanged. The build bar layout and icon registration live in `ui/mods/dynastiya.legion`; build tabs, the lobby commander frame and hint and player icons are registered with the shared faction module. The welcome screen, intro video button and theme setting were removed. The original HUD appearance, styles and assets are retained. The theme logic moved to the shared Dynastiya faction theme module (`ui/mods/dynastiya.faction_theme`), where Legion registers its HUD classes and recoloured image variants: the controlled army sets the theme for every panel, including panels opened later; builder and action panels follow the selection. A panel switches to a new theme only after its frames and icons are loaded. Existing image getters and Knockout bindings are preserved, with theme adapters created once instead of on every message. Faction build tab hotkeys are computed when the build set is created instead of in a deferred timer. Interface strings use Dynastiya localization.
 
 ## Exiles
 
-Exiles 0.8.5.3 by NikolaMX and BOIYOUSAYWHAT: https://github.com/NikolaMX/Exiles-Faction. The source MIT license is retained in `LICENSE.Exiles`. Units, models, textures, effects, strategic icons and AI data are integrated into Dynastiya; the original server and client mods are not required. Shared standard-unit data is merged with Legion.
+Exiles 0.8.5.3 by NikolaMX and BOIYOUSAYWHAT: https://github.com/NikolaMX/Exiles-Faction. The source MIT license is retained in [licenses/exiles.txt](licenses/exiles.txt). Units, models, textures, effects, strategic icons and AI data are integrated into Dynastiya; the original server and client mods are not required. Shared standard-unit data is merged with Legion.
 
 The lobby identifies Exiles commanders with a blue frame. Exiles registers its lobby frame and hint, player icons and build tabs with the shared faction module (`ui/mods/dynastiya.faction_theme`), which serves Legion the same way. The source mod did not recolour the HUD, so Exiles has no HUD theme classes: its units count as other-faction units, and a selection with Legion keeps the Legion mixed theme; the faction overview and original community links open in a shared Dynastiya modal from the main menu, without automatically replacing the news panel. Extractor maturation and fabrication-complex assistance use scoped automation, with one command per completed unit and cleanup on scene exit.
 
 ## Bug Faction
 
-Bug Faction 1.20 by Ferretmaster, BillTheBlueBot, Anonemous2, Taiga, Quitch and Quildtide: https://github.com/Ferret-Master/Bug-Faction-Client. The source CC BY-NC-SA 4.0 license is retained in `LICENSE.Bugs`. Units, research, models, effects, AI, strategic icons, audio and commander artwork are integrated; the original mods are not required. Lobby frames, player icons and build tabs register with the shared faction module. Research is applied while constructing build sets, without delayed slot mutations.
+Bug Faction 1.20 by Ferretmaster, BillTheBlueBot, Anonemous2, Taiga, Quitch and Quildtide: https://github.com/Ferret-Master/Bug-Faction-Client. The source CC BY-NC-SA 4.0 license is retained in [licenses/bug-faction.txt](licenses/bug-faction.txt). Units, research, models, effects, AI, strategic icons, audio and commander artwork are integrated; the original mods are not required. Lobby frames, player icons and build tabs register with the shared faction module. Research is applied while constructing build sets, without delayed slot mutations.
 
 Missing source effect and model references are repaired. Animation adapters preserve available clips and omit references to clips or skeleton controls absent from the shipped meshes. The source menu theme switcher and external FloatZone dependency are replaced by the shared overview and research dialog. Interception targets are merged with existing MLA/Legion defenses, using the already integrated Faction Compatibility license.
 
