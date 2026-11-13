@@ -1,7 +1,8 @@
 (function () {
     'use strict';
 
-    // Only PA's informational KO tooltips. Popovers and manual scene panels
+    // PA's informational KO tooltips follow hover only; click focus must not
+    // keep them open after the pointer leaves. Popovers and manual scene panels
     // keep their own triggers, containers and lifetime.
     var binding = ko.bindingHandlers.tooltip;
     if (binding.dynastiyaLifecycle) return;
@@ -17,7 +18,6 @@
         tooltip.options.delay = { show: 0, hide: 0 };
         tooltip.options.animation = false;
         var hovered = false;
-        var focused = false;
         var disposed = false;
 
         function hide() {
@@ -26,14 +26,14 @@
             tooltip.hide();
         }
         function update() {
-            if (hovered || focused) {
+            if (hovered) {
                 clearTimeout(tooltip.timeout);
                 tooltip.hoverState = 'in';
                 if (!tooltip.$tip || !tooltip.$tip.hasClass('in')) tooltip.show();
             } else hide();
         }
         function reset() {
-            hovered = focused = false;
+            hovered = false;
             hide();
         }
         function dispose() {
@@ -53,8 +53,6 @@
         $element.off('mouseenter.tooltip mouseleave.tooltip focus.tooltip blur.tooltip');
         $element.on('mouseenter.dynastiyaTooltip', function () { hovered = true; update(); });
         $element.on('mouseleave.dynastiyaTooltip', function () { hovered = false; update(); });
-        $element.on('focus.dynastiyaTooltip', function () { focused = true; update(); });
-        $element.on('blur.dynastiyaTooltip', function () { focused = false; update(); });
         ko.utils.domNodeDisposal.addDisposeCallback(element, dispose);
         return result;
     };
