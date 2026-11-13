@@ -21,8 +21,16 @@ html:not(.dynastiya-keyboard-focus) .btn:focus,
 html:not(.dynastiya-keyboard-focus) [role="button"]:focus {
     outline: none !important;
 }
-.btn.selected, .btn.active, .btn_toggle.live, [aria-selected="true"] {
+.btn.selected:not(.dynastiya-texture-frame), .btn.active:not(.dynastiya-texture-frame),
+.btn_toggle.live:not(.dynastiya-texture-frame), [aria-selected="true"]:not(.dynastiya-texture-frame) {
     border-color: #9ceaff !important;
+}
+/* Keep border widths: border-image needs them to draw the texture slices.
+   Suppress only the extra CSS frame, even during keyboard focus/selection. */
+html .dynastiya-texture-frame,
+html .dynastiya-texture-frame:focus {
+    outline: none !important;
+    border-color: transparent !important;
 }
 button:disabled, input:disabled, select:disabled, .btn.disabled,
 .btn_std_disabled, .btn_hero_disabled, .btn_toggle_disabled {

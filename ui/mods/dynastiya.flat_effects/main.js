@@ -12,6 +12,28 @@
     document.addEventListener('mousedown', function () {
         document.documentElement.classList.remove('dynastiya-keyboard-focus');
     }, true);
+    // Texture borders (including border-image slices) already draw the frame.
+    // Inspect only the interacted control, not every element or each UI update.
+    function textureFrame(event) {
+        var element = event.target;
+        var controls = 'button, a, .btn, .btn_std, .btn_hero, .btn_neg, .btn_std_gray, ' +
+            '[role="button"], [tabindex], ' +
+            'input[type="button"], input[type="submit"], input[type="reset"]';
+        while (element && element.nodeType === 1) {
+            if (element.webkitMatchesSelector(controls)) break;
+            element = element.parentElement;
+        }
+        if (!element || element.nodeType !== 1) return;
+        if (/^(SELECT|TEXTAREA)$/.test(element.tagName) || element.isContentEditable ||
+            (element.tagName === 'INPUT' && !/^(button|submit|reset)$/.test(element.type))) return;
+        if (event.type === 'mouseover' && event.relatedTarget && element.contains(event.relatedTarget)) return;
+        var style = getComputedStyle(element);
+        var textured = /url\(/.test(style.borderImageSource + ' ' + style.backgroundImage);
+        if (textured) element.classList.add('dynastiya-texture-frame');
+        else element.classList.remove('dynastiya-texture-frame');
+    }
+    document.addEventListener('focus', textureFrame, true);
+    document.addEventListener('mouseover', textureFrame, true);
     var base = 'coui://ui/mods/dynastiya.flat_effects/';
     var installed = {};
     // Generated with the CSS: panels need no separate inventory request before
