@@ -11,6 +11,16 @@ a:focus, [tabindex]:focus, .btn:focus {
     outline: 2px solid #9ceaff !important;
     outline-offset: -2px;
 }
+/* A pointer click also sets :focus. Keep button rings for Tab navigation only. */
+html:not(.dynastiya-keyboard-focus) button:focus,
+html:not(.dynastiya-keyboard-focus) input[type="button"]:focus,
+html:not(.dynastiya-keyboard-focus) input[type="submit"]:focus,
+html:not(.dynastiya-keyboard-focus) input[type="reset"]:focus,
+html:not(.dynastiya-keyboard-focus) a:focus,
+html:not(.dynastiya-keyboard-focus) .btn:focus,
+html:not(.dynastiya-keyboard-focus) [role="button"]:focus {
+    outline: none !important;
+}
 .btn.selected, .btn.active, .btn_toggle.live, [aria-selected="true"] {
     border-color: #9ceaff !important;
 }
