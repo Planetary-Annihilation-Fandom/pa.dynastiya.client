@@ -1,3 +1,5 @@
+The original license text is included in Dynastiya at [licenses/requirejs-text.txt](../../../../../licenses/requirejs-text.txt).
+
 # text
 
 A [RequireJS](http://requirejs.org)/AMD loader plugin for loading text
