@@ -3,6 +3,15 @@
     'use strict';
     if (window.dynastiyaFlatEffectsLoaded) return;
     window.dynastiyaFlatEffectsLoaded = true;
+    // Coherent predates :focus-visible. Track Tab versus pointer input without
+    // blurring controls or cancelling their normal click/keyboard actions.
+    document.addEventListener('keydown', function (event) {
+        if (event.keyCode === 9 && !event.altKey && !event.ctrlKey && !event.metaKey)
+            document.documentElement.classList.add('dynastiya-keyboard-focus');
+    }, true);
+    document.addEventListener('mousedown', function () {
+        document.documentElement.classList.remove('dynastiya-keyboard-focus');
+    }, true);
     var base = 'coui://ui/mods/dynastiya.flat_effects/';
     var installed = {};
     // Generated with the CSS: panels need no separate inventory request before
