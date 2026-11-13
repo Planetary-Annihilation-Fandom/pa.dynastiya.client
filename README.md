@@ -1,4 +1,4 @@
-![Dynastiya](assets/readme-banner.png)
+![Dynastiya](assets/readme-banner_crop.png)
 
 # Dynastiya
 
