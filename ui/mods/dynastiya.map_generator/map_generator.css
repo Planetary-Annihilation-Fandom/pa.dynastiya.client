@@ -81,6 +81,16 @@ button.generate:hover {
     /* -webkit-transition: .1s; */
 }
 
+/* Bootstrap paints disabled .btn-default buttons white while generating.
+   The texture supplies the entire face in every state. */
+#frame-body button.generate {
+    background-color: transparent;
+}
+
+button.generate:active {
+    border-image: url(coui://ui/main/shared/img/buttons/btn_lrg_std_active.png) 5 40 10 40 fill;
+}
+
 button.option {
     width: 30px !important;
     height: 30px !important;
