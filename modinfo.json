@@ -6,7 +6,7 @@
     "gameplay"
   ],
   "context": "client",
-  "date": "2026-11-11",
+  "date": "2026-11-22",
   "description": "Client dependencies for Dynastiya: Legion Expansion, Exiles Faction, and Second Wave Expansion.",
   "display_name": "Dynastiya Client",
   "forum": "https://github.com/Planetary-Annihilation-Fandom/pa.dynastiya.server/discussions",
@@ -16,7 +16,7 @@
   "identifier": "com.pa.dynastiya.client",
   "signature": "not yet implemented",
   "titansOnly": true,
-  "version": "0.1.11",
+  "version": "1.0.0",
   "dependencies": [
     "com.pa.legion-expansion-client",
     "com.pa.nik.exiles_client",
