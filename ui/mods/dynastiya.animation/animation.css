@@ -1,5 +1,0 @@
-/* A static hourglass replaces working.svg. Keep KO visibility, size and tooltips. */
-img.working {
-    -webkit-animation: none !important;
-    animation: none !important;
-}
