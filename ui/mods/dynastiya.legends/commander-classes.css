@@ -1,85 +1,36 @@
-.palegends-picker-label {
-    display: none;
-}
-
-.div-commander-picker.palegends-picker {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.palegends-picker .palegends-picker-label {
-    display: block;
-    width: 100%;
-    padding: 3px 0;
-    margin: 3px 0;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-.palegends-picker-title {
-    order: -3;
-    color: #ffd08a;
-    border-bottom: 1px solid #87572e;
-}
-
-.palegends-picker-divider {
-    order: -1;
-    color: #b5c9d4;
-    border-top: 1px solid #87572e;
-}
-
-/* Faction Compatibility marks these commanders as MLA. Keep their class colors in both pickers. */
-.game_roster .palegends-picker .palegends-class {
-    order: -2;
-    background: linear-gradient(180deg, #3a2409 0%, #1b1004 55%, #120b03 100%) !important;
-    border: 1px solid #ffa63a !important;
-    box-shadow: 0 0 10px rgba(255, 150, 40, .55),
-                inset 0 0 18px rgba(255, 140, 30, .18) !important;
-    color: #ffd08a;
-}
-
-.game_roster .palegends-picker .palegends-class:hover,
-.game_roster .palegends-picker .palegends-class:active {
-    background: linear-gradient(180deg, #55340d 0%, #2a1806 55%, #180f04 100%) !important;
-    border-color: #ffd27a !important;
-    box-shadow: 0 0 18px rgba(255, 175, 60, .85),
-                inset 0 0 22px rgba(255, 160, 40, .28) !important;
-}
-
-.palegends-class .profile-commander {
-    display: block;
-    height: 72px;
-    width: auto;
-    margin: 5px auto;
-}
-
-.slot-player-commander.palegends-slot {
-    background: linear-gradient(180deg, #3a2409 0%, #1b1004 100%) !important;
-    border: 1px solid #ffa63a !important;
-    box-shadow: 0 0 8px rgba(255, 150, 40, .55),
-                inset 0 0 10px rgba(255, 140, 30, .18) !important;
-}
-
-.palegends-slot .profile-commander {
-    display: block;
-    height: 38px;
-    width: auto;
-    margin: 0 auto;
-}
-
-.game_roster .roster_table .palegends-slot-row {
-    border-image: url("coui://ui/mods/dynastiya.legends/img/ctrl_user_legendary.png") 0 17 53 17 !important;
-}
-
-.game_roster .roster_table .palegends-slot-row:hover {
-    border-image-source: url("coui://ui/mods/dynastiya.legends/img/ctrl_user_legendary_hover.png") !important;
-}
-
-.game_roster .roster_table .palegends-slot-row.active {
-    border-image-source: url("coui://ui/mods/dynastiya.legends/img/ctrl_user_legendary_active.png") !important;
-}
-
-.game_roster .roster_table .palegends-slot-row.ready,
-.game_roster .roster_table .palegends-slot-row.loading {
-    border-image-source: url("coui://ui/mods/dynastiya.legends/img/ctrl_user_legendary_locked.png") !important;
-}
+/* Two commander tiles per column; each class scrolls independently. */
+.div-commander-picker.dyn-class-picker { display: block; }
+.dyn-class-picker > .div-commander-picker-item { display: none !important; }
+.dyn-class-row { display: flex; align-items: flex-start; }
+.dyn-class-row + .dyn-class-row { margin-top: 10px; padding-top: 10px; border-top: 1px solid #87572e; }
+.dyn-class-button { box-sizing: border-box; flex: 0 0 152px; width: 152px; height: 126px; padding: 4px; color: #ffd08a; background: linear-gradient(180deg, #3a2409 0%, #1b1004 55%, #120b03 100%); border: 1px solid #ffa63a; box-shadow: 0 0 10px rgba(255,150,40,.55), inset 0 0 18px rgba(255,140,30,.18); cursor: pointer; }
+.dyn-class-button:hover, .dyn-class-button.selected { border-color: #ffd27a; background: linear-gradient(180deg, #55340d 0%, #2a1806 55%, #180f04 100%); box-shadow: 0 0 18px rgba(255,175,60,.85), inset 0 0 22px rgba(255,160,40,.28); }
+.dyn-class-button img { display: block; width: 72px; height: 72px; margin: 0 auto 3px; object-fit: contain; }
+.dyn-class-button span { display: block; }
+.dyn-class-frame { position: relative; flex: 1 1 auto; min-width: 0; }
+.dyn-class-scroll { display: flex; width: 100%; overflow-x: auto; overflow-y: hidden; }
+.dyn-overflow-start, .dyn-overflow-end { display: none; position: absolute; top: 0; width: 24px; z-index: 3; pointer-events: none; }
+.dyn-overflow-start { left: 0; background: linear-gradient(to right, rgba(255,255,255,.45), transparent); }
+.dyn-overflow-end { right: 0; background: linear-gradient(to left, rgba(255,255,255,.45), transparent); }
+.dyn-class-frame.has-start .dyn-overflow-start, .dyn-class-frame.has-end .dyn-overflow-end { display: block; }
+.dyn-class-column { flex: 0 0 152px; width: 152px; }
+.dyn-class-column .div-commander-picker-item { display: block; }
+.dyn-slot-class { display: inline-block; vertical-align: middle; width: 40px; height: 40px; margin: 5px 4px 0 0; border: 1px solid #806332; background: #231b10; color: #d0b77a; line-height: 38px; text-align: center; box-sizing: border-box; }
+.dyn-slot-class img { width: 100%; height: 100%; object-fit: contain; }
+/* Keep names and controls in one line as the roster narrows. */
+.game_roster .slot-player:not(.empty) { display: flex; align-items: flex-start; }
+.game_roster .slot-player:not(.empty) .slot-player-commander { flex: 0 0 150px; margin: 5px 0 0 -11px; }
+.game_roster .slot-player:not(.empty) .dyn-slot-class { flex: 0 0 40px; margin-top: 5px; }
+.game_roster .slot-player:not(.empty) .slot-player-text { margin: 12px 2px 0; white-space: nowrap; flex-shrink: 0; }
+.game_roster .slot-player:not(.empty) .slot-player-text.truncate { min-width: 0; overflow: hidden; text-overflow: ellipsis; flex: 0 1 auto; }
+.game_roster .slot-player:not(.empty) .slot-controls { order: 2; float: none; flex: 0 0 auto; margin: 12px 10px 0 auto; }
+.game_roster .slot-player:not(.empty) .army-econ { order: 3; float: none; flex: 0 0 auto; margin: 5px -96px 0 0; }
+.dyn-class-modal-backdrop { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 100000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.72); }
+.dyn-class-modal { width: 720px; max-width: calc(100% - 32px); max-height: calc(100% - 32px); background: #18263f; border: 1px solid #838383; color: white; }
+.dyn-class-modal-header { display: flex; align-items: center; padding: 12px 12px 12px 24px; border-bottom: 1px solid #596372; }
+.dyn-class-modal-title { flex: 1; font-size: 22px; }
+.dyn-class-modal-close { width: 40px; height: 40px; border: 1px solid transparent; background: transparent; color: #a1b0ba; font-size: 28px; cursor: pointer; }
+.dyn-class-modal-close:hover { border-color: #06fae8; color: white; }
+.dyn-class-modal-body { display: flex; align-items: flex-start; padding: 24px; overflow-y: auto; max-height: 60vh; }
+.dyn-class-modal-body img { width: 80px; height: 80px; margin-right: 20px; object-fit: contain; }
+.dyn-class-modal-body p { margin: 0; font-size: 16px; }
