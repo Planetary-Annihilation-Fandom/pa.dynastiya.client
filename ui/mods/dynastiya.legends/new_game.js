@@ -1,7 +1,6 @@
 // Group the PA Legends portraits without moving Knockout-managed commander tiles.
 (function () {
     var portraits = '.profile-commander';
-    var emblem = '/palegends_icons/';
     var picker = '#commander-picker .div-commander-picker, #ai-commander-picker .div-commander-picker';
 
     loadCSS('coui://ui/mods/dynastiya.legends/commander-classes.css');
@@ -9,7 +8,7 @@
     // Class portraits use their own art in both the pickers and the roster.
     function isLegendary(container) {
         var image = container.querySelector(portraits);
-        return image && (image.getAttribute('src') || '').indexOf(emblem) !== -1;
+        return !!image && DynastiyaCommanderClasses.isSuperformIcon(image.getAttribute('src'));
     }
 
     // Mark the four class tiles and the current selections, including AI and remote players.
@@ -35,6 +34,9 @@
     function containsPortrait(node) {
         return node.nodeType === 1 && (node.matches(portraits) || node.querySelector(portraits));
     }
+
+    // The catalogue may arrive after the first roster render.
+    DynastiyaCommanderClasses.loaded.done(updateRoster);
 
     // Put the labels outside the Knockout loops and use flex order for the visual grouping.
     $(function () {
