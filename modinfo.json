@@ -25,6 +25,11 @@
     ],
     "shared_build": [
       "coui://ui/mods/dynastiya.legends/shared_build.js"
+    ],
+    "live_game": [
+      "coui://ui/mods/dynastiya.legends/commander_classes.js",
+      "coui://ui/mods/dynastiya.context/models.js",
+      "coui://ui/mods/dynastiya.context/commander_classes.js"
     ]
   },
   "dependencies": [
