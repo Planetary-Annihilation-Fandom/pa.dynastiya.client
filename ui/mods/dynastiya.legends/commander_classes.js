@@ -29,6 +29,11 @@
             var id = getClassId(spec);
             return id ? catalogue.classes[id] : null;
         },
+        // Return a copy so game rules cannot alter the shared catalogue.
+        getCombatSuperforms: function (id) {
+            var entry = catalogue && catalogue.classes[id];
+            return entry && Array.isArray(entry.combatSuperforms) ? entry.combatSuperforms.slice() : [];
+        },
         // The current picker identifies superform portraits by their catalogue icons.
         isSuperformIcon: function (url) {
             if (!catalogue || !url) return false;

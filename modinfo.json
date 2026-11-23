@@ -26,10 +26,17 @@
     "shared_build": [
       "coui://ui/mods/dynastiya.legends/shared_build.js"
     ],
+    "icon_atlas": [
+      "coui://ui/mods/dynastiya.legends/icon_atlas.js"
+    ],
     "live_game": [
       "coui://ui/mods/dynastiya.legends/commander_classes.js",
       "coui://ui/mods/dynastiya.context/models.js",
-      "coui://ui/mods/dynastiya.context/commander_classes.js"
+      "coui://ui/mods/dynastiya.context/commander_classes.js",
+      "coui://ui/mods/dynastiya.legends/superforms.js"
+    ],
+    "live_game_build_bar": [
+      "coui://ui/mods/dynastiya.legends/superforms-build-bar.js"
     ]
   },
   "dependencies": [

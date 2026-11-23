@@ -6,6 +6,8 @@
             ['factory', 6, { row: 0, column: 6 }],
         '/pa/units/palegends/palegends_atlas/palegends_atlas.json':
             ['factory', 7, { row: 0, column: 7 }],
+        '/pa/units/palegends/palegends_ares/palegends_ares.json':
+            ['factory', 9, { row: 0, column: 9 }],
         '/pa/units/palegends/palegends_uran/palegends_uran.json':
             ['factory', 8, { row: 0, column: 8 }],
         '/pa/units/palegends/palegends_helios/palegends_helios.json':
