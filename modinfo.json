@@ -17,6 +17,14 @@
   "signature": "not yet implemented",
   "titansOnly": true,
   "version": "1.0.1",
+  "scenes": {
+    "new_game": [
+      "coui://ui/mods/dynastiya.legends/new_game.js"
+    ],
+    "shared_build": [
+      "coui://ui/mods/dynastiya.legends/shared_build.js"
+    ]
+  },
   "dependencies": [
     "com.pa.legion-expansion-client",
     "com.pa.nik.exiles_client",

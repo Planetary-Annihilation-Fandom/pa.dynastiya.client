@@ -1,0 +1,85 @@
+.palegends-picker-label {
+    display: none;
+}
+
+.div-commander-picker.palegends-picker {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.palegends-picker .palegends-picker-label {
+    display: block;
+    width: 100%;
+    padding: 3px 0;
+    margin: 3px 0;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.palegends-picker-title {
+    order: -3;
+    color: #ffd08a;
+    border-bottom: 1px solid #87572e;
+}
+
+.palegends-picker-divider {
+    order: -1;
+    color: #b5c9d4;
+    border-top: 1px solid #87572e;
+}
+
+/* Faction Compatibility marks these commanders as MLA. Keep their class colors in both pickers. */
+.game_roster .palegends-picker .palegends-class {
+    order: -2;
+    background: linear-gradient(180deg, #3a2409 0%, #1b1004 55%, #120b03 100%) !important;
+    border: 1px solid #ffa63a !important;
+    box-shadow: 0 0 10px rgba(255, 150, 40, .55),
+                inset 0 0 18px rgba(255, 140, 30, .18) !important;
+    color: #ffd08a;
+}
+
+.game_roster .palegends-picker .palegends-class:hover,
+.game_roster .palegends-picker .palegends-class:active {
+    background: linear-gradient(180deg, #55340d 0%, #2a1806 55%, #180f04 100%) !important;
+    border-color: #ffd27a !important;
+    box-shadow: 0 0 18px rgba(255, 175, 60, .85),
+                inset 0 0 22px rgba(255, 160, 40, .28) !important;
+}
+
+.palegends-class .profile-commander {
+    display: block;
+    height: 72px;
+    width: auto;
+    margin: 5px auto;
+}
+
+.slot-player-commander.palegends-slot {
+    background: linear-gradient(180deg, #3a2409 0%, #1b1004 100%) !important;
+    border: 1px solid #ffa63a !important;
+    box-shadow: 0 0 8px rgba(255, 150, 40, .55),
+                inset 0 0 10px rgba(255, 140, 30, .18) !important;
+}
+
+.palegends-slot .profile-commander {
+    display: block;
+    height: 38px;
+    width: auto;
+    margin: 0 auto;
+}
+
+.game_roster .roster_table .palegends-slot-row {
+    border-image: url("coui://ui/mods/dynastiya.legends/img/ctrl_user_legendary.png") 0 17 53 17 !important;
+}
+
+.game_roster .roster_table .palegends-slot-row:hover {
+    border-image-source: url("coui://ui/mods/dynastiya.legends/img/ctrl_user_legendary_hover.png") !important;
+}
+
+.game_roster .roster_table .palegends-slot-row.active {
+    border-image-source: url("coui://ui/mods/dynastiya.legends/img/ctrl_user_legendary_active.png") !important;
+}
+
+.game_roster .roster_table .palegends-slot-row.ready,
+.game_roster .roster_table .palegends-slot-row.loading {
+    border-image-source: url("coui://ui/mods/dynastiya.legends/img/ctrl_user_legendary_locked.png") !important;
+}
