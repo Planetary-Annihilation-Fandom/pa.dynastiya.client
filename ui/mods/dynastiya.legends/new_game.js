@@ -73,11 +73,12 @@
         });
     }
 
-    // The lobby model no longer exposes isCustomFaction in build 124731: specs mark
-    // Legion as custom, while Exiles are only recognisable by their spec path.
+    // Known factions come from the shared catalogue; other custom specs keep their priority.
     function isNonMla(spec) {
+        var faction = catalogue.getCommanderFaction(spec);
+        if (faction) return faction !== 'mla';
         var data = CommanderUtility.bySpec.getSpec(spec) || {};
-        return !!data.custom || spec.indexOf('/pa/units/commanders/exiles_') === 0;
+        return !!data.custom;
     }
 
     // Rebuild only when the game's available tiles change, preserving horizontal scroll otherwise.
