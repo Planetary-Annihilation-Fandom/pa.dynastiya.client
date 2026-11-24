@@ -77,6 +77,8 @@
     function isNonMla(spec) {
         var faction = catalogue.getCommanderFaction(spec);
         if (faction) return faction !== 'mla';
+        // 2026-11-24: This fallback appears unnecessary for current selectable commanders,
+        // but preserves priority for a future catalogue entry with an unknown custom faction.
         var data = CommanderUtility.bySpec.getSpec(spec) || {};
         return !!data.custom;
     }
