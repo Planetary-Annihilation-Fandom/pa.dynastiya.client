@@ -73,9 +73,14 @@
         });
     }
 
-    // The faction compatibility model does not classify Exiles, so include its known specs too.
+    // Known factions come from the shared catalogue; other custom specs keep their priority.
     function isNonMla(spec) {
-        return model.isCustomFaction(spec) || spec.indexOf('/pa/units/commanders/exiles_') === 0;
+        var faction = catalogue.getCommanderFaction(spec);
+        if (faction) return faction !== 'mla';
+        // 2026-11-24: This fallback appears unnecessary for current selectable commanders,
+        // but preserves priority for a future catalogue entry with an unknown custom faction.
+        var data = CommanderUtility.bySpec.getSpec(spec) || {};
+        return !!data.custom;
     }
 
     // Rebuild only when the game's available tiles change, preserving horizontal scroll otherwise.

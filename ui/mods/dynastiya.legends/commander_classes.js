@@ -21,9 +21,21 @@
         return Object.prototype.hasOwnProperty.call(catalogue.classes, id) ? id : null;
     }
 
+    // Recognise factions only for catalogue commanders; other mods may use custom specs too.
+    function getCommanderFaction(spec) {
+        if (!getClassId(spec)) return null;
+        var name = spec.slice('/pa/units/commanders/'.length);
+        if (spec.indexOf('/pa/units/commanders/') !== 0) return null;
+        if (name.indexOf('l_') === 0) return 'legion';
+        if (name.indexOf('exiles_') === 0) return 'exiles';
+        if (/^(imperial|quad|raptor|tank)_/.test(name)) return 'mla';
+        return null;
+    }
+
     global.DynastiyaCommanderClasses = {
         loaded: loaded.promise(),
         getClassId: getClassId,
+        getCommanderFaction: getCommanderFaction,
         // Resolve the catalogue entry without guessing a class from a file name.
         getClass: function (spec) {
             var id = getClassId(spec);
